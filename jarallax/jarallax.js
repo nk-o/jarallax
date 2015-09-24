@@ -28,7 +28,7 @@
                 speed             : 0.5,
                 src               : null,
                 enableTransform   : true,
-                forceAcceleration : true
+                forceAcceleration : false
             };
             dataOptions      = _this.$item.data('jarallax') || {};
             _this.options    = $.extend({}, _this.defaults, dataOptions, userOptions);
