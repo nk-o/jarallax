@@ -96,7 +96,8 @@
         // insert to item
         _this.image.$container
             .css({
-                visibility: 'hidden'
+                visibility : 'hidden',
+                'z-index'  : -100
             })
             .addClass('jarallax-container')
             .prependTo(_this.$item)
