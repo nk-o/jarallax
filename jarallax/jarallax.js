@@ -95,9 +95,12 @@
 
             _this.defaults   = {
                 speed             : 0.5,
-                src               : null,
+                imgSrc            : null,
+                imgWidth          : null,
+                imgHeight         : null,
                 enableTransform   : true,
-                forceAcceleration : false
+                forceAcceleration : false,
+                zIndex            : -100
             };
             dataOptions      = _this.$item.data('jarallax') || {};
             _this.options    = $.extend({}, _this.defaults, dataOptions, userOptions);
@@ -105,11 +108,11 @@
             _this.instanceID = instanceID++;
 
             _this.image      = {
-                src        : _this.options.src || _this.$item.attr('data-jarallax-src') || null,
+                src        : _this.options.imgSrc || null,
                 $container : null,
                 $item      : null,
-                width      : null,
-                height     : null,
+                width      : _this.options.imgWidth || null,
+                height     : _this.options.imgHeight || null,
                 ready      : false
             }
 
@@ -166,7 +169,7 @@
         _this.image.$container
             .css({
                 visibility : 'hidden',
-                'z-index'  : -100
+                'z-index'  : _this.options.zIndex
             })
             .addClass('jarallax-container')
             .prependTo(_this.$item)
