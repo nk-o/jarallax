@@ -287,6 +287,8 @@
         }
     }
 
+    var oldJarallax = $.fn.jarallax;
+
     $.fn.jarallax = function() {
         var items = this,
             options = arguments[0],
@@ -303,6 +305,12 @@
             if (typeof ret !== 'undefined') return ret;
         }
 
+        return this;
+    };
+
+    // no conflict
+    $.fn.jarallax.noConflict = function () {
+        $.fn.jarallax = oldJarallax;
         return this;
     };
 
