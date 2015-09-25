@@ -112,8 +112,7 @@
                 $container : null,
                 $item      : null,
                 width      : _this.options.imgWidth || null,
-                height     : _this.options.imgHeight || null,
-                ready      : false
+                height     : _this.options.imgHeight || null
             }
 
             _this.initEvents();
@@ -176,7 +175,6 @@
 
         // cover image and init parallax position after image load
         _this.getImageSize(_this.image.src, function(width, height) {
-            _this.image.ready  = true;
             _this.image.width  = width;
             _this.image.height = height;
 
@@ -249,7 +247,7 @@
     Jarallax.prototype.coverImage = function() {
         var _this = this;
 
-        if(!_this.image.ready) {
+        if(!_this.image.width || !_this.image.height) {
             return;
         }
 
@@ -283,7 +281,7 @@
     Jarallax.prototype.onScroll = function() {
         var _this = this;
 
-        if(!_this.image.ready) {
+        if(!_this.image.width || !_this.image.height) {
             return;
         }
 
