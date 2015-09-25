@@ -104,6 +104,9 @@
             dataOptions      = _this.$item.data('jarallax') || {};
             _this.options    = $.extend({}, _this.defaults, dataOptions, userOptions);
 
+            // fix speed option [0.0, 1.0]
+            _this.options.speed = Math.min(1, Math.max(0, parseFloat(_this.options.speed)));
+
             _this.instanceID = instanceID++;
 
             _this.image      = {
