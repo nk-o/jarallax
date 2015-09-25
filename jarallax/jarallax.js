@@ -163,6 +163,7 @@
         // item with background image (this will be moved to create parallax effect)
         _this.image.$item = _this.image.$container.clone()
             .css({
+                position              : 'fixed',
                 'pointer-events'      : 'none',
                 'background-position' : '50% 50%',
                 'background-repeat'   : 'no-repeat no-repeat',
@@ -176,7 +177,7 @@
                 visibility : 'hidden',
                 'z-index'  : _this.options.zIndex
             })
-            .addClass('jarallax-container')
+            .attr('id', 'jarallax-container-' + _this.instanceID)
             .prependTo(_this.$item)
 
         // cover image and init parallax position after image load
@@ -185,6 +186,7 @@
             _this.image.height = height;
 
             window.requestAnimationFrame($.proxy(_this.coverImage, _this));
+            window.requestAnimationFrame($.proxy(_this.clipContainer, _this));
             window.requestAnimationFrame($.proxy(_this.onScroll, _this));
 
             // remove default user background
@@ -214,6 +216,7 @@
             timeout = setTimeout(function() {
                 window.requestAnimationFrame(function() {
                     _this.coverImage();
+                    _this.clipContainer();
                     _this.onScroll();
                 });
             }, 100);
@@ -227,6 +230,9 @@
         if(_this.options.forceAcceleration) {
             _this.forceAcceleration(true);
         }
+
+        // remove additional styles for clip
+        $('head #jarallax-clip-' + _this.instanceID).remove();
 
         $(window).off('.jarallax-' + _this.instanceID);
 
@@ -248,6 +254,34 @@
             callback(tempImg.width, tempImg.height)
         }
         tempImg.src = src;
+    }
+
+    // it will remove some image overlapping
+    // overlapping occur due to an image position fixed inside absolute possition element (webkit based browsers works without any fix)
+    Jarallax.prototype.clipContainer = function() {
+        var _this  = this,
+            width  = _this.image.$container.outerWidth(true),
+            height = _this.image.$container.outerHeight(true);
+
+        var $styles = $('head #jarallax-clip-' + _this.instanceID);
+        if(!$styles.length) {
+            $('head').append('<style type="text/css" id="jarallax-clip-' + _this.instanceID + '"></style>');
+            $styles = $('head #jarallax-clip-' + _this.instanceID);
+        }
+
+        var css = [
+            '#jarallax-container-' + _this.instanceID + ' {',
+            '   clip: rect(0px ' + width + 'px ' + height + 'px 0);',
+            '   clip: rect(0px, ' + width + 'px, ' + height + 'px, 0);',
+            '}'
+        ].join('\n');
+
+        // add clip styles inline (this method need for support IE8 and less browsers)
+        if ($styles[0].styleSheet) {
+            $styles[0].styleSheet.cssText = css;
+        } else {
+            $styles.html(document.createTextNode(css));
+        }
     }
 
     Jarallax.prototype.coverImage = function() {
@@ -307,7 +341,7 @@
         }
 
         // calculate parallax
-        var position = (scrollTop - sectionTop) * _this.options.speed;
+        var position = - (scrollTop - sectionTop) * _this.options.speed;
 
         if(supportTransform && _this.options.enableTransform) {
             css.transform = 'translateY(' + position + 'px)';
