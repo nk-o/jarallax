@@ -99,7 +99,6 @@
                 imgWidth          : null,
                 imgHeight         : null,
                 enableTransform   : true,
-                forceAcceleration : false,
                 zIndex            : -100
             };
             dataOptions      = _this.$item.data('jarallax') || {};
@@ -140,11 +139,6 @@
 
     Jarallax.prototype.init = function() {
         var _this = this;
-
-        // add force acceleration
-        if(_this.options.forceAcceleration) {
-            _this.forceAcceleration();
-        }
 
         // container for parallax image
         _this.image.$container = $('<div>')
@@ -225,11 +219,6 @@
 
     Jarallax.prototype.destroy = function() {
         var _this = this;
-
-        // destroy force acceleration
-        if(_this.options.forceAcceleration) {
-            _this.forceAcceleration(true);
-        }
 
         // remove additional styles for clip
         $('head #jarallax-clip-' + _this.instanceID).remove();
@@ -353,48 +342,6 @@
         }
 
         _this.image.$item.css(css);
-    }
-
-    Jarallax.prototype.forceAcceleration = function(destroy) {
-        var _this = this;
-
-        if(!_this.options.forceAcceleration) {
-            return false;
-        }
-
-        var $styles = $('head #jarallax-force-acceleration');
-
-        // add translate3d for <html> tag
-        // prevent lags in some browsers
-        if(!destroy) {
-            if(!$styles.length) {
-                $('head').append([
-                    '<style type="text/css" id="jarallax-force-acceleration" data-jarallax-IDs="">',
-                    '  html {',
-                    '     -webkit-transform: translate3d(0,0,0);',
-                    '     -moz-transform: translate3d(0,0,0);',
-                    '     -ms-transform: translate3d(0,0,0);',
-                    '     -o-transform: translate3d(0,0,0);',
-                    '     transform: translate3d(0,0,0);',
-                    '  }',
-                    '</style>'
-                ].join('\n'));
-                $styles = $('head #jarallax-force-acceleration');
-            }
-
-            $styles.attr('data-jarallax-IDs', $styles.attr('data-jarallax-IDs') + _this.instanceID + ',');
-        }
-
-        // destroy
-        else {
-            var newDataAttr = $styles.attr('data-jarallax-IDs').replace(_this.instanceID + ',', '');
-
-            if(newDataAttr == '' || newDataAttr == ' ') {
-                $styles.remove();
-            } else {
-                $styles.attr('data-jarallax-IDs', newDataAttr);
-            }
-        }
     }
 
     var oldJarallax = $.fn.jarallax;
