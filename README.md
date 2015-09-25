@@ -91,5 +91,8 @@ Options can be passed in data attributes or in object when you initialize jarall
     </tbody>
 </table>
 
+# Images
+All demo images from https://www.pexels.com/
+
 # License
 Copyright (c) 2015 _nK Licensed under the WTFPL license.

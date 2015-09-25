@@ -1,0 +1,53 @@
+.jarallax {
+    position: relative;
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: 50% 50%;
+}
+
+/* demo styles */
+body {
+    font-family: 'Montserrat', sans-serif;
+    margin: 0;
+    color: #fff;
+    line-height: 1.5;
+}
+h1 {
+    font-size: 50px;
+}
+h2 {
+    font-size: 30px;
+}
+p {
+    margin-top: 0;
+    margin-bottom: 5px;
+}
+small {
+    font-size: 75%;
+    color: #eee;
+}
+a, a:visited, a:hover, a:focus {
+    color: inherit;
+}
+a:hover, a:focus {
+    color: #ddd;
+}
+.jarallax {
+    height: 600px;
+}
+.demo-table {
+    display: table;
+    width: 100%;
+    height: 600px;
+    background-color: rgba(39,35,51,0.8);
+}
+.demo-table-cell {
+    display: table-cell;
+    text-align: center;
+    vertical-align: middle;
+}
+.demo-gap {
+    padding: 50px;
+    background-color: #272333;
+    text-align: center;
+}
