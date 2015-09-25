@@ -382,4 +382,9 @@
         $.fn.jarallax = oldJarallax;
         return this;
     };
+
+    // data-jarallax initialization
+    $(document).on('ready.data-jarallax', function () {
+        $('[data-jarallax]').jarallax();
+    });
 }));
