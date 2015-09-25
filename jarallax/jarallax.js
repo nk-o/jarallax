@@ -127,7 +127,7 @@
 
     Jarallax.prototype.initImg = function() {
         var _this = this;
-        
+
         // get image src
         if(_this.image.src === null) {
             _this.image.src = _this.$item.css('background-image').replace(/^url\(['"]?/g,'').replace(/['"]?\)$/g,'');
@@ -280,7 +280,7 @@
         if ($styles[0].styleSheet) {
             $styles[0].styleSheet.cssText = css;
         } else {
-            $styles.html(document.createTextNode(css));
+            $styles.html(css);
         }
     }
 
