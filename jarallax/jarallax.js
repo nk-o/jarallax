@@ -168,7 +168,6 @@
                 'background-repeat'   : 'no-repeat no-repeat',
                 'background-image'    : 'url(' + _this.image.src + ')'
             })
-            .addClass('jarallax-container')
             .prependTo(_this.image.$container);
 
         // insert to item
