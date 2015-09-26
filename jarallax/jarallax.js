@@ -82,6 +82,9 @@
         return (has3d !== undefined && has3d.length > 0 && has3d !== "none");
     }());
 
+    // list with all jarallax instances
+    // need to render all in one scroll/resize event
+    var jarallaxList = [];
 
     // Jarallax instance
     var Jarallax = (function() {
@@ -118,9 +121,9 @@
             }
 
             if(_this.initImg()) {
-                _this.initEvents();
-
                 _this.init();
+
+                jarallaxList.push(_this);
             }
         }
 
@@ -200,33 +203,19 @@
         });
     };
 
-    Jarallax.prototype.initEvents = function() {
-        var _this = this;
-
-        $(window).on('scroll.jarallax.jarallax-' + _this.instanceID, function() {
-            window.requestAnimationFrame($.proxy(_this.onScroll, _this));
-        });
-
-        var timeout;
-        $(window).on('resize.jarallax.jarallax-' + _this.instanceID + ' load.jarallax.jarallax-' + _this.instanceID + '', function() {
-            clearTimeout(timeout);
-            timeout = setTimeout(function() {
-                window.requestAnimationFrame(function() {
-                    _this.coverImage();
-                    _this.clipContainer();
-                    _this.onScroll();
-                });
-            }, 100);
-        });
-    }
-
     Jarallax.prototype.destroy = function() {
         var _this = this;
 
+        // remove from instances list
+        for(var k = 0, len = jarallaxList.length; k < len; k++) {
+            if(jarallaxList[k].instanceID === _this.instanceID) {
+                jarallaxList.splice(k, 1);
+                break;
+            }
+        }
+
         // remove additional styles for clip
         $('head #jarallax-clip-' + _this.instanceID).remove();
-
-        $(window).off('.jarallax-' + _this.instanceID);
 
         _this.$item.attr('style', _this.$item.data('JarallaxOriginalStyles'));
         _this.$item.removeData('JarallaxOriginalStyles');
@@ -334,6 +323,7 @@
 
         // calculate parallax
         var position = - (scrollTop - sectionTop) * _this.options.speed;
+            position = Math.floor(position * 100) / 100;
 
         if(supportTransform && _this.options.enableTransform) {
             css.transform = 'translateY(' + position + 'px)';
@@ -341,11 +331,37 @@
                 css.transform = 'translate3d(0, ' + position + 'px, 0)';
             }
         } else {
-            css.backgroundPosition = '50% ' + Math.round(position) + 'px';
+            css.backgroundPosition = '50% ' + position + 'px';
         }
 
         _this.image.$item.css(css);
-    }
+    };
+
+    // init events
+    (function() {
+        $(window).on('scroll.jarallax', function() {
+            window.requestAnimationFrame(function() {
+                for(var k = 0, len = jarallaxList.length; k < len; k++) {
+                    jarallaxList[k].onScroll();
+                }
+            });
+        });
+
+        var timeout;
+        $(window).on('resize.jarallax load.jarallax', function() {
+            clearTimeout(timeout);
+            timeout = setTimeout(function() {
+                window.requestAnimationFrame(function() {
+                    for(var k = 0, len = jarallaxList.length; k < len; k++) {
+                        var _this = jarallaxList[k];
+                        _this.coverImage();
+                        _this.clipContainer();
+                        _this.onScroll();
+                    }
+                });
+            }, 100);
+        });
+    }());
 
     var oldJarallax = $.fn.jarallax;
 
