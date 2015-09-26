@@ -81,6 +81,8 @@
 
         return (has3d !== undefined && has3d.length > 0 && has3d !== "none");
     }());
+    
+    var isAndroid = navigator.userAgent.toLowerCase().indexOf('android') > -1;
 
     // list with all jarallax instances
     // need to render all in one scroll/resize event
@@ -117,7 +119,10 @@
                 $container : null,
                 $item      : null,
                 width      : _this.options.imgWidth || null,
-                height     : _this.options.imgHeight || null
+                height     : _this.options.imgHeight || null,
+                // fix for Android devices
+                // use <img> instead background image - more smoothly
+                useImgTag  : isAndroid
             }
 
             if(_this.initImg()) {
@@ -144,11 +149,8 @@
     }
 
     Jarallax.prototype.init = function() {
-        var _this = this;
-
-        // container for parallax image
-        _this.image.$container = $('<div>')
-            .css({
+        var _this = this,
+            containerStyles = {
                 position         : 'absolute',
                 top              : 0,
                 left             : 0,
@@ -157,40 +159,54 @@
                 overflow         : 'hidden',
                 'pointer-events' : 'none',
                 'transition'     : 'transform linear -1ms, -webkit-transform linear -1ms'
-            })
-            .prependTo(_this.$item);
+            },
+            imageStyles = {
+                position              : 'fixed'
+            };
 
-        // item with background image (this will be moved to create parallax effect)
-        _this.image.$item = _this.image.$container.clone()
-            .css({
-                position              : 'fixed',
-                'pointer-events'      : 'none',
-                'background-position' : '50% 50%',
-                'background-repeat'   : 'no-repeat no-repeat',
-                'background-image'    : 'url(' + _this.image.src + ')'
-            })
-            .prependTo(_this.image.$container);
-
-        // insert to item
-        _this.image.$container
+        // container for parallax image
+        _this.image.$container = $('<div>')
+            .css(containerStyles)
             .css({
                 visibility : 'hidden',
                 'z-index'  : _this.options.zIndex
             })
             .attr('id', 'jarallax-container-' + _this.instanceID)
-            .prependTo(_this.$item)
+            .prependTo(_this.$item);
+
+        // use img tag
+        if(_this.image.useImgTag) {
+            _this.image.$item = $('<img>').attr('src', _this.image.src);
+            imageStyles = $.extend({}, containerStyles, imageStyles)
+        }
+
+        // use div with background image
+        else {
+            _this.image.$item = $('<div>');
+            imageStyles = $.extend({
+                'background-position' : '50% 50%',
+                'background-repeat'   : 'no-repeat no-repeat',
+                'background-image'    : 'url(' + _this.image.src + ')'
+            }, containerStyles, imageStyles)
+        }
+
+        // parallax image
+        _this.image.$item.css(imageStyles)
+            .prependTo(_this.image.$container);
 
         // cover image and init parallax position after image load
         _this.getImageSize(_this.image.src, function(width, height) {
             _this.image.width  = width;
             _this.image.height = height;
 
-            window.requestAnimationFrame($.proxy(_this.coverImage, _this));
-            window.requestAnimationFrame($.proxy(_this.clipContainer, _this));
-            window.requestAnimationFrame($.proxy(_this.onScroll, _this));
+            window.requestAnimationFrame(function() {
+                _this.coverImage();
+                _this.clipContainer();
+                _this.onScroll();
+            })
 
             // remove default user background
-            _this.$item.data('JarallaxOriginalStyles', _this.$item.attr('style'));
+            _this.$item.data('jarallax-original-styles', _this.$item.attr('style'));
 
             // timeout to fix IE blinking
             setTimeout(function() {
@@ -217,12 +233,17 @@
         // remove additional styles for clip
         $('head #jarallax-clip-' + _this.instanceID).remove();
 
-        _this.$item.attr('style', _this.$item.data('JarallaxOriginalStyles'));
-        _this.$item.removeData('JarallaxOriginalStyles');
+        _this.$item.attr('style', _this.$item.data('jarallax-original-styles'));
+        _this.$item.removeData('jarallax-original-styles');
 
         _this.image.$container.remove();
 
         delete _this.$item[0].jarallax;
+    }
+
+    // round to 2 decimals
+    Jarallax.prototype.round = function(num) {
+        return Math.floor(num * 100) / 100;
     }
 
     Jarallax.prototype.getImageSize = function(src, callback) {
@@ -277,7 +298,8 @@
             wndW  = $(window).outerWidth(true),
             whdH  = $(window).outerHeight(true),
             imgW  = _this.image.width,
-            imgH  = _this.image.height;
+            imgH  = _this.image.height,
+            resultWidth, resultHeight;
 
         var css = {
             width  : Math.max(wndW, contW) * Math.max(_this.options.speed, 1),
@@ -286,16 +308,30 @@
 
         // cover by width
         if(css.width / css.height > imgW / imgH) {
-            var h = css.width * imgH / imgW;
-            css.backgroundSize = css.width + 'px ' + h + 'px';
+            resultWidth = css.width;
+            resultHeight = css.width * imgH / imgW;
         }
 
         // cover by height
         else {
-            var w = css.height * imgW / imgH;
-            css.backgroundSize = w + 'px ' + css.height + 'px';
+            resultWidth = css.height * imgW / imgH;
+            resultHeight = css.height;
+        }
+        
+        // for img tag
+        if(_this.image.useImgTag) {
+            css.width = _this.round(resultWidth);
+            css.height = _this.round(resultHeight);
+            css.marginLeft = _this.round(- (resultWidth - contW) / 2);
+            css.marginTop = _this.round(- (resultHeight - contH) / 2);
         }
 
+        // for div with background image
+        else {
+            css.backgroundSize = _this.round(resultWidth) + 'px ' + _this.round(resultHeight) + 'px';
+        }
+
+        // apply to item
         _this.image.$item.css(css);
     };
 
@@ -323,7 +359,7 @@
 
         // calculate parallax
         var position = - (scrollTop - sectionTop) * _this.options.speed;
-            position = Math.floor(position * 100) / 100;
+            position = _this.round(position);
 
         if(supportTransform && _this.options.enableTransform) {
             css.transform = 'translateY(' + position + 'px)';
