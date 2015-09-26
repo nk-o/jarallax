@@ -35,6 +35,30 @@ a:hover, a:focus {
 .jarallax {
     height: 600px;
 }
+
+/* demo menu */
+.demo-menu {
+    background-color: #272333;
+}
+.demo-menu ul {
+    list-style-type: none;
+    text-align: center;
+    margin: 0;
+}
+.demo-menu ul li {
+    display: inline-block;
+}
+.demo-menu ul li a {
+    display: block;
+    padding: 20px 30px;
+    text-decoration: none;
+}
+.demo-menu ul li.active a,
+.demo-menu ul li a:hover {
+    background-color: #383344;
+}
+
+/* hero block */
 .demo-table {
     display: table;
     width: 100%;
@@ -46,8 +70,22 @@ a:hover, a:focus {
     text-align: center;
     vertical-align: middle;
 }
+
+/* gap */
 .demo-gap {
     padding: 50px;
     background-color: #272333;
     text-align: center;
+}
+
+/* full height demo */
+html.demo-full-height,
+html.demo-full-height body,
+html.demo-full-height .jarallax,
+html.demo-full-height .demo-table {
+    height: 100%;
+}
+html.demo-full-height .jarallax,
+html.demo-full-height .demo-table {
+    min-height: 600px;
 }
