@@ -1,5 +1,12 @@
 # Just Another Parallax
-jQuery background parallax plugin. High performance (translate3d) with fallback (background-position) for old browsers.
+jQuery background parallax plugin used for adding a smooth parallax scrolling effect to background images using CSS3 transforms (translate3d). With a background-position fallback when CSS transforms are not supported.
+
+## Tested Browsers
+* IE7+
+* Safari 5.1.7 (Windows)
+* Latest browsers for Mac and Windows (Chrome, Forefox, Safari, Edge)
+* Latest Chrome on Android
+* Latest Safari on iOs
 
 ## Getting Started
 Load jQuery(1.7+) and include Jarallax plugin
@@ -20,6 +27,7 @@ Mandatory requirement for plugin works properly - the selected item should be NO
 This need for correct show background image before Jarallax initialize end.
 ```css
 .jarallax {
+  position: relative;
   background-size: cover;
   background-repeat: no-repeat;
   background-position: 50% 50%;
