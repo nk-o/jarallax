@@ -4,9 +4,14 @@ jQuery background parallax plugin used for adding a smooth parallax scrolling ef
 ## Tested Browsers
 * IE7+
 * Safari 5.1.7 (Windows)
-* Latest browsers for Mac and Windows (Chrome, Forefox, Safari, Edge)
+* Latest browsers on Mac and Windows (Chrome, Firefox, Safari, IE, Edge)
 * Latest Chrome on Android
 * Latest Safari on iOs
+
+## Demos
+* [Simple parallax](http://free.nkdev.info/jarallax/simple-parallax.html)
+* [Parallax with smooth scroll](http://free.nkdev.info/jarallax/smooth-scroll.html)
+* [Parallax with full-height blocks](http://free.nkdev.info/jarallax/full-height-blocks.html)
 
 ## Getting Started
 Load jQuery(1.7+) and include Jarallax plugin
