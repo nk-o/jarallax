@@ -177,7 +177,9 @@
         // use img tag
         if(_this.image.useImgTag) {
             _this.image.$item = $('<img>').attr('src', _this.image.src);
-            imageStyles = $.extend({}, containerStyles, imageStyles)
+            imageStyles = $.extend({
+                'max-width' : 'none'
+            }, containerStyles, imageStyles)
         }
 
         // use div with background image
