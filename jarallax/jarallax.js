@@ -83,6 +83,7 @@
     }());
     
     var isAndroid = navigator.userAgent.toLowerCase().indexOf('android') > -1;
+    var isOperaOld = !!window.opera;
 
     // list with all jarallax instances
     // need to render all in one scroll/resize event
@@ -122,7 +123,7 @@
                 height     : _this.options.imgHeight || null,
                 // fix for Android devices
                 // use <img> instead background image - more smoothly
-                useImgTag  : isAndroid
+                useImgTag  : isAndroid || isOperaOld
             }
 
             if(_this.initImg()) {
@@ -175,7 +176,7 @@
             .prependTo(_this.$item);
 
         // use img tag
-        if(_this.image.useImgTag) {
+        if(_this.image.useImgTag && supportTransform) {
             _this.image.$item = $('<img>').attr('src', _this.image.src);
             imageStyles = $.extend({
                 'max-width' : 'none'
@@ -321,7 +322,7 @@
         }
         
         // for img tag
-        if(_this.image.useImgTag) {
+        if(_this.image.useImgTag && supportTransform) {
             css.width = _this.round(resultWidth);
             css.height = _this.round(resultHeight);
             css.marginLeft = _this.round(- (resultWidth - contW) / 2);
