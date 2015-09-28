@@ -3,8 +3,8 @@ jQuery background parallax plugin used for adding a smooth parallax scrolling ef
 
 ## Tested Browsers
 * IE7+
-* Safari 5.1.7 (Windows)
-* Opera 12 (not Webkit-based)
+* Safari 5.1.7+
+* Opera 12+
 * Latest browsers on Mac and Windows (Chrome, Firefox, Safari, IE, Edge)
 * Latest Chrome on Android
 * Latest Safari on iOs
