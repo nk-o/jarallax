@@ -197,29 +197,37 @@
         _this.image.$item.css(imageStyles)
             .prependTo(_this.image.$container);
 
-        // cover image and init parallax position after image load
-        _this.getImageSize(_this.image.src, function(width, height) {
-            _this.image.width  = width;
-            _this.image.height = height;
+        // cover image if width and height is ready
+        function initAfterReady() {
+            _this.coverImage();
+            _this.clipContainer();
+            _this.onScroll(true);
 
-            window.requestAnimationFrame(function() {
-                _this.coverImage();
-                _this.clipContainer();
-                _this.onScroll();
-            })
-
-            // remove default user background
+            // save default user styles
             _this.$item.data('jarallax-original-styles', _this.$item.attr('style'));
 
             // timeout to fix IE blinking
             setTimeout(function() {
+                // remove default user background
                 _this.$item.css({
                     'background-image'      : 'none',
                     'background-attachment' : 'scroll',
                     'background-size'       : 'auto'
                 });
             }, 0);
-        });
+        }
+
+        if(_this.image.width && _this.image.height) {
+            // init if width and height already exists
+            initAfterReady();
+        } else {
+            // load image and get width and height
+            _this.getImageSize(_this.image.src, function(width, height) {
+                _this.image.width  = width;
+                _this.image.height = height;
+                initAfterReady();
+            });
+        }
     };
 
     Jarallax.prototype.destroy = function() {
@@ -338,7 +346,7 @@
         _this.image.$item.css(css);
     };
 
-    Jarallax.prototype.onScroll = function() {
+    Jarallax.prototype.onScroll = function(force) {
         var _this = this;
 
         if(!_this.image.width || !_this.image.height) {
@@ -356,7 +364,9 @@
             };
 
         // Check if totally above or totally below viewport
-        if (sectionTop + sectionHeight < scrollTop || sectionTop > scrollTop + wndHeight) {
+        var check = force ? false
+                          : sectionTop + sectionHeight < scrollTop || sectionTop > scrollTop + wndHeight;
+        if (check) {
             return;
         }
 
