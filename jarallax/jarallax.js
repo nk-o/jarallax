@@ -423,11 +423,17 @@
             ret;
 
         for (k; k < len; k++) {
-            if (typeof options === 'object' || typeof options === 'undefined')
-                items[k].jarallax = new Jarallax(items[k], options);
-            else
+            if (typeof options === 'object' || typeof options === 'undefined') {
+                if(!items[k].jarallax) {
+                    items[k].jarallax = new Jarallax(items[k], options);
+                }
+            }
+            else {
                 ret = items[k].jarallax[options].apply(items[k].jarallax, args);
-            if (typeof ret !== 'undefined') return ret;
+            }
+            if (typeof ret !== 'undefined') {
+                return ret;
+            }
         }
 
         return this;
