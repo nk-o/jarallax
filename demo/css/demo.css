@@ -6,6 +6,12 @@
 }
 
 /* demo styles */
+*, *, *:after, *:before {
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
+}
+
 body {
     font-family: 'Montserrat', sans-serif;
     margin: 0;
@@ -88,4 +94,21 @@ html.demo-full-height .demo-table {
 html.demo-full-height .jarallax,
 html.demo-full-height .demo-table {
     min-height: 600px;
+}
+
+/* horizontal demo */
+html.demo-horizontal,
+html.demo-horizontal body {
+    height: 100%;
+}
+html.demo-horizontal .demo-table {
+    height: 100%;
+}
+html.demo-horizontal body {
+    width: 400%;
+}
+html.demo-horizontal body > div {
+    float: left;
+    width: 25%;
+    height: 100%;
 }
