@@ -402,7 +402,7 @@
         });
 
         var timeout;
-        $(window).on('resize.jarallax load.jarallax', function() {
+        $(window).on('resize.jarallax orientationchange.jarallax load.jarallax', function() {
             clearTimeout(timeout);
             timeout = setTimeout(function() {
                 window.requestAnimationFrame(function() {
