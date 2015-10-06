@@ -434,7 +434,7 @@
                 }
             }
             else {
-                ret = items[k].jarallax[options].apply(items[k].jarallax, args);
+                ret = items[k].jarallax ? items[k].jarallax[options].apply(items[k].jarallax, args) : undefined;
             }
             if (typeof ret !== 'undefined') {
                 return ret;
