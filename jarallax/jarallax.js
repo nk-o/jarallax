@@ -189,7 +189,7 @@
             imageStyles = $.extend({
                 'background-position' : '50% 50%',
                 'background-repeat'   : 'no-repeat no-repeat',
-                'background-image'    : 'url(' + _this.image.src + ')'
+                'background-image'    : 'url("' + _this.image.src + '")'
             }, containerStyles, imageStyles)
         }
 
