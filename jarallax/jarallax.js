@@ -100,6 +100,7 @@
             _this.$item      = $(item);
 
             _this.defaults   = {
+                type              : 'scroll', // type of parallax: scroll, scale, opacity, scale-opacity, scroll-opacity
                 speed             : 0.5,
                 imgSrc            : null,
                 imgWidth          : null,
@@ -359,8 +360,9 @@
             wndHeight     = $(window).height(),
             // starting position of each element to have parallax applied to it
             sectionTop    = _this.$item.offset().top,
-            sectionLeft    = _this.$item.offset().left,
+            sectionLeft   = _this.$item.offset().left,
             sectionHeight = _this.$item.outerHeight(true),
+            sectionWidth  = _this.$item.outerWidth(true),
             css           = {
                 visibility         : 'visible',
                 backgroundPosition : '50% 50%'
@@ -373,19 +375,77 @@
             return;
         }
 
-        // calculate parallax
-        var positionY = - (scrollTop - sectionTop) * _this.options.speed;
-        var positionX = - (scrollLeft - sectionLeft) * _this.options.speed;
-            positionY = _this.round(positionY);
-            positionX = _this.round(positionX);
+        // calculate parallax helping variables
+        var dx = scrollLeft - sectionLeft;
+        var dy = scrollTop - sectionTop;
 
-        if(supportTransform && _this.options.enableTransform) {
-            css.transform = 'translateY(' + positionY + 'px) translateX(' + positionX + 'px)';
-            if(support3dtransform) {
-                css.transform = 'translate3d(' + positionX + 'px, ' + positionY + 'px, 0)';
-            }
+        var beforeTop = Math.max(0, -dy);
+        var beforeTopEnd = Math.max(0, sectionHeight - dy);
+        var afterTop = Math.max(0, dy);
+        var beforeBottom = Math.max(0, -dy + sectionHeight - wndHeight);
+        var beforeBottomEnd = Math.max(0, sectionHeight - (-dy + sectionHeight - wndHeight));
+        var afterBottom = Math.max(0, dy + wndHeight - sectionHeight);
+
+        // calculate on how percent of section is visible
+        var visiblePercent = 1;
+        if(sectionHeight < wndHeight) {
+            visiblePercent = 1 - (afterTop || beforeBottom) / sectionHeight;
         } else {
-            css.backgroundPosition = positionX + 'px ' + positionY + 'px';
+            if(beforeTopEnd <= wndHeight) {
+                visiblePercent = beforeTopEnd / wndHeight;
+            } else if (beforeBottomEnd <= wndHeight) {
+                visiblePercent = beforeBottomEnd / wndHeight;
+            }
+        }
+
+        var calculations = {
+            // vertical
+            scrollTop: scrollTop,
+            sectionHeight: sectionHeight,
+            wndHeight: wndHeight,
+
+            dy: dy,
+
+            beforeTop: beforeTop,
+            beforeTopEnd: beforeTopEnd,
+            afterTop: afterTop,
+            beforeBottom: beforeBottom,
+            beforeBottomEnd: beforeBottomEnd,
+            afterBottom: afterBottom,
+
+            visiblePercent: visiblePercent
+        };
+
+        // opacity
+        if(_this.options.type == 'opacity' || _this.options.type == 'scale-opacity' || _this.options.type == 'scroll-opacity') {
+            css.position = 'absolute';
+            css.transform = 'translate3d(0, 0, 0)';
+            css.opacity = visiblePercent;
+        }
+
+        // scale
+        if(_this.options.type == 'scale' || _this.options.type == 'scale-opacity') {
+            var scale = 1;
+            scale += _this.options.speed * (1 - visiblePercent);
+            css.position = 'absolute';
+            css.transform = 'scale(' + scale + ') translate3d(0, 0, 0)';
+        }
+
+        // scroll
+        if(_this.options.type == 'scroll' || _this.options.type == 'scroll-opacity') {
+            var positionY = - dy * _this.options.speed;
+            var positionX = - dx * _this.options.speed;
+                positionY = _this.round(positionY);
+                positionX = _this.round(positionX);
+            if(supportTransform && _this.options.enableTransform) {
+                css.transform = 'translateY(' + positionY + 'px) translateX(' + positionX + 'px)';
+                if(support3dtransform) {
+                    css.transform = 'translate3d(' + positionX + 'px, ' + positionY + 'px, 0)';
+                }
+            } else {
+                css.backgroundPosition = positionX + 'px ' + positionY + 'px';
+            }
+            css.position = 'fixed';
         }
 
         _this.image.$item.css(css);
