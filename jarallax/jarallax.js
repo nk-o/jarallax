@@ -106,7 +106,13 @@
                 imgWidth          : null,
                 imgHeight         : null,
                 enableTransform   : true,
-                zIndex            : -100
+                zIndex            : -100,
+
+                // events
+                onScroll          : null, // function(calculations) {}
+                onInit            : null, // function() {}
+                onDestroy         : null, // function() {}
+                onCoverImage      : null  // function() {}
             };
             dataOptions      = _this.$item.data('jarallax') || {};
             _this.options    = $.extend({}, _this.defaults, dataOptions, userOptions);
@@ -207,6 +213,11 @@
             // save default user styles
             _this.$item.data('jarallax-original-styles', _this.$item.attr('style'));
 
+            // call onInit event
+            if(_this.options.onInit) {
+                _this.options.onInit.call(_this);
+            }
+
             // timeout to fix IE blinking
             setTimeout(function() {
                 // remove default user background
@@ -249,6 +260,11 @@
         _this.$item.removeData('jarallax-original-styles');
 
         _this.image.$container.remove();
+
+        // call onDestroy event
+        if(_this.options.onDestroy) {
+            _this.options.onDestroy.call(_this);
+        }
 
         delete _this.$item[0].jarallax;
     }
@@ -345,6 +361,11 @@
 
         // apply to item
         _this.image.$item.css(css);
+
+        // call onCoverImage event
+        if(_this.options.onCoverImage) {
+            _this.options.onCoverImage.call(_this);
+        }
     };
 
     Jarallax.prototype.onScroll = function(force) {
@@ -394,24 +415,6 @@
             }
         }
 
-        var calculations = {
-            // vertical
-            scrollTop: scrollTop,
-            sectionHeight: sectionHeight,
-            wndHeight: wndHeight,
-
-            dy: dy,
-
-            beforeTop: beforeTop,
-            beforeTopEnd: beforeTopEnd,
-            afterTop: afterTop,
-            beforeBottom: beforeBottom,
-            beforeBottomEnd: beforeBottomEnd,
-            afterBottom: afterBottom,
-
-            visiblePercent: visiblePercent
-        };
-
         // opacity
         if(_this.options.type == 'opacity' || _this.options.type == 'scale-opacity' || _this.options.type == 'scroll-opacity') {
             css.position = 'absolute';
@@ -443,6 +446,24 @@
         }
 
         _this.image.$item.css(css);
+
+        // call onScroll event
+        if(_this.options.onScroll) {
+            _this.options.onScroll.call(_this, {
+                scrollTop: scrollTop,
+                sectionHeight: sectionHeight,
+                wndHeight: wndHeight,
+
+                beforeTop: beforeTop,
+                beforeTopEnd: beforeTopEnd,
+                afterTop: afterTop,
+                beforeBottom: beforeBottom,
+                beforeBottomEnd: beforeBottomEnd,
+                afterBottom: afterBottom,
+
+                visiblePercent: visiblePercent
+            });
+        }
     };
 
     // init events
