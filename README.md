@@ -13,7 +13,6 @@ jQuery background parallax plugin used for adding a smooth parallax scrolling ef
 * [Simple parallax](http://free.nkdev.info/jarallax/simple-parallax.html)
 * [Parallax with smooth scroll](http://free.nkdev.info/jarallax/smooth-scroll.html)
 * [Parallax with full-height blocks](http://free.nkdev.info/jarallax/full-height-blocks.html)
-* [Parallax horizontal](http://free.nkdev.info/jarallax/horizontal.html)
 
 ## Getting Started
 Load jQuery(1.7+) and include Jarallax plugin

@@ -355,14 +355,11 @@
         }
 
         var scrollTop     = $(window).scrollTop(),
-            scrollLeft    = $(window).scrollLeft(),
             wndWidth      = $(window).width(),
             wndHeight     = $(window).height(),
             // starting position of each element to have parallax applied to it
             sectionTop    = _this.$item.offset().top,
-            sectionLeft   = _this.$item.offset().left,
             sectionHeight = _this.$item.outerHeight(true),
-            sectionWidth  = _this.$item.outerWidth(true),
             css           = {
                 visibility         : 'visible',
                 backgroundPosition : '50% 50%'
@@ -376,7 +373,6 @@
         }
 
         // calculate parallax helping variables
-        var dx = scrollLeft - sectionLeft;
         var dy = scrollTop - sectionTop;
 
         var beforeTop = Math.max(0, -dy);
@@ -434,16 +430,14 @@
         // scroll
         if(_this.options.type == 'scroll' || _this.options.type == 'scroll-opacity') {
             var positionY = - dy * _this.options.speed;
-            var positionX = - dx * _this.options.speed;
                 positionY = _this.round(positionY);
-                positionX = _this.round(positionX);
             if(supportTransform && _this.options.enableTransform) {
-                css.transform = 'translateY(' + positionY + 'px) translateX(' + positionX + 'px)';
+                css.transform = 'translateY(' + positionY + 'px)';
                 if(support3dtransform) {
-                    css.transform = 'translate3d(' + positionX + 'px, ' + positionY + 'px, 0)';
+                    css.transform = 'translate3d(0, ' + positionY + 'px, 0)';
                 }
             } else {
-                css.backgroundPosition = positionX + 'px ' + positionY + 'px';
+                css.backgroundPosition = '50% ' + positionY + 'px';
             }
             css.position = 'fixed';
         }
