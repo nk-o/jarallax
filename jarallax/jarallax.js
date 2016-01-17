@@ -398,19 +398,19 @@
         var beforeTop = Math.max(0, -dy);
         var beforeTopEnd = Math.max(0, sectionHeight - dy);
         var afterTop = Math.max(0, dy);
-        var beforeBottom = Math.max(0, -dy + sectionHeight - wndHeight);
-        var beforeBottomEnd = Math.max(0, sectionHeight - (-dy + sectionHeight - wndHeight));
-        var afterBottom = Math.max(0, dy + wndHeight - sectionHeight);
+        var beforeBottom = Math.max(0, -dy + sectionHeight - windowHeight);
+        var beforeBottomEnd = Math.max(0, sectionHeight - (-dy + sectionHeight - windowHeight));
+        var afterBottom = Math.max(0, dy + windowHeight - sectionHeight);
 
         // calculate on how percent of section is visible
         var visiblePercent = 1;
-        if(sectionHeight < wndHeight) {
+        if(sectionHeight < windowHeight) {
             visiblePercent = 1 - (afterTop || beforeBottom) / sectionHeight;
         } else {
-            if(beforeTopEnd <= wndHeight) {
-                visiblePercent = beforeTopEnd / wndHeight;
-            } else if (beforeBottomEnd <= wndHeight) {
-                visiblePercent = beforeBottomEnd / wndHeight;
+            if(beforeTopEnd <= windowHeight) {
+                visiblePercent = beforeTopEnd / windowHeight;
+            } else if (beforeBottomEnd <= windowHeight) {
+                visiblePercent = beforeBottomEnd / windowHeight;
             }
         }
 
