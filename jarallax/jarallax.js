@@ -376,8 +376,7 @@
         }
 
         var scrollTop     = $(window).scrollTop(),
-            wndWidth      = $(window).width(),
-            wndHeight     = $(window).height(),
+            windowHeight  = $(window).height(),
             // starting position of each element to have parallax applied to it
             sectionTop    = _this.$item.offset().top,
             sectionHeight = _this.$item.outerHeight(true),
@@ -388,7 +387,7 @@
 
         // Check if totally above or totally below viewport
         var check = force ? false
-                          : sectionTop + sectionHeight < scrollTop || sectionTop > scrollTop + wndHeight;
+                          : sectionTop + sectionHeight < scrollTop || sectionTop > scrollTop + windowHeight;
         if (check) {
             return;
         }
@@ -452,7 +451,7 @@
             _this.options.onScroll.call(_this, {
                 scrollTop: scrollTop,
                 sectionHeight: sectionHeight,
-                wndHeight: wndHeight,
+                windowHeight: windowHeight,
 
                 beforeTop: beforeTop,
                 beforeTopEnd: beforeTopEnd,
