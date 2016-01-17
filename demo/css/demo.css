@@ -81,7 +81,15 @@ a:hover, a:focus {
 .demo-gap {
     padding: 50px;
     background-color: #272333;
+}
+.demo-gap h1,
+.demo-gap h2,
+.demo-gap h3 {
     text-align: center;
+}
+.demo-gap .container {
+    max-width: 800px;
+    margin: 0 auto;
 }
 
 /* full height demo */
