@@ -68,6 +68,12 @@ Options can be passed in data attributes or in object when you initialize jarall
     </thead>
     <tbody>
         <tr>
+            <td>type</td>
+            <td>string</td>
+            <td>scroll</td>
+            <td>scroll, scale, opacity, scroll-opacity, scale-opacity</td>
+        </tr>
+        <tr>
             <td>speed</td>
             <td>float</td>
             <td>0.5</td>
@@ -104,6 +110,75 @@ Options can be passed in data attributes or in object when you initialize jarall
         </tr>
     </tbody>
 </table>
+
+# Events
+Evenets used the same way as Options.
+
+<table class='table table-bordered table-striped'>
+    <thead>
+        <tr>
+            <th>name</th>
+            <th style='width: 60%;'>description</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td>onScroll</td>
+            <td>Called when parallax working. Use first argument with calculations. More info <a href="#onscroll-event">see below</a>.
+            </td>
+        </tr>
+        <tr>
+            <td>onInit</td>
+            <td>Called after init end.</td>
+        </tr>
+        <tr>
+            <td>onDestroy</td>
+            <td>Called after destroy.</td>
+        </tr>
+        <tr>
+            <td>onCoverImage</td>
+            <td>Called after cover image.</td>
+        </tr>
+    </tbody>
+</table>
+
+## onScroll event
+
+```javascript
+$('.jarallax').jarallax({
+    onScroll: function(calculations) {
+        console.log(calculations);
+    }
+});
+```
+
+Console Result:
+```javascript
+{
+    // current scroll height
+    scrollTop       : float,
+
+    // parallax section height
+    sectionHeight   : float,
+
+    // window height
+    windowHeight    : float,
+    
+    // see image below for more info
+    beforeTop       : float,
+    beforeTopEnd    : float,
+    afterTop        : float,
+    beforeBottom    : float,
+    beforeBottomEnd : float,
+    afterBottom     : float,
+
+    // percent of visible part of section (from 0 to 1)
+    visiblePercent: float
+}
+```
+
+Calculations example:
+[![On Scroll Calculations](http://a.nkdev.info/jarallax/jarallax-calculations.jpg)](http://a.nkdev.info/jarallax/jarallax-calculations.jpg)
 
 # Images
 All demo images from https://www.pexels.com/
