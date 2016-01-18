@@ -380,7 +380,6 @@
         }
 
         var section = _this.$item[0].getBoundingClientRect();
-        console.log($(window)[0].getBoundingClientRect())
         var windowHeight  = $(window).height(),
             windowWidth   = $(window).width(),
             css           = {
