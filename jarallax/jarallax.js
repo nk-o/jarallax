@@ -135,8 +135,6 @@
 
             if(_this.initImg()) {
                 _this.init();
-
-                jarallaxList.push(_this);
             }
         }
 
@@ -240,6 +238,8 @@
                 initAfterReady();
             });
         }
+        
+        jarallaxList.push(_this);
     };
 
     Jarallax.prototype.destroy = function() {
@@ -517,6 +517,7 @@
 
         return this;
     };
+    $.fn.jarallax.constructor = Jarallax;
 
     // no conflict
     $.fn.jarallax.noConflict = function () {
