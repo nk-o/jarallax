@@ -166,14 +166,8 @@ $('.jarallax').jarallax({
 Console Result:
 ```javascript
 {
-    // current scroll height
-    scrollTop       : float,
-
-    // parallax section height
-    sectionHeight   : float,
-
-    // window height
-    windowHeight    : float,
+    // parallax section client rect (top, left, width, height)
+    rect            : object,
     
     // see image below for more info
     beforeTop       : float,
@@ -184,7 +178,7 @@ Console Result:
     afterBottom     : float,
 
     // percent of visible part of section (from 0 to 1)
-    visiblePercent: float
+    visiblePercent  : float
 }
 ```
 

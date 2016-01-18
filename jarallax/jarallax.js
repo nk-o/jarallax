@@ -455,7 +455,6 @@
         // call onScroll event
         if(_this.options.onScroll) {
             _this.options.onScroll.call(_this, {
-                windowHeight: windowHeight,
                 section: section,
 
                 beforeTop: beforeTop,
