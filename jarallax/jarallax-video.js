@@ -396,13 +396,6 @@
 }(function($) {
     var Jarallax = $.fn.jarallax.constructor;
 
-    // check if parallax container is in viewport
-    // http://stackoverflow.com/questions/123999/how-to-tell-if-a-dom-element-is-visible-in-the-current-viewport
-    function isElementInViewport($el) {
-        var rect = $el[0].getBoundingClientRect();
-        return (rect.bottom >= 0 && rect.right >= 0 && rect.top <= (window.innerHeight || document.documentElement.clientHeight) && rect.left <= (window.innerWidth || document.documentElement.clientWidth));
-    }
-
     // append video after init Jarallax
     var def_init = Jarallax.prototype.init;
     Jarallax.prototype.init = function() {
@@ -457,7 +450,7 @@
 
                 video.on('ready', function() {
                     function checkViewport() {
-                        if(isElementInViewport(_this.$item)) {
+                        if(_this.isVisible()) {
                             video.play();
                         } else {
                             video.pause();

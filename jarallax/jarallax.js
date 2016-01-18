@@ -368,6 +368,10 @@
         }
     };
 
+    Jarallax.prototype.isVisible = function() {
+        return this.isElementInViewport || false;
+    }
+
     Jarallax.prototype.onScroll = function(force) {
         var _this = this;
 
@@ -375,37 +379,40 @@
             return;
         }
 
-        var scrollTop     = $(window).scrollTop(),
-            windowHeight  = $(window).height(),
-            // starting position of each element to have parallax applied to it
-            sectionTop    = _this.$item.offset().top,
-            sectionHeight = _this.$item.outerHeight(true),
+        var section = _this.$item[0].getBoundingClientRect();
+        console.log($(window)[0].getBoundingClientRect())
+        var windowHeight  = $(window).height(),
+            windowWidth   = $(window).width(),
             css           = {
                 visibility         : 'visible',
                 backgroundPosition : '50% 50%'
             };
 
+        _this.isElementInViewport = (
+            section.bottom >= 0 &&
+            section.right >= 0 &&
+            section.top <= windowHeight &&
+            section.left <= windowWidth
+        );
+
         // Check if totally above or totally below viewport
-        var check = force ? false
-                          : sectionTop + sectionHeight < scrollTop || sectionTop > scrollTop + windowHeight;
+        var check = force ? false : !_this.isElementInViewport;
         if (check) {
             return;
         }
 
         // calculate parallax helping variables
-        var dy = scrollTop - sectionTop;
-
-        var beforeTop = Math.max(0, -dy);
-        var beforeTopEnd = Math.max(0, sectionHeight - dy);
-        var afterTop = Math.max(0, dy);
-        var beforeBottom = Math.max(0, -dy + sectionHeight - windowHeight);
-        var beforeBottomEnd = Math.max(0, sectionHeight - (-dy + sectionHeight - windowHeight));
-        var afterBottom = Math.max(0, dy + windowHeight - sectionHeight);
+        var beforeTop = Math.max(0, section.top);
+        var beforeTopEnd = Math.max(0, section.height + section.top);
+        var afterTop = Math.max(0, -section.top);
+        var beforeBottom = Math.max(0, section.top + section.height - windowHeight);
+        var beforeBottomEnd = Math.max(0, section.height - (section.top + section.height - windowHeight));
+        var afterBottom = Math.max(0, -section.top + windowHeight - section.height);
 
         // calculate on how percent of section is visible
         var visiblePercent = 1;
-        if(sectionHeight < windowHeight) {
-            visiblePercent = 1 - (afterTop || beforeBottom) / sectionHeight;
+        if(section.height < windowHeight) {
+            visiblePercent = 1 - (afterTop || beforeBottom) / section.height;
         } else {
             if(beforeTopEnd <= windowHeight) {
                 visiblePercent = beforeTopEnd / windowHeight;
@@ -431,7 +438,7 @@
 
         // scroll
         if(_this.options.type == 'scroll' || _this.options.type == 'scroll-opacity') {
-            var positionY = - dy * _this.options.speed;
+            var positionY = section.top * _this.options.speed;
                 positionY = _this.round(positionY);
             if(supportTransform && _this.options.enableTransform) {
                 css.transform = 'translateY(' + positionY + 'px)';
@@ -449,9 +456,8 @@
         // call onScroll event
         if(_this.options.onScroll) {
             _this.options.onScroll.call(_this, {
-                scrollTop: scrollTop,
-                sectionHeight: sectionHeight,
                 windowHeight: windowHeight,
+                section: section,
 
                 beforeTop: beforeTop,
                 beforeTopEnd: beforeTopEnd,

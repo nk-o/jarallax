@@ -2,7 +2,7 @@
 jQuery background parallax plugin used for adding a smooth parallax scrolling effect to background images and Youtube/Vimeo videos using CSS3 transforms (translate3d). With a background-position fallback when CSS transforms are not supported.
 
 ## Tested Browsers
-* IE7+
+* IE9+
 * Safari 5.1.7+
 * Opera 12+
 * Latest browsers on Mac and Windows (Chrome, Firefox, Safari, IE, Edge)
