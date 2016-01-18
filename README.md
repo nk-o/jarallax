@@ -1,5 +1,5 @@
 # Just Another Parallax
-jQuery background parallax plugin used for adding a smooth parallax scrolling effect to background images using CSS3 transforms (translate3d). With a background-position fallback when CSS transforms are not supported.
+jQuery background parallax plugin used for adding a smooth parallax scrolling effect to background images and Youtube/Vimeo videos using CSS3 transforms (translate3d). With a background-position fallback when CSS transforms are not supported.
 
 ## Tested Browsers
 * IE7+
@@ -14,6 +14,7 @@ jQuery background parallax plugin used for adding a smooth parallax scrolling ef
 * [Parallax with smooth scroll](http://free.nkdev.info/jarallax/smooth-scroll.html)
 * [Parallax with full-height blocks](http://free.nkdev.info/jarallax/full-height-blocks.html)
 * [Parallax with Scale and Opacity](http://free.nkdev.info/jarallax/scale-opacity-parallax.html)
+* [Video Parallax (Youtube and Vimeo)](http://free.nkdev.info/jarallax/video-parallax.html)
 
 ## Getting Started
 Load jQuery(1.7+) and include Jarallax plugin
@@ -21,12 +22,21 @@ Load jQuery(1.7+) and include Jarallax plugin
 <!-- Jarallax -->
 <script src='https://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js'></script>
 <script src='jarallax/jarallax.js'></script>
+
+<!-- Include it if you want to use Video parallax -->
+<script src='jarallax/jarallax-video.js'></script>
 ```
 
 ## Set up your HTML
 Mandatory requirement for plugin works properly - the selected item should be NOT position: static (for ex. relative).
 ```html
+<!-- Image Parallax -->
 <div class='jarallax' style='background-image: url(<background_image_url_here>)'>
+  Your content here...
+</div>
+
+<!-- Video Parallax -->
+<div class='jarallax' data-jarallax-video='https://www.youtube.com/watch?v=ab0TSkLe-E0'>
   Your content here...
 </div>
 ```

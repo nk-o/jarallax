@@ -154,7 +154,7 @@
         }
         
         if(_this.type === 'vimeo') {
-            $.get('http://vimeo.com/api/v2/video/' + _this.videoID + '.json', function(response) {
+            $.get('https://vimeo.com/api/v2/video/' + _this.videoID + '.json', function(response) {
                 _this.videoImage = response[0].thumbnail_large;
                 callback(_this.videoImage);
             });
@@ -179,7 +179,8 @@
                 _this.playerOptions.width = $(window).width();
                 _this.playerOptions.playerVars = {
                     autohide: 1,
-                    rel: 0
+                    rel: 0,
+                    autoplay: 0
                 };
 
                 // hide controls
@@ -192,11 +193,6 @@
                     _this.playerOptions.playerVars
                 }
 
-                // autoplay
-                if(_this.options.autoplay) {
-                    _this.playerOptions.playerVars.autoplay = 1;
-                }
-
                 // events
                 var videoStarted = 0;
                 _this.playerOptions.events = {
@@ -204,6 +200,10 @@
                         // mute
                         if(_this.options.mute) {
                             e.target.mute();
+                        }
+                        // autoplay
+                        if(_this.options.autoplay) {
+                            _this.play();
                         }
                         _this.fire('ready', e);
                     },
@@ -240,7 +240,7 @@
                 }
 
                 // autoplay
-                _this.playerOptions += '&autoplay=' + (_this.options.autoplay ? 1 : 0);
+                _this.playerOptions += '&autoplay=0';
 
                 // loop
                 _this.playerOptions += '&loop=' + (_this.options.loop ? 1 : 0);
@@ -256,10 +256,13 @@
 
                 var videoStarted = 0;
                 _this.player.addEvent('ready', function(e) {
-                    _this.fire('ready', e);
-
                     // mute
                     _this.player.api('setVolume', _this.options.mute ? 0 : 100);
+
+                    // autoplay
+                    if(_this.options.autoplay) {
+                        _this.play();
+                    }
 
                     _this.player.addEvent('playProgress', function(e) {
                         if(!videoStarted) {
@@ -267,6 +270,8 @@
                         }
                         videoStarted = 1;
                     });
+
+                    _this.fire('ready', e);
                 });
             }
 
