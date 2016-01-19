@@ -198,6 +198,14 @@
             }, containerStyles, imageStyles)
         }
 
+        // check if one of parents have transform style (without this check, scroll transform will be inverted)
+        _this.parentWithTransform = 0;
+        _this.$item.parents().each(function() {
+            if(!$(this).css('transform') || $(this).css('transform') !== 'none') {
+                _this.parentWithTransform = 1;
+            }
+        })
+
         // parallax image
         _this.image.$item.css(imageStyles)
             .prependTo(_this.image.$container);
@@ -440,6 +448,11 @@
             var positionY = section.top * _this.options.speed;
                 positionY = _this.round(positionY);
             if(supportTransform && _this.options.enableTransform) {
+                // fix if parents with transform style
+                if(_this.parentWithTransform) {
+                    positionY *= -1;
+                }
+
                 css.transform = 'translateY(' + positionY + 'px)';
                 if(support3dtransform) {
                     css.transform = 'translate3d(0, ' + positionY + 'px, 0)';
