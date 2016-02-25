@@ -144,7 +144,7 @@
         var _this = this;
 
         if(_this.videoImage) {
-            callback(_this.videoID);
+            callback(_this.videoImage);
             return;
         }
 
