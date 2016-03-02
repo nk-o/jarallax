@@ -101,7 +101,7 @@
 
             _this.defaults   = {
                 type              : 'scroll', // type of parallax: scroll, scale, opacity, scale-opacity, scroll-opacity
-                speed             : 0.5,
+                speed             : 0.5, // supported value from -1 to 2
                 imgSrc            : null,
                 imgWidth          : null,
                 imgHeight         : null,
@@ -117,8 +117,8 @@
             dataOptions      = _this.$item.data('jarallax') || {};
             _this.options    = $.extend({}, _this.defaults, dataOptions, userOptions);
 
-            // fix speed option [0.0, 1.0]
-            _this.options.speed = Math.min(1, Math.max(0, parseFloat(_this.options.speed)));
+            // fix speed option [-1.0, 2.0]
+            _this.options.speed = Math.min(2, Math.max(-1, parseFloat(_this.options.speed)));
 
             _this.instanceID = instanceID++;
 
@@ -193,6 +193,7 @@
             _this.image.$item = $('<div>');
             imageStyles = $.extend({
                 'background-position' : '50% 50%',
+                'background-size'     : '100% 100%',
                 'background-repeat'   : 'no-repeat no-repeat',
                 'background-image'    : 'url("' + _this.image.src + '")'
             }, containerStyles, imageStyles)
@@ -329,17 +330,25 @@
             return;
         }
 
-        var contW = _this.image.$container.outerWidth(true),
-            contH = _this.image.$container.outerHeight(true),
-            wndW  = $(window).outerWidth(true),
-            whdH  = $(window).outerHeight(true),
+        var contW = Math.max(_this.image.$container.outerWidth(true), $(window).outerWidth(true)),
+            contH = Math.max(_this.image.$container.outerHeight(true), $(window).outerHeight(true)),
             imgW  = _this.image.width,
             imgH  = _this.image.height,
             resultWidth, resultHeight;
 
+        var speedFactor = 1;
+        if(_this.options.speed < 0) {
+            speedFactor += Math.abs(_this.options.speed);
+        }
+        else if(_this.options.speed > 1) {
+            speedFactor = _this.options.speed;
+        }
+
         var css = {
-            width  : Math.max(wndW, contW) * Math.max(_this.options.speed, 1),
-            height : Math.max(whdH, contH) * Math.max(_this.options.speed, 1)
+            width  : contW * speedFactor,
+            height : contH * speedFactor,
+            marginLeft: 0,
+            marginTop: 0
         };
 
         // cover by width
@@ -353,18 +362,15 @@
             resultWidth = css.height * imgW / imgH;
             resultHeight = css.height;
         }
-        
-        // for img tag
-        if(_this.image.useImgTag && supportTransform) {
-            css.width = _this.round(resultWidth);
-            css.height = _this.round(resultHeight);
-            css.marginLeft = _this.round(- (resultWidth - contW) / 2);
-            css.marginTop = _this.round(- (resultHeight - contH) / 2);
-        }
 
-        // for div with background image
-        else {
-            css.backgroundSize = _this.round(resultWidth) + 'px ' + _this.round(resultHeight) + 'px';
+        css.width = _this.round(resultWidth);
+        css.height = _this.round(resultHeight);
+
+        if(css.width > contW) {
+            css.marginLeft = _this.round(- (resultWidth - contW) / 2);
+        }
+        if(css.height > contH) {
+            css.marginTop = _this.round(- (resultHeight - contH) / 2);
         }
 
         // apply to item
@@ -445,8 +451,34 @@
 
         // scroll
         if(_this.options.type == 'scroll' || _this.options.type == 'scroll-opacity') {
-            var positionY = section.top * _this.options.speed;
-                positionY = _this.round(positionY);
+            var positionY = section.top;
+
+            // centering parallax if block < window height
+            if(section.height < windowHeight) {
+                positionY -= (windowHeight - section.height) / 2;
+            }
+
+            // speed from 0 to 1
+            if(_this.options.speed >= 0 && _this.options.speed <= 1) {
+                positionY *= _this.options.speed;
+            }
+
+            // negative speed and from 1 to 2
+            else {
+                var imageRect = _this.image.$item[0].getBoundingClientRect();
+                var percent = (windowHeight + section.height - section.height - section.top) / (windowHeight + section.height);
+                    percent = percent - 0.5; // 0.5 for top and 0.5 for bottom
+                var newPos = percent * (imageRect.height - Math.max(section.height, windowHeight));
+
+                if(_this.options.speed > 1) {
+                    positionY -= newPos;
+                } else {
+                    positionY = newPos;
+                }
+            }
+
+            positionY = _this.round(positionY);
+
             if(supportTransform && _this.options.enableTransform) {
                 // fix if parents with transform style
                 if(_this.parentWithTransform) {

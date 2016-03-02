@@ -15,6 +15,7 @@ jQuery background parallax plugin used for adding a smooth parallax scrolling ef
 * [Parallax with full-height blocks](http://free.nkdev.info/jarallax/full-height-blocks.html)
 * [Parallax with Scale and Opacity](http://free.nkdev.info/jarallax/scale-opacity-parallax.html)
 * [Video Parallax (Youtube and Vimeo)](http://free.nkdev.info/jarallax/video-parallax.html)
+* [Parallax with Different Speed](http://free.nkdev.info/jarallax/different-speed.html)
 
 ## Getting Started
 Load jQuery(1.7+) and include Jarallax plugin
@@ -88,7 +89,7 @@ Options can be passed in data attributes or in object when you initialize jarall
             <td>speed</td>
             <td>float</td>
             <td>0.5</td>
-            <td>Parallax effect speed. Provide numbers from 0.0 to 1.0</td>
+            <td>Parallax effect speed. Provide numbers from -1.0 to 2.0</td>
         </tr>
         <tr>
             <td>imgSrc</td>
