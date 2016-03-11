@@ -42,17 +42,6 @@
         }());
 
     var supportTransform = (function() {
-        var prefixes = 'transform WebkitTransform MozTransform OTransform msTransform'.split(' ');
-        var div = document.createElement('div');
-        for(var i = 0; i < prefixes.length; i++) {
-            if(div && div.style[prefixes[i]] !== undefined) {
-                return prefixes[i];
-            }
-        }
-        return false;
-    }());
-
-    var support3dtransform = (function() {
         if (!window.getComputedStyle) {
             return false;
         }
@@ -485,10 +474,7 @@
                     positionY *= -1;
                 }
 
-                css.transform = 'translateY(' + positionY + 'px)';
-                if(support3dtransform) {
-                    css.transform = 'translate3d(0, ' + positionY + 'px, 0)';
-                }
+                css.transform = 'translate3d(0, ' + positionY + 'px, 0)';
             } else {
                 css.backgroundPosition = '50% ' + positionY + 'px';
             }
