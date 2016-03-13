@@ -319,8 +319,8 @@
             return;
         }
 
-        var contW = Math.max(_this.image.$container.outerWidth(true), $(window).outerWidth(true)),
-            contH = Math.max(_this.image.$container.outerHeight(true), $(window).outerHeight(true)),
+        var contW = Math.max(_this.image.$container.outerWidth(true), $(window).width()),
+            contH = Math.max(_this.image.$container.outerHeight(true), $(window).height()),
             imgW  = _this.image.width,
             imgH  = _this.image.height,
             resultWidth, resultHeight;
