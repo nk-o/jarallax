@@ -169,7 +169,7 @@ Console Result:
 {
     // parallax section client rect (top, left, width, height)
     rect            : object,
-    
+
     // see image below for more info
     beforeTop       : float,
     beforeTopEnd    : float,
@@ -186,8 +186,13 @@ Console Result:
 Calculations example:
 [![On Scroll Calculations](http://a.nkdev.info/jarallax/jarallax-calculations.jpg)](http://a.nkdev.info/jarallax/jarallax-calculations.jpg)
 
+# Real Usage Examples
+* [Youplay](http://wp.nkdev.info/youplay)
+* [InLove](http://wp.nkdev.info/in-love/home-1/)
+* [Flatness](http://wp.nkdev.info/in-love/flatness/)
+
 # Images
 All demo images from https://www.pexels.com/
 
 # License
-Copyright (c) 2015 _nK Licensed under the WTFPL license.
+Copyright (c) 2016 _nK Licensed under the WTFPL license.
