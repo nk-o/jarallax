@@ -4,7 +4,7 @@
  * Author  : _nK http://nkdev.info
  * GitHub  : https://github.com/nk-o/jarallax
  */
-(function(factory) {
+(function (factory) {
     'use strict';
     if (typeof define === 'function' && define.amd) {
         define(['jquery'], factory);
@@ -13,44 +13,47 @@
     } else {
         factory(jQuery);
     }
-}(function($) {
+}(function ($) {
+    'use strict';
+
     // Adapted from https://gist.github.com/paulirish/1579671
-    if (!Date.now)
-        Date.now = function() { return new Date().getTime(); };
-    if(!window.requestAnimationFrame)
-        (function() {
-            'use strict';
-            
+    if(!Date.now) {
+        Date.now = function () { return new Date().getTime(); };
+    }
+    if(!window.requestAnimationFrame) {
+        (function () {
+
             var vendors = ['webkit', 'moz'];
             for (var i = 0; i < vendors.length && !window.requestAnimationFrame; ++i) {
                 var vp = vendors[i];
                 window.requestAnimationFrame = window[vp+'RequestAnimationFrame'];
-                window.cancelAnimationFrame = (window[vp+'CancelAnimationFrame']
-                                           || window[vp+'CancelRequestAnimationFrame']);
+                window.cancelAnimationFrame = window[vp+'CancelAnimationFrame']
+                                           || window[vp+'CancelRequestAnimationFrame'];
             }
             if (/iP(ad|hone|od).*OS 6/.test(window.navigator.userAgent) // iOS6 is buggy
                 || !window.requestAnimationFrame || !window.cancelAnimationFrame) {
                 var lastTime = 0;
-                window.requestAnimationFrame = function(callback) {
+                window.requestAnimationFrame = function (callback) {
                     var now = Date.now();
                     var nextTime = Math.max(lastTime + 16, now);
-                    return setTimeout(function() { callback(lastTime = nextTime); },
+                    return setTimeout(function () { callback(lastTime = nextTime); },
                                       nextTime - now);
                 };
                 window.cancelAnimationFrame = clearTimeout;
             }
         }());
+    }
 
     var isAndroid = navigator.userAgent.toLowerCase().indexOf('android') > -1;
     var isOperaOld = !!window.opera;
     var isIElt10 = document.all && !window.atob;
 
-    var supportTransform = isIElt10 ? false : (function() {
+    var supportTransform = isIElt10 ? false : (function () {
         if (!window.getComputedStyle) {
             return false;
         }
 
-        var el = document.createElement('p'), 
+        var el = document.createElement('p'),
             has3d,
             transforms = {
                 'webkitTransform':'-webkit-transform',
@@ -64,7 +67,7 @@
         (document.body || document.documentElement).insertBefore(el, null);
 
         for (var t in transforms) {
-            if (el.style[t] !== undefined) {
+            if (typeof el.style[t] !== 'undefined') {
                 el.style[t] = "translate3d(1px,1px,1px)";
                 has3d = window.getComputedStyle(el).getPropertyValue(transforms[t]);
             }
@@ -72,7 +75,7 @@
 
         (document.body || document.documentElement).removeChild(el);
 
-        return (has3d !== undefined && has3d.length > 0 && has3d !== "none");
+        return typeof has3d !== 'undefined' && has3d.length > 0 && has3d !== "none";
     }());
 
     // list with all jarallax instances
@@ -80,10 +83,10 @@
     var jarallaxList = [];
 
     // Jarallax instance
-    var Jarallax = (function() {
+    var Jarallax = (function () {
         var instanceID = 0;
 
-        function Jarallax(item, userOptions) {
+        function Jarallax_inner (item, userOptions) {
             var _this = this,
                 dataOptions;
 
@@ -121,17 +124,17 @@
                 // fix for Android devices
                 // use <img> instead background image - more smoothly
                 useImgTag  : isAndroid || isOperaOld
-            }
+            };
 
             if(_this.initImg()) {
                 _this.init();
             }
         }
 
-        return Jarallax;
+        return Jarallax_inner;
     }());
 
-    Jarallax.prototype.initImg = function() {
+    Jarallax.prototype.initImg = function () {
         var _this = this;
 
         // get image src
@@ -142,9 +145,9 @@
             return false;
         }
         return true;
-    }
+    };
 
-    Jarallax.prototype.init = function() {
+    Jarallax.prototype.init = function () {
         var _this = this,
             containerStyles = {
                 position         : 'absolute',
@@ -175,7 +178,7 @@
             _this.image.$item = $('<img>').attr('src', _this.image.src);
             imageStyles = $.extend({
                 'max-width' : 'none'
-            }, containerStyles, imageStyles)
+            }, containerStyles, imageStyles);
         }
 
         // use div with background image
@@ -186,7 +189,7 @@
                 'background-size'     : '100% 100%',
                 'background-repeat'   : 'no-repeat no-repeat',
                 'background-image'    : 'url("' + _this.image.src + '")'
-            }, containerStyles, imageStyles)
+            }, containerStyles, imageStyles);
         }
 
         // fix for IE9 and less
@@ -196,18 +199,18 @@
 
         // check if one of parents have transform style (without this check, scroll transform will be inverted)
         _this.parentWithTransform = 0;
-        _this.$item.parents().each(function() {
+        _this.$item.parents().each(function () {
             if(!$(this).css('transform') || $(this).css('transform') !== 'none') {
                 _this.parentWithTransform = 1;
             }
-        })
+        });
 
         // parallax image
         _this.image.$item.css(imageStyles)
             .prependTo(_this.image.$container);
 
         // cover image if width and height is ready
-        function initAfterReady() {
+        function initAfterReady () {
             _this.coverImage();
             _this.clipContainer();
             _this.onScroll(true);
@@ -221,7 +224,7 @@
             }
 
             // timeout to fix IE blinking
-            setTimeout(function() {
+            setTimeout(function () {
                 // remove default user background
                 _this.$item.css({
                     'background-image'      : 'none',
@@ -236,17 +239,17 @@
             initAfterReady();
         } else {
             // load image and get width and height
-            _this.getImageSize(_this.image.src, function(width, height) {
+            _this.getImageSize(_this.image.src, function (width, height) {
                 _this.image.width  = width;
                 _this.image.height = height;
                 initAfterReady();
             });
         }
-        
+
         jarallaxList.push(_this);
     };
 
-    Jarallax.prototype.destroy = function() {
+    Jarallax.prototype.destroy = function () {
         var _this = this;
 
         // remove from instances list
@@ -271,28 +274,28 @@
         }
 
         delete _this.$item[0].jarallax;
-    }
+    };
 
     // round to 2 decimals
-    Jarallax.prototype.round = function(num) {
+    Jarallax.prototype.round = function (num) {
         return Math.floor(num * 100) / 100;
-    }
+    };
 
-    Jarallax.prototype.getImageSize = function(src, callback) {
+    Jarallax.prototype.getImageSize = function (src, callback) {
         if(!src || !callback) {
-            return false;
+            return;
         }
 
         var tempImg = new Image();
-        tempImg.onload = function() {
-            callback(tempImg.width, tempImg.height)
-        }
+        tempImg.onload = function () {
+            callback(tempImg.width, tempImg.height);
+        };
         tempImg.src = src;
-    }
+    };
 
     // it will remove some image overlapping
     // overlapping occur due to an image position fixed inside absolute possition element (webkit based browsers works without any fix)
-    Jarallax.prototype.clipContainer = function() {
+    Jarallax.prototype.clipContainer = function () {
         // clip is not working properly on real IE9 and less
         if(isIElt10) {
             return;
@@ -317,9 +320,9 @@
 
         // add clip styles inline (this method need for support IE8 and less browsers)
         $styles.html(css);
-    }
+    };
 
-    Jarallax.prototype.coverImage = function() {
+    Jarallax.prototype.coverImage = function () {
         var _this = this;
 
         if(!_this.image.width || !_this.image.height) {
@@ -378,11 +381,11 @@
         }
     };
 
-    Jarallax.prototype.isVisible = function() {
+    Jarallax.prototype.isVisible = function () {
         return this.isElementInViewport || false;
-    }
+    };
 
-    Jarallax.prototype.onScroll = function(force) {
+    Jarallax.prototype.onScroll = function (force) {
         var _this = this;
 
         if(!_this.image.width || !_this.image.height) {
@@ -397,12 +400,11 @@
                 backgroundPosition : '50% 50%'
             };
 
-        _this.isElementInViewport = (
+        _this.isElementInViewport =
             section.bottom >= 0 &&
             section.right >= 0 &&
             section.top <= windowHeight &&
-            section.left <= windowWidth
-        );
+            section.left <= windowWidth;
 
         // Check if totally above or totally below viewport
         var check = force ? false : !_this.isElementInViewport;
@@ -431,14 +433,14 @@
         }
 
         // opacity
-        if(_this.options.type == 'opacity' || _this.options.type == 'scale-opacity' || _this.options.type == 'scroll-opacity') {
+        if(_this.options.type === 'opacity' || _this.options.type === 'scale-opacity' || _this.options.type === 'scroll-opacity') {
             css.position = 'absolute';
             css.transform = 'translate3d(0, 0, 0)';
             css.opacity = visiblePercent;
         }
 
         // scale
-        if(_this.options.type == 'scale' || _this.options.type == 'scale-opacity') {
+        if(_this.options.type === 'scale' || _this.options.type === 'scale-opacity') {
             var scale = 1;
             scale += _this.options.speed * (1 - visiblePercent);
             css.position = 'absolute';
@@ -446,7 +448,7 @@
         }
 
         // scroll
-        if(_this.options.type == 'scroll' || _this.options.type == 'scroll-opacity') {
+        if(_this.options.type === 'scroll' || _this.options.type === 'scroll-opacity') {
             var positionY = section.top;
 
             // centering parallax if block < window height
@@ -511,9 +513,9 @@
     };
 
     // init events
-    (function() {
-        $(window).on('scroll.jarallax', function() {
-            window.requestAnimationFrame(function() {
+    (function () {
+        $(window).on('scroll.jarallax', function () {
+            window.requestAnimationFrame(function () {
                 for(var k = 0, len = jarallaxList.length; k < len; k++) {
                     jarallaxList[k].onScroll();
                 }
@@ -521,10 +523,10 @@
         });
 
         var timeout;
-        $(window).on('resize.jarallax orientationchange.jarallax load.jarallax', function() {
+        $(window).on('resize.jarallax orientationchange.jarallax load.jarallax', function () {
             clearTimeout(timeout);
-            timeout = setTimeout(function() {
-                window.requestAnimationFrame(function() {
+            timeout = setTimeout(function () {
+                window.requestAnimationFrame(function () {
                     for(var k = 0, len = jarallaxList.length; k < len; k++) {
                         var _this = jarallaxList[k];
                         _this.coverImage();
@@ -538,7 +540,7 @@
 
     var oldJarallax = $.fn.jarallax;
 
-    $.fn.jarallax = function() {
+    $.fn.jarallax = function () {
         var items = this,
             options = arguments[0],
             args = Array.prototype.slice.call(arguments, 1),
@@ -552,8 +554,8 @@
                     items[k].jarallax = new Jarallax(items[k], options);
                 }
             }
-            else {
-                ret = items[k].jarallax ? items[k].jarallax[options].apply(items[k].jarallax, args) : undefined;
+            else if(items[k].jarallax) {
+                ret = items[k].jarallax[options].apply(items[k].jarallax, args);
             }
             if (typeof ret !== 'undefined') {
                 return ret;
