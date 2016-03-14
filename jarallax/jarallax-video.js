@@ -4,7 +4,7 @@
  * Author  : _nK http://nkdev.info
  * GitHub  : https://github.com/nk-o/jarallax
  */
-(function(factory) {
+(function (factory) {
     'use strict';
     if (typeof define === 'function' && define.amd) {
         define(['jquery'], factory);
@@ -13,12 +13,13 @@
     } else {
         factory(jQuery);
     }
-}(function($) {
+}(function ($) {
+    'use strict';
 
-    var VideoWorker = (function() {
+    var VideoWorker = (function () {
         var ID = 0;
 
-        function VideoWorker(url, options) {
+        function VideoWorker_inner (url, options) {
             var _this = this;
 
             _this.url = url;
@@ -30,7 +31,7 @@
                 controls: 0
             };
 
-            _this.options = $.extend({}, _this.options_default, options)
+            _this.options = $.extend({}, _this.options_default, options);
 
             // check URL
             _this.videoID = _this.parseURL(url);
@@ -43,22 +44,22 @@
             }
         }
 
-        return VideoWorker;
+        return VideoWorker_inner;
     }());
 
-    VideoWorker.prototype.parseURL = function(url) {
+    VideoWorker.prototype.parseURL = function (url) {
         // parse youtube ID
-        function getYoutubeID(url) {
+        function getYoutubeID (ytUrl) {
             var regExp = /.*(?:youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=)([^#\&\?]*).*/;
-            var match = url.match(regExp);
-            return (match && match[1].length==11) ? match[1] : false;
+            var match = ytUrl.match(regExp);
+            return match && match[1].length === 11 ? match[1] : false;
         }
 
         // parse vimeo ID
-        function getVimeoID(url) {
+        function getVimeoID (vmUrl) {
             var regExp = /https?:\/\/(?:www\.|player\.)?vimeo.com\/(?:channels\/(?:\w+\/)?|groups\/([^\/]*)\/videos\/|album\/(\d+)\/video\/|video\/|)(\d+)(?:$|\/|\?)/;
-            var match = url.match(regExp);
-            return (match && match[3]) ? match[3] : false;
+            var match = vmUrl.match(regExp);
+            return match && match[3] ? match[3] : false;
         }
 
         var Youtube = getYoutubeID(url);
@@ -70,25 +71,25 @@
         } else if (Vimeo) {
             this.type = 'vimeo';
             return Vimeo;
-        } else {
-            return false;
         }
+
+        return false;
     };
 
-    VideoWorker.prototype.isValid = function() {
+    VideoWorker.prototype.isValid = function () {
         return !!this.videoID;
-    }
+    };
 
     // events
-    VideoWorker.prototype.on = function(name, callback) {
+    VideoWorker.prototype.on = function (name, callback) {
         this.userEventsList = this.userEventsList || [];
 
         // add new callback in events list
         (this.userEventsList[name] || (this.userEventsList[name] = [])).push(callback);
-    }
-    VideoWorker.prototype.off = function(name, callback) {
+    };
+    VideoWorker.prototype.off = function (name, callback) {
         if(!this.userEventsList[name] || !this.userEventsList) {
-            return false;
+            return;
         }
 
         if(!callback) {
@@ -96,23 +97,24 @@
         } else {
             for(var k = 0; k < this.userEventsList[name].length; k++) {
                 if(this.userEventsList[name][k] === callback) {
-                    this.userEventsList[name][k] = undefined;
+                    this.userEventsList[name][k] = false;
                 }
             }
         }
-    }
-    VideoWorker.prototype.fire = function(name) {
+    };
+    VideoWorker.prototype.fire = function (name) {
         var args = [].slice.call(arguments, 1);
         if(this.userEventsList && typeof this.userEventsList[name] !== 'undefined') {
             for(var k in this.userEventsList[name]) {
                 // call with all arguments
-                if(this.userEventsList[name][k])
+                if(this.userEventsList[name][k]) {
                     this.userEventsList[name][k].apply(this, args);
+                }
             }
         }
-    }
+    };
 
-    VideoWorker.prototype.play = function() {
+    VideoWorker.prototype.play = function () {
         if(!this.player) {
             return;
         }
@@ -124,13 +126,13 @@
         if(this.type === 'vimeo') {
             this.player.api('play');
         }
-    }
+    };
 
-    VideoWorker.prototype.pause = function() {
+    VideoWorker.prototype.pause = function () {
         if(!this.player) {
             return;
         }
-        
+
         if(this.type === 'youtube' && this.player.pauseVideo) {
             this.player.pauseVideo();
         }
@@ -138,9 +140,9 @@
         if(this.type === 'vimeo') {
             this.player.api('pause');
         }
-    }
+    };
 
-    VideoWorker.prototype.getImageURL = function(callback) {
+    VideoWorker.prototype.getImageURL = function (callback) {
         var _this = this;
 
         if(_this.videoImage) {
@@ -152,16 +154,16 @@
             _this.videoImage = 'https://img.youtube.com/vi/' + _this.videoID + '/maxresdefault.jpg';
             callback(_this.videoImage);
         }
-        
+
         if(_this.type === 'vimeo') {
-            $.get('https://vimeo.com/api/v2/video/' + _this.videoID + '.json', function(response) {
+            $.get('https://vimeo.com/api/v2/video/' + _this.videoID + '.json', function (response) {
                 _this.videoImage = response[0].thumbnail_large;
                 callback(_this.videoImage);
             });
         }
     };
 
-    VideoWorker.prototype.getIframe = function(callback) {
+    VideoWorker.prototype.getIframe = function (callback) {
         var _this = this;
 
         // return generated iframe
@@ -171,7 +173,7 @@
         }
 
         // generate new iframe
-        _this.onAPIready(function() {
+        _this.onAPIready(function () {
             // Youtube
             if(_this.type === 'youtube') {
                 _this.playerOptions = {};
@@ -190,13 +192,12 @@
                     _this.playerOptions.playerVars.controls = 0;
                     _this.playerOptions.playerVars.showinfo = 0;
                     _this.playerOptions.playerVars.disablekb = 1;
-                    _this.playerOptions.playerVars
                 }
 
                 // events
-                var videoStarted = 0;
+                var ytStarted;
                 _this.playerOptions.events = {
-                    onReady: function(e) {
+                    onReady: function (e) {
                         // mute
                         if(_this.options.mute) {
                             e.target.mute();
@@ -207,13 +208,13 @@
                         }
                         _this.fire('ready', e);
                     },
-                    onStateChange: function(e) {
+                    onStateChange: function (e) {
                         // loop
                         if(_this.options.loop && e.data === YT.PlayerState.ENDED) {
                             e.target.playVideo();
                         }
-                        if(videoStarted == 0 && e.data === YT.PlayerState.PLAYING) {
-                            videoStarted = 1;
+                        if(!ytStarted && e.data === YT.PlayerState.PLAYING) {
+                            ytStarted = 1;
                             _this.fire('started', e);
                         }
                     }
@@ -254,8 +255,7 @@
 
                 _this.player = _this.player || $f(_this.$iframe[0]);
 
-                var videoStarted = 0;
-                _this.player.addEvent('ready', function(e) {
+                _this.player.addEvent('ready', function () {
                     // mute
                     _this.player.api('setVolume', _this.options.mute ? 0 : 100);
 
@@ -264,11 +264,12 @@
                         _this.play();
                     }
 
-                    _this.player.addEvent('playProgress', function(e) {
-                        if(!videoStarted) {
+                    var vmStarted;
+                    _this.player.addEvent('playProgress', function (e) {
+                        if(!vmStarted) {
                             _this.fire('started', e);
                         }
-                        videoStarted = 1;
+                        vmStarted = 1;
                     });
 
                     _this.fire('ready', e);
@@ -279,7 +280,7 @@
         });
     };
 
-    VideoWorker.prototype.init = function() {
+    VideoWorker.prototype.init = function () {
         var _this = this;
 
         _this.playerID = 'VideoWorker-' + _this.ID;
@@ -287,7 +288,7 @@
 
     var YoutubeAPIadded = 0;
     var VimeoAPIadded = 0;
-    VideoWorker.prototype.loadAPI = function() {
+    VideoWorker.prototype.loadAPI = function () {
         var _this = this;
 
         if(YoutubeAPIadded && VimeoAPIadded) {
@@ -305,10 +306,10 @@
         // load Vimeo API
         if(_this.type === 'vimeo' && !VimeoAPIadded) {
             VimeoAPIadded = 1;
-            src = '//f.vimeocdn.com/js/froogaloop2.min.js'
+            src = '//f.vimeocdn.com/js/froogaloop2.min.js';
         }
 
-        if (window.location.origin == 'file://') {
+        if (window.location.origin === 'file://') {
             src = 'http:' + src;
         }
 
@@ -316,7 +317,7 @@
         var tag = document.createElement('script');
         var head = document.getElementsByTagName('head')[0];
         tag.src = src;
-        
+
         head.appendChild(tag);
 
         head = null;
@@ -327,26 +328,26 @@
     var loadingVimeoPlayer = 0;
     var loadingYoutubeDeffer = $.Deferred();
     var loadingVimeoDeffer = $.Deferred();
-    VideoWorker.prototype.onAPIready = function(callback) {
+    VideoWorker.prototype.onAPIready = function (callback) {
         var _this = this;
 
         // Youtube
         if(_this.type === 'youtube') {
             // Listen for Gobal YT player callback
-            if ((typeof YT === 'undefined' || YT.loaded == 0) && !loadingYoutubePlayer) {
+            if ((typeof YT === 'undefined' || YT.loaded === 0) && !loadingYoutubePlayer) {
                 // Prevents Ready Event from being called twice
                 loadingYoutubePlayer = 1;
-                
+
                 // Creates deferred so, other players know when to wait.
-                window.onYouTubeIframeAPIReady = function() {
+                window.onYouTubeIframeAPIReady = function () {
                     window.onYouTubeIframeAPIReady = null;
                     loadingYoutubeDeffer.resolve('done');
                     callback();
                 };
-            } else if (typeof YT === 'object' && YT.loaded == 1)  {
+            } else if (typeof YT === 'object' && YT.loaded === 1)  {
                 callback();
             } else {
-                loadingYoutubeDeffer.done(function() {
+                loadingYoutubeDeffer.done(function () {
                     callback();
                 });
             }
@@ -356,7 +357,7 @@
         if(_this.type === 'vimeo') {
             if(typeof $f === 'undefined' && !loadingVimeoPlayer) {
                 loadingVimeoPlayer = 1;
-                var frooga_interval = setInterval(function() {
+                var frooga_interval = setInterval(function () {
                     if(typeof $f !== 'undefined') {
                         clearInterval(frooga_interval);
                         loadingVimeoDeffer.resolve('done');
@@ -366,9 +367,9 @@
             } else if(typeof $f !== 'undefined') {
                 callback();
             } else {
-                loadingVimeoDeffer.done(function() {
+                loadingVimeoDeffer.done(function () {
                     callback();
-                })
+                });
             }
         }
     };
@@ -384,7 +385,7 @@
  * Author  : _nK http://nkdev.info
  * GitHub  : https://github.com/nk-o/jarallax
  */
-(function(factory) {
+(function (factory) {
     'use strict';
     if (typeof define === 'function' && define.amd) {
         define(['jquery'], factory);
@@ -393,18 +394,20 @@
     } else {
         factory(jQuery);
     }
-}(function($) {
+}(function ($) {
+    'use strict';
+
     var Jarallax = $.fn.jarallax.constructor;
 
     // append video after init Jarallax
     var def_init = Jarallax.prototype.init;
-    Jarallax.prototype.init = function() {
+    Jarallax.prototype.init = function () {
         var _this = this;
 
         def_init.apply(_this);
 
         if(_this.video) {
-            _this.video.getIframe(function(iframe) {
+            _this.video.getIframe(function (iframe) {
                 _this.$video = $(iframe).css({
                         position: 'fixed',
                         top: 0, left: 0, right: 0, bottom: 0,
@@ -419,7 +422,7 @@
 
     // append video after init Jarallax
     var def_coverImage = Jarallax.prototype.coverImage;
-    Jarallax.prototype.coverImage = function() {
+    Jarallax.prototype.coverImage = function () {
         var _this = this;
 
         def_coverImage.apply(_this);
@@ -435,11 +438,11 @@
 
     // init video parallax
     var def_initImg = Jarallax.prototype.initImg;
-    Jarallax.prototype.initImg = function() {
+    Jarallax.prototype.initImg = function () {
         var _this = this;
 
         if(!_this.options.videoSrc) {
-            _this.options.videoSrc = _this.$item.attr('data-jarallax-video') || undefined;
+            _this.options.videoSrc = _this.$item.attr('data-jarallax-video') || false;
         }
 
         if(_this.options.videoSrc) {
@@ -448,8 +451,8 @@
             if(video.isValid()) {
                 _this.image.useImgTag = true;
 
-                video.on('ready', function() {
-                    function checkViewport() {
+                video.on('ready', function () {
+                    function checkViewport () {
                         if(_this.isVisible()) {
                             video.play();
                         } else {
@@ -457,12 +460,12 @@
                         }
                     }
 
-                    // pause video when it out of viewport 
+                    // pause video when it out of viewport
                     $(window).on('DOMContentLoaded.jarallax-' + _this.instanceID + ' load.jarallax-' + _this.instanceID + ' resize.jarallax-' + _this.instanceID + ' scroll.jarallax-' + _this.instanceID + '', checkViewport);
                     checkViewport();
                 });
 
-                video.on('started', function() {
+                video.on('started', function () {
                     _this.image.$default_item = _this.image.$item;
                     _this.image.$item = _this.$video;
 
@@ -481,7 +484,7 @@
 
                 _this.video = video;
 
-                video.getImageURL(function(url) {
+                video.getImageURL(function (url) {
                     _this.image.src = url;
                     _this.init();
                 });
@@ -495,11 +498,11 @@
 
     // Destroy video parallax
     var def_destroy = Jarallax.prototype.destroy;
-    Jarallax.prototype.destroy = function() {
+    Jarallax.prototype.destroy = function () {
         var _this = this;
 
         $(window).off('.jarallax-' + _this.instanceID);
 
         def_destroy.apply(_this);
-    }
+    };
 }));
