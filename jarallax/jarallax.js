@@ -442,7 +442,11 @@
         // scale
         if(_this.options.type === 'scale' || _this.options.type === 'scale-opacity') {
             var scale = 1;
-            scale += _this.options.speed * (1 - visiblePercent);
+            if(_this.options.speed < 0) {
+                scale += -1 * _this.options.speed * visiblePercent;
+            } else {
+                scale += _this.options.speed * (1 - visiblePercent);
+            }
             css.position = 'absolute';
             css.transform = 'scale(' + scale + ') translate3d(0, 0, 0)';
         }
@@ -461,7 +465,7 @@
                 positionY *= _this.options.speed;
             }
 
-            // negative speed and from 1 to 2
+            // speed from -1 to 0 and from 1 to 2
             else {
                 var imageRect = _this.image.$item[0].getBoundingClientRect();
                 var percent = (windowHeight + section.height - section.height - section.top) / (windowHeight + section.height);
