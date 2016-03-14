@@ -41,7 +41,11 @@
             }
         }());
 
-    var supportTransform = (function() {
+    var isAndroid = navigator.userAgent.toLowerCase().indexOf('android') > -1;
+    var isOperaOld = !!window.opera;
+    var isIElt10 = document.all && !window.atob;
+
+    var supportTransform = isIElt10 ? false : (function() {
         if (!window.getComputedStyle) {
             return false;
         }
@@ -70,9 +74,6 @@
 
         return (has3d !== undefined && has3d.length > 0 && has3d !== "none");
     }());
-    
-    var isAndroid = navigator.userAgent.toLowerCase().indexOf('android') > -1;
-    var isOperaOld = !!window.opera;
 
     // list with all jarallax instances
     // need to render all in one scroll/resize event
@@ -188,6 +189,11 @@
             }, containerStyles, imageStyles)
         }
 
+        // fix for IE9 and less
+        if(isIElt10) {
+            imageStyles.backgroundAttachment = 'fixed';
+        }
+
         // check if one of parents have transform style (without this check, scroll transform will be inverted)
         _this.parentWithTransform = 0;
         _this.$item.parents().each(function() {
@@ -287,6 +293,11 @@
     // it will remove some image overlapping
     // overlapping occur due to an image position fixed inside absolute possition element (webkit based browsers works without any fix)
     Jarallax.prototype.clipContainer = function() {
+        // clip is not working properly on real IE9 and less
+        if(isIElt10) {
+            return;
+        }
+
         var _this  = this,
             width  = _this.image.$container.outerWidth(true),
             height = _this.image.$container.outerHeight(true);
@@ -299,17 +310,13 @@
 
         var css = [
             '#jarallax-container-' + _this.instanceID + ' {',
-            '   clip: rect(0px ' + width + 'px ' + height + 'px 0);',
-            '   clip: rect(0px, ' + width + 'px, ' + height + 'px, 0);',
+            '   clip: rect(0 ' + width + 'px ' + height + 'px 0);',
+            '   clip: rect(0, ' + width + 'px, ' + height + 'px, 0);',
             '}'
         ].join('\n');
 
         // add clip styles inline (this method need for support IE8 and less browsers)
-        if ($styles[0].styleSheet) {
-            $styles[0].styleSheet.cssText = css;
-        } else {
-            $styles.html(css);
-        }
+        $styles.html(css);
     }
 
     Jarallax.prototype.coverImage = function() {
@@ -478,7 +485,10 @@
             } else {
                 css.backgroundPosition = '50% ' + positionY + 'px';
             }
-            css.position = 'fixed';
+
+            // fixed position is not work properly for IE9 and less
+            // solution - use absolute position and emulate fixed by using container offset
+            css.position = isIElt10 ? 'absolute' : 'fixed';
         }
 
         _this.image.$item.css(css);
