@@ -255,7 +255,7 @@
 
                 _this.player = _this.player || $f(_this.$iframe[0]);
 
-                _this.player.addEvent('ready', function () {
+                _this.player.addEvent('ready', function (eventReady) {
                     // mute
                     _this.player.api('setVolume', _this.options.mute ? 0 : 100);
 
@@ -265,14 +265,14 @@
                     }
 
                     var vmStarted;
-                    _this.player.addEvent('playProgress', function (e) {
+                    _this.player.addEvent('playProgress', function (eventPlay) {
                         if(!vmStarted) {
-                            _this.fire('started', e);
+                            _this.fire('started', eventPlay);
                         }
                         vmStarted = 1;
                     });
 
-                    _this.fire('ready', e);
+                    _this.fire('ready', eventReady);
                 });
             }
 
