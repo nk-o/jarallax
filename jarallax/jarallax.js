@@ -484,7 +484,7 @@
             if(supportTransform && _this.options.enableTransform) {
                 // fix if parents with transform style
                 if(_this.parentWithTransform) {
-                    positionY *= -1;
+                    positionY -= section.top;
                 }
 
                 css.transform = 'translate3d(0, ' + positionY + 'px, 0)';
