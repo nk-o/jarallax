@@ -1,6 +1,6 @@
 /*!
  * Name    : Video Worker (wrapper for Youtube and Vimeo)
- * Version : 1.0.0
+ * Version : 1.0.1
  * Author  : _nK http://nkdev.info
  * GitHub  : https://github.com/nk-o/jarallax
  */
