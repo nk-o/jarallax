@@ -78,6 +78,14 @@
         return typeof has3d !== 'undefined' && has3d.length > 0 && has3d !== "none";
     }());
 
+    var $wnd = $(window);
+    var wndW;
+    var wndH;
+    function updateWndVars() {
+        wndW = $(window).width();
+        wndH = $(window).height();
+    }
+
     // list with all jarallax instances
     // need to render all in one scroll/resize event
     var jarallaxList = [];
@@ -388,9 +396,7 @@
         }
 
         var section = _this.$item[0].getBoundingClientRect();
-        var windowHeight  = $(window).height(),
-            windowWidth   = $(window).width(),
-            css           = {
+        var css     = {
                 visibility         : 'visible',
                 backgroundPosition : '50% 50%'
             };
@@ -398,8 +404,8 @@
         _this.isElementInViewport =
             section.bottom >= 0 &&
             section.right >= 0 &&
-            section.top <= windowHeight &&
-            section.left <= windowWidth;
+            section.top <= wndH &&
+            section.left <= wndW;
 
         // Check if totally above or totally below viewport
         var check = force ? false : !_this.isElementInViewport;
@@ -411,19 +417,19 @@
         var beforeTop = Math.max(0, section.top);
         var beforeTopEnd = Math.max(0, section.height + section.top);
         var afterTop = Math.max(0, -section.top);
-        var beforeBottom = Math.max(0, section.top + section.height - windowHeight);
-        var beforeBottomEnd = Math.max(0, section.height - (section.top + section.height - windowHeight));
-        var afterBottom = Math.max(0, -section.top + windowHeight - section.height);
+        var beforeBottom = Math.max(0, section.top + section.height - wndH);
+        var beforeBottomEnd = Math.max(0, section.height - (section.top + section.height - wndH));
+        var afterBottom = Math.max(0, -section.top + wndH - section.height);
 
         // calculate on how percent of section is visible
         var visiblePercent = 1;
-        if(section.height < windowHeight) {
+        if(section.height < wndH) {
             visiblePercent = 1 - (afterTop || beforeBottom) / section.height;
         } else {
-            if(beforeTopEnd <= windowHeight) {
-                visiblePercent = beforeTopEnd / windowHeight;
-            } else if (beforeBottomEnd <= windowHeight) {
-                visiblePercent = beforeBottomEnd / windowHeight;
+            if(beforeTopEnd <= wndH) {
+                visiblePercent = beforeTopEnd / wndH;
+            } else if (beforeBottomEnd <= wndH) {
+                visiblePercent = beforeBottomEnd / wndH;
             }
         }
 
@@ -451,8 +457,8 @@
             var positionY = section.top;
 
             // centering parallax if block < window height
-            if(section.height < windowHeight) {
-                positionY -= (windowHeight - section.height) / 2;
+            if(section.height < wndH) {
+                positionY -= (wndH - section.height) / 2;
             }
 
             // speed from 0 to 1
@@ -463,9 +469,9 @@
             // speed from -1 to 0 and from 1 to 2
             else {
                 var imageRect = _this.image.$item[0].getBoundingClientRect();
-                var percent = (windowHeight + section.height - section.height - section.top) / (windowHeight + section.height);
+                var percent = (wndH + section.height - section.height - section.top) / (wndH + section.height);
                     percent = percent - 0.5; // 0.5 for top and 0.5 for bottom
-                var newPos = percent * (imageRect.height - Math.max(section.height, windowHeight));
+                var newPos = percent * (imageRect.height - Math.max(section.height, wndH));
 
                 if(_this.options.speed > 1) {
                     positionY -= newPos;
@@ -510,30 +516,21 @@
     };
 
     // init events
-    (function () {
-        $(window).on('scroll.jarallax', function () {
-            window.requestAnimationFrame(function () {
-                for(var k = 0, len = jarallaxList.length; k < len; k++) {
-                    jarallaxList[k].onScroll();
+    $(window).on('scroll.jarallax resize.jarallax orientationchange.jarallax load.jarallax', function (e) {
+        window.requestAnimationFrame(function () {
+            if(e.type !== 'scroll') {
+                updateWndVars();
+            }
+            for(var k = 0, len = jarallaxList.length; k < len; k++) {
+                // cover image and clip needed only when parallax container was changed
+                if(e.type !== 'scroll') {
+                    jarallaxList[k].coverImage();
+                    jarallaxList[k].clipContainer();
                 }
-            });
+                jarallaxList[k].onScroll();
+            }
         });
-
-        var timeout;
-        $(window).on('resize.jarallax orientationchange.jarallax load.jarallax', function () {
-            clearTimeout(timeout);
-            timeout = setTimeout(function () {
-                window.requestAnimationFrame(function () {
-                    for(var k = 0, len = jarallaxList.length; k < len; k++) {
-                        var _this = jarallaxList[k];
-                        _this.coverImage();
-                        _this.clipContainer();
-                        _this.onScroll();
-                    }
-                });
-            }, 100);
-        });
-    }());
+    });
 
     var oldJarallax = $.fn.jarallax;
 
