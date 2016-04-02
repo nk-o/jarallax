@@ -276,11 +276,6 @@
         delete _this.$item[0].jarallax;
     };
 
-    // round to 2 decimals
-    Jarallax.prototype.round = function (num) {
-        return Math.floor(num * 100) / 100;
-    };
-
     Jarallax.prototype.getImageSize = function (src, callback) {
         if(!src || !callback) {
             return;
@@ -362,14 +357,14 @@
             resultHeight = css.height;
         }
 
-        css.width = _this.round(resultWidth);
-        css.height = _this.round(resultHeight);
+        css.width = resultWidth;
+        css.height = resultHeight;
 
         if(css.width > contW) {
-            css.marginLeft = _this.round(- (resultWidth - contW) / 2);
+            css.marginLeft = - (resultWidth - contW) / 2;
         }
         if(css.height > contH) {
-            css.marginTop = _this.round(- (resultHeight - contH) / 2);
+            css.marginTop = - (resultHeight - contH) / 2;
         }
 
         // apply to item
@@ -478,8 +473,6 @@
                     positionY = newPos;
                 }
             }
-
-            positionY = _this.round(positionY);
 
             if(supportTransform && _this.options.enableTransform) {
                 // fix if parents with transform style
