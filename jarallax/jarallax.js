@@ -81,9 +81,9 @@
     var $wnd = $(window);
     var wndW;
     var wndH;
-    function updateWndVars() {
-        wndW = $(window).width();
-        wndH = $(window).height();
+    function updateWndVars () {
+        wndW = $wnd.width();
+        wndH = $wnd.height();
     }
 
     // list with all jarallax instances
@@ -332,8 +332,8 @@
             return;
         }
 
-        var contW = Math.max(_this.image.$container.outerWidth(true), $(window).width()),
-            contH = Math.max(_this.image.$container.outerHeight(true), $(window).height()),
+        var contW = Math.max(_this.image.$container.outerWidth(true), wndW),
+            contH = Math.max(_this.image.$container.outerHeight(true), wndH),
             imgW  = _this.image.width,
             imgH  = _this.image.height,
             resultWidth, resultHeight;
@@ -516,7 +516,7 @@
     };
 
     // init events
-    $(window).on('scroll.jarallax resize.jarallax orientationchange.jarallax load.jarallax', function (e) {
+    $wnd.on('scroll.jarallax resize.jarallax orientationchange.jarallax load.jarallax', function (e) {
         window.requestAnimationFrame(function () {
             if(e.type !== 'scroll') {
                 updateWndVars();
