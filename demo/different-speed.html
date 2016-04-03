@@ -7,7 +7,6 @@
     <title>Jarallax | Different Speed Demo</title>
     <link href='https://fonts.googleapis.com/css?family=Montserrat' rel='stylesheet' type='text/css'>
     <link href='css/demo.css' rel='stylesheet' type='text/css'>
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
     <script src="../jarallax/jarallax.js"></script>
 </head>
 <body>
@@ -48,10 +47,15 @@
     <script async defer id="github-bjs" src="https://buttons.github.io/buttons.js"></script>
     <script type="text/javascript">
         /* init Jarallax */
-        $('.jarallax').jarallax({
+        jarallax(document.querySelectorAll('.jarallax'), {
             imgWidth: 1366,
             imgHeight: 768
-        })
+        });
+        /* init Jarallax with jQuery */
+        // $('.jarallax').jarallax({
+        //     imgWidth: 1366,
+        //     imgHeight: 768
+        // });
     </script>
 </body>
 </html>

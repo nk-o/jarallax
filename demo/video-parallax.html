@@ -7,7 +7,6 @@
     <title>Jarallax | Video Parallax Demo</title>
     <link href='https://fonts.googleapis.com/css?family=Montserrat' rel='stylesheet' type='text/css'>
     <link href='css/demo.css' rel='stylesheet' type='text/css'>
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
     <script src="../jarallax/jarallax.js"></script>
     <script src="../jarallax/jarallax-video.js"></script>
 </head>
@@ -49,11 +48,17 @@
     <script async defer id="github-bjs" src="https://buttons.github.io/buttons.js"></script>
     <script type="text/javascript">
         /* init Jarallax */
-        $('.jarallax').jarallax({
+        jarallax(document.querySelectorAll('.jarallax'), {
             speed: 0.5,
             imgWidth: 1366,
             imgHeight: 768
-        })
+        });
+        /* init Jarallax with jQuery */
+        // $('.jarallax').jarallax({
+        //     speed: 0.5,
+        //     imgWidth: 1366,
+        //     imgHeight: 768
+        // });
     </script>
 </body>
 </html>

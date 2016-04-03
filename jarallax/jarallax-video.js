@@ -4,17 +4,52 @@
  * Author  : _nK http://nkdev.info
  * GitHub  : https://github.com/nk-o/jarallax
  */
-(function (factory) {
+(function (window) {
     'use strict';
-    if (typeof define === 'function' && define.amd) {
-        define(['jquery'], factory);
-    } else if (typeof exports !== 'undefined') {
-        module.exports = factory(require('jquery'));
-    } else {
-        factory(jQuery);
+
+    // Extend like jQuery.extend
+    function extend (out) {
+        out = out || {};
+        for (var i = 1; i < arguments.length; i++) {
+            if (!arguments[i]) {
+                continue;
+            }
+            for (var key in arguments[i]) {
+                if (arguments[i].hasOwnProperty(key)) {
+                    out[key] = arguments[i][key];
+                }
+            }
+        }
+        return out;
     }
-}(function ($) {
-    'use strict';
+
+    // Deffered
+    // thanks http://stackoverflow.com/questions/18096715/implement-deferred-object-without-using-jquery
+    function Deferred () {
+        this._done = [];
+        this._fail = [];
+    }
+    Deferred.prototype = {
+        execute: function (list, args) {
+            var i = list.length;
+            args = Array.prototype.slice.call(args);
+            while(i--) {
+                list[i].apply(null, args);
+            }
+        },
+        resolve: function () {
+            this.execute(this._done, arguments);
+        },
+        reject: function () {
+            this.execute(this._fail, arguments);
+        },
+        done: function (callback) {
+            this._done.push(callback);
+        },
+        fail: function (callback) {
+            this._fail.push(callback);
+        }
+    };
 
     var VideoWorker = (function () {
         var ID = 0;
@@ -31,7 +66,7 @@
                 controls: 0
             };
 
-            _this.options = $.extend({}, _this.options_default, options);
+            _this.options = extend({}, _this.options_default, options);
 
             // check URL
             _this.videoID = _this.parseURL(url);
@@ -88,7 +123,7 @@
         (this.userEventsList[name] || (this.userEventsList[name] = [])).push(callback);
     };
     VideoWorker.prototype.off = function (name, callback) {
-        if(!this.userEventsList[name] || !this.userEventsList) {
+        if(!this.userEventsList || !this.userEventsList[name]) {
             return;
         }
 
@@ -156,10 +191,22 @@
         }
 
         if(_this.type === 'vimeo') {
-            $.get('https://vimeo.com/api/v2/video/' + _this.videoID + '.json', function (response) {
-                _this.videoImage = response[0].thumbnail_large;
-                callback(_this.videoImage);
-            });
+            var request = new XMLHttpRequest();
+            request.open('GET', 'https://vimeo.com/api/v2/video/' + _this.videoID + '.json', true);
+            request.onreadystatechange = function () {
+                if (this.readyState === 4) {
+                    if (this.status >= 200 && this.status < 400) {
+                        // Success!
+                        var response = JSON.parse(this.responseText);
+                        _this.videoImage = response[0].thumbnail_large;
+                        callback(_this.videoImage);
+                    } else {
+                        // Error :(
+                    }
+                }
+            };
+            request.send();
+            request = null;
         }
     };
 
@@ -174,11 +221,17 @@
 
         // generate new iframe
         _this.onAPIready(function () {
+            var hiddenDiv;
+            if(!_this.$iframe) {
+                hiddenDiv = document.createElement('div');
+                hiddenDiv.style.display = 'none';
+            }
+
             // Youtube
             if(_this.type === 'youtube') {
                 _this.playerOptions = {};
                 _this.playerOptions.videoId = _this.videoID;
-                _this.playerOptions.width = $(window).width();
+                _this.playerOptions.width = window.innerWidth || document.documentElement.clientWidth;
                 _this.playerOptions.playerVars = {
                     autohide: 1,
                     rel: 0,
@@ -220,12 +273,17 @@
                     }
                 };
 
-                if(!_this.$iframe) {
-                    $('<div style="display: none;"><div id="' + _this.playerID + '"></div></div>').appendTo('body');
+                var firstInit = !_this.$iframe;
+                if(firstInit) {
+                    var div = document.createElement('div');
+                    div.setAttribute('id', _this.playerID);
+                    hiddenDiv.appendChild(div);
+                    document.body.appendChild(hiddenDiv);
                 }
                 _this.player = _this.player || new window.YT.Player(_this.playerID, _this.playerOptions);
-
-                _this.$iframe = _this.$iframe || $('#' + _this.playerID);
+                if(firstInit) {
+                    _this.$iframe = document.getElementById(_this.playerID);
+                }
             }
 
             // Vimeo
@@ -247,13 +305,15 @@
                 _this.playerOptions += '&loop=' + (_this.options.loop ? 1 : 0);
 
                 if(!_this.$iframe) {
-                    var VimeoURL = 'https://player.vimeo.com/video/' + _this.videoID + '?' + _this.playerOptions;
-                    $('<div style="display: none;"><iframe id="' + _this.playerID + '" src="' + VimeoURL + '" frameborder="0" webkitallowfullscreen mozallowfullscreen allowfullscreen></iframe></div>').appendTo('body');
+                    _this.$iframe = document.createElement('iframe');
+                    _this.$iframe.setAttribute('id', _this.playerID);
+                    _this.$iframe.setAttribute('src', 'https://player.vimeo.com/video/' + _this.videoID + '?' + _this.playerOptions);
+                    _this.$iframe.setAttribute('frameborder', '0');
+                    hiddenDiv.appendChild(_this.$iframe);
+                    document.body.appendChild(hiddenDiv);
                 }
 
-                _this.$iframe = _this.$iframe || $('#' + _this.playerID);
-
-                _this.player = _this.player || $f(_this.$iframe[0]);
+                _this.player = _this.player || $f(_this.$iframe);
 
                 _this.player.addEvent('ready', function (eventReady) {
                     // mute
@@ -326,8 +386,8 @@
 
     var loadingYoutubePlayer = 0;
     var loadingVimeoPlayer = 0;
-    var loadingYoutubeDeffer = $.Deferred();
-    var loadingVimeoDeffer = $.Deferred();
+    var loadingYoutubeDeffer = new Deferred();
+    var loadingVimeoDeffer = new Deferred();
     VideoWorker.prototype.onAPIready = function (callback) {
         var _this = this;
 
@@ -375,7 +435,7 @@
     };
 
     window.VideoWorker = VideoWorker;
-}));
+}(window));
 
 
 
@@ -385,19 +445,14 @@
  * Author  : _nK http://nkdev.info
  * GitHub  : https://github.com/nk-o/jarallax
  */
-(function (factory) {
-    'use strict';
-    if (typeof define === 'function' && define.amd) {
-        define(['jquery'], factory);
-    } else if (typeof exports !== 'undefined') {
-        module.exports = factory(require('jquery'));
-    } else {
-        factory(jQuery);
-    }
-}(function ($) {
+(function () {
     'use strict';
 
-    var Jarallax = $.fn.jarallax.constructor;
+    if(typeof jarallax === 'undefined') {
+        return;
+    }
+
+    var Jarallax = jarallax.constructor;
 
     // append video after init Jarallax
     var def_init = Jarallax.prototype.init;
@@ -408,14 +463,16 @@
 
         if(_this.video) {
             _this.video.getIframe(function (iframe) {
-                _this.$video = $(iframe).css({
-                        position: 'fixed',
-                        top: 0, left: 0, right: 0, bottom: 0,
-                        width: '100%',
-                        height: '100%',
-                        visibility: 'visible',
-                        zIndex: -1
-                    }).appendTo(_this.image.$container);
+                _this.css(iframe, {
+                    position: 'fixed',
+                    top: '0px', left: '0px', right: '0px', bottom: '0px',
+                    width: '100%',
+                    height: '100%',
+                    visibility: 'visible',
+                    zIndex: -1
+                });
+                _this.$video = iframe;
+                _this.image.$container.appendChild(iframe);
             });
         }
     };
@@ -428,10 +485,10 @@
         def_coverImage.apply(_this);
 
         // add video height over than need to hide controls
-        if(_this.video && _this.image.$item.is('iframe')) {
-            _this.image.$item.css({
-                height: _this.image.$item.height() + 400,
-                top: -200
+        if(_this.video && _this.image.$item.nodeName === 'IFRAME') {
+            _this.css(_this.image.$item, {
+                height: _this.image.$item.getBoundingClientRect().height + 400 + 'px',
+                top: '-200px'
             });
         }
     };
@@ -442,7 +499,7 @@
         var _this = this;
 
         if(!_this.options.videoSrc) {
-            _this.options.videoSrc = _this.$item.attr('data-jarallax-video') || false;
+            _this.options.videoSrc = _this.$item.getAttribute('data-jarallax-video') || false;
         }
 
         if(_this.options.videoSrc) {
@@ -452,17 +509,15 @@
                 _this.image.useImgTag = true;
 
                 video.on('ready', function () {
-                    function checkViewport () {
+                    var oldOnScroll = _this.onScroll;
+                    _this.onScroll = function () {
+                        oldOnScroll.apply(_this);
                         if(_this.isVisible()) {
                             video.play();
                         } else {
                             video.pause();
                         }
-                    }
-
-                    // pause video when it out of viewport
-                    $(window).on('DOMContentLoaded.jarallax-' + _this.instanceID + ' load.jarallax-' + _this.instanceID + ' resize.jarallax-' + _this.instanceID + ' scroll.jarallax-' + _this.instanceID + '', checkViewport);
-                    checkViewport();
+                    };
                 });
 
                 video.on('started', function () {
@@ -478,7 +533,7 @@
 
                     // hide image
                     if(_this.image.$default_item) {
-                        _this.image.$default_item.fadeOut(500);
+                        _this.image.$default_item.style.display = 'none';
                     }
                 });
 
@@ -501,8 +556,6 @@
     Jarallax.prototype.destroy = function () {
         var _this = this;
 
-        $(window).off('.jarallax-' + _this.instanceID);
-
         def_destroy.apply(_this);
     };
-}));
+}());
