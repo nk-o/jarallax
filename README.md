@@ -1,5 +1,5 @@
 # Just Another Parallax
-jQuery background parallax plugin used for adding a smooth parallax scrolling effect to background images and Youtube/Vimeo videos using CSS3 transforms (translate3d). With a background-position fallback when CSS transforms are not supported.
+Parallax plugin with NO dependencies. jQuery supported. Used for adding a smooth parallax scrolling effect to background images and Youtube/Vimeo videos using CSS3 transforms (translate3d). With a background-position fallback when CSS transforms are not supported.
 
 ## Tested Browsers
 * IE9+
@@ -18,10 +18,9 @@ jQuery background parallax plugin used for adding a smooth parallax scrolling ef
 * [Parallax with Different Speed](http://free.nkdev.info/jarallax/different-speed.html)
 
 ## Getting Started
-Load jQuery(1.7+) and include Jarallax plugin
+Include Jarallax plugin. Also include jQuery before jarallax if you want to use it.
 ```html
 <!-- Jarallax -->
-<script src='https://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js'></script>
 <script src='jarallax/jarallax.js'></script>
 
 <!-- Include it if you want to use Video parallax -->
@@ -29,37 +28,48 @@ Load jQuery(1.7+) and include Jarallax plugin
 ```
 
 ## Set up your HTML
-Mandatory requirement for plugin works properly - the selected item should be NOT position: static (for ex. relative).
 ```html
 <!-- Image Parallax -->
 <div class='jarallax' style='background-image: url(<background_image_url_here>)'>
-  Your content here...
+    Your content here...
 </div>
 
 <!-- Video Parallax -->
 <div class='jarallax' data-jarallax-video='https://www.youtube.com/watch?v=ab0TSkLe-E0'>
-  Your content here...
+    Your content here...
 </div>
 ```
+
 ### Additional styles
-This need for correct show background image before Jarallax initialize end.
+Mandatory requirement for plugin works properly - the selected item should be NOT position: static (for ex. relative).
+
+This styles need to add relative position and correct background image position before Jarallax initialize end.
 ```css
 .jarallax {
-  position: relative;
-  background-size: cover;
-  background-repeat: no-repeat;
-  background-position: 50% 50%;
+    position: relative;
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: 50% 50%;
 }
 ```
 
 ## Call the plugin
+
 ### A. Data attribute way
 ```html
 <div data-jarallax='{"speed": 0.2}' class='jarallax' style='background-image: url(<background_image_url_here>)'>
-  Your content here...
+    Your content here...
 </div>
 ```
+
 ### B. JavaScript way
+```javascript
+jarallax(document.querySelectorAll('.jarallax'), {
+    speed: 0.2
+});
+```
+
+### C. jQuery way
 ```javascript
 $('.jarallax').jarallax({
     speed: 0.2
@@ -155,9 +165,8 @@ Evenets used the same way as Options.
 </table>
 
 ## onScroll event
-
 ```javascript
-$('.jarallax').jarallax({
+jarallax(document.querySelectorAll('.jarallax'), {
     onScroll: function(calculations) {
         console.log(calculations);
     }
@@ -185,6 +194,70 @@ Console Result:
 
 Calculations example:
 [![On Scroll Calculations](http://a.nkdev.info/jarallax/jarallax-calculations.jpg)](http://a.nkdev.info/jarallax/jarallax-calculations.jpg)
+
+
+# Methods
+<table class='table table-bordered table-striped'>
+    <thead>
+        <tr>
+            <th>name</th>
+            <th>result</th>
+            <th style='width: 60%;'>description</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td>destroy</td>
+            <td>-</td>
+            <td>Destroy Jarallax and set block as it was before plugin init.</td>
+        </tr>
+        <tr>
+            <td>isVisible</td>
+            <td>boolean</td>
+            <td>Check if parallax block is in viewport.</td>
+        </tr>
+        <tr>
+            <td>clipContainer</td>
+            <td>-</td>
+            <td>Clip parallax container. Called on window resize and load.</td>
+        </tr>
+        <tr>
+            <td>coverImage</td>
+            <td>-</td>
+            <td>Fit image in parallax container. Called on window resize and load.</td>
+        </tr>
+        <tr>
+            <td>onScroll</td>
+            <td>-</td>
+            <td>Calculate parallax image position. Called on window scroll.</td>
+        </tr>
+    </tbody>
+</table>
+
+## Call methods example
+### A. JavaScript way
+```javascript
+jarallax(document.querySelectorAll('.jarallax'), 'destroy');
+```
+
+### B. jQuery way
+```javascript
+$('.jarallax').jarallax('destroy');
+```
+
+
+# No conflict
+If you already have global ***jarallax*** variable or ***jQuery.fn.jarallax***, you can rename plugin.
+### A. JavaScript way
+```javascript
+var newJarallax = jarallax.noConflict();
+```
+
+### B. jQuery way
+```javascript
+jQuery.fn.newJarallax = jQuery.fn.jarallax.noConflict();
+```
+
 
 # Real Usage Examples
 * [Youplay](http://wp.nkdev.info/youplay)

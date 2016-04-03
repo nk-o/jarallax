@@ -227,7 +227,7 @@
         _this.parentWithTransform = 0;
         var $itemParents = _this.$item.parentNode;
         while ($itemParents !== null) {
-            if(!$itemParents === document && _this.css($itemParents, 'transform')) {
+            if(!$itemParents === document && (_this.css($itemParents, '-webkit-transform') || _this.css($itemParents, '-moz-transform') || _this.css($itemParents, 'transform'))) {
                 _this.parentWithTransform = 1;
             }
             $itemParents = $itemParents.parentNode;
@@ -480,7 +480,7 @@
         // opacity
         if(_this.options.type === 'opacity' || _this.options.type === 'scale-opacity' || _this.options.type === 'scroll-opacity') {
             styles.position = 'absolute';
-            styles.transform = 'translate3d(0, 0, 0)';
+            styles.WebkitTransform = styles.MozTransform = styles.transform = 'translate3d(0, 0, 0)';
             styles.opacity = visiblePercent;
         }
 
@@ -493,7 +493,7 @@
                 scale += _this.options.speed * (1 - visiblePercent);
             }
             styles.position = 'absolute';
-            styles.transform = 'scale(' + scale + ') translate3d(0, 0, 0)';
+            styles.WebkitTransform = styles.MozTransform = styles.transform = 'scale(' + scale + ') translate3d(0, 0, 0)';
         }
 
         // scroll
@@ -530,7 +530,7 @@
                     positionY -= section.top;
                 }
 
-                styles.transform = 'translate3d(0, ' + positionY + 'px, 0)';
+                styles.WebkitTransform = styles.MozTransform = styles.transform = 'translate3d(0, ' + positionY + 'px, 0)';
             } else {
                 styles.backgroundPosition = '50% ' + positionY + 'px';
             }
@@ -593,8 +593,7 @@
 
 
     // global definition
-    var oldPlugin = window.jarallax;
-    window.jarallax = function (items) {
+    var plugin = function (items) {
         // check for dom element
         // thanks: http://stackoverflow.com/questions/384286/javascript-isdom-how-do-you-check-if-a-javascript-object-is-a-dom-object
         if(typeof HTMLElement === "object" ? items instanceof HTMLElement : items && typeof items === "object" && items !== null && items.nodeType === 1 && typeof items.nodeName==="string") {
@@ -623,9 +622,11 @@
 
         return items;
     };
-    window.jarallax.constructor = Jarallax;
+    plugin.constructor = Jarallax;
 
     // no conflict
+    var oldPlugin = window.jarallax;
+    window.jarallax = plugin;
     window.jarallax.noConflict = function () {
         window.jarallax = oldPlugin;
         return this;
@@ -633,14 +634,15 @@
 
     // jQuery support
     if(typeof jQuery !== 'undefined') {
-        var oldJqPlugin = jQuery.fn.jarallax;
-        jQuery.fn.jarallax = function () {
+        var jQueryPlugin = function () {
             var res = window.jarallax(this);
             return typeof res !== 'object' ? res : this;
         };
-        jQuery.fn.jarallax.constructor = Jarallax;
+        jQueryPlugin.constructor = Jarallax;
 
         // no conflict
+        var oldJqPlugin = jQuery.fn.jarallax;
+        jQuery.fn.jarallax = jQueryPlugin;
         jQuery.fn.jarallax.noConflict = function () {
             jQuery.fn.jarallax = oldJqPlugin;
             return this;
@@ -649,6 +651,6 @@
 
     // data-jarallax initialization
     addEventListener(window, 'DOMContentLoaded', function () {
-        window.jarallax(document.querySelectorAll('[data-jarallax]'));
+        plugin(document.querySelectorAll('[data-jarallax]'));
     });
 }(window));
