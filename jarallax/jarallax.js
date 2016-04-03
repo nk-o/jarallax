@@ -227,7 +227,7 @@
         _this.parentWithTransform = 0;
         var $itemParents = _this.$item.parentNode;
         while ($itemParents !== null) {
-            if(!$itemParents === document && (_this.css($itemParents, '-webkit-transform') || _this.css($itemParents, '-moz-transform') || _this.css($itemParents, 'transform'))) {
+            if($itemParents !== document && (_this.css($itemParents, '-webkit-transform') || _this.css($itemParents, '-moz-transform') || _this.css($itemParents, 'transform'))) {
                 _this.parentWithTransform = 1;
             }
             $itemParents = $itemParents.parentNode;
