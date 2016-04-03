@@ -635,7 +635,9 @@
     // jQuery support
     if(typeof jQuery !== 'undefined') {
         var jQueryPlugin = function () {
-            var res = window.jarallax(this);
+            var args = arguments || [];
+            Array.prototype.unshift.call(args, this);
+            var res = plugin.apply(window, args);
             return typeof res !== 'object' ? res : this;
         };
         jQueryPlugin.constructor = Jarallax;
