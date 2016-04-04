@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Jarallax | JavaScript parallax scrolling with NO dependencies</title>
+    <meta name="description" content="Pure JavaScript parallax scrolling effect. jQuery supported. Youtube and Vimeo parallax supported.">
+    <link href='css/demo.css' rel='stylesheet' type='text/css'>
+    <script src="../jarallax/jarallax.js"></script>
+    <script src="../jarallax/jarallax-video.js"></script>
+</head>
+<body>
+    <div class="jarallax" style="background-image: url(images/image1.jpg);">
+        <div class="demo-table">
+            <div class="demo-table-cell">
+                <h1>Just Another Parallax <small>[Jarallax]</small></h1>
+                <h2>Parallax with high performance</h2>
+
+                <br>
+                <a class="github-button" href="https://github.com/nk-o/jarallax" data-style="mega" data-count-href="/nk-o/jarallax/stargazers" data-count-api="/repos/nk-o/jarallax#stargazers_count" data-count-aria-label="# stargazers on GitHub" aria-label="Star nk-o/jarallax on GitHub">Star</a>
+                <a class="github-button" href="https://github.com/nk-o/jarallax/archive/master.zip" data-style="mega" aria-label="Download nk-o/jarallax on GitHub">Download</a>
+            </div>
+        </div>
+    </div>
+    <div class="demo-gap">
+        <div class="container">
+            <p>Smooth parallax scrolling effect for background images using <strong>CSS transforms</strong> with graceful degradation for old browsers. Parallax plugin with <strong>NO dependencies</strong>. jQuery supported. <strong>Youtube</strong> and <strong>Vimeo</strong> parallax supported.</p>
+            <p>Documentation you can find in the Github readme of the plugin - <a href="https://github.com/nk-o/jarallax">https://github.com/nk-o/jarallax</a></p>
+        </div>
+    </div>
+    <div class="jarallax" style="background-image: url(images/image2.jpg);"></div>
+    <div class="demo-gap">
+        <h2>Different parallax speed</h2>
+    </div>
+    <div class="jarallax" data-jarallax='{"speed": 0.2}' style="background-image: url(images/image3.jpg);"></div>
+    <div class="jarallax" data-jarallax='{"speed": -0.2}' style="background-image: url(images/image4.jpg);"></div>
+    <div class="jarallax" data-jarallax='{"speed": -1.2}' style="background-image: url(images/image5.jpg);"></div>
+    <div class="demo-gap">
+        <h2>Scale and Opacity</h2>
+    </div>
+    <div class="jarallax" data-jarallax='{"speed": 0.2, "type": "scale-opacity"}' style="background-image: url(images/image6.jpg);"></div>
+    <div class="jarallax" data-jarallax='{"type": "scroll-opacity"}' style="background-image: url(images/image7.jpg);"></div>
+    <div class="jarallax" data-jarallax='{"type": "opacity"}' style="background-image: url(images/image8.jpg);"></div>
+    <div class="jarallax" data-jarallax='{"speed": -0.2, "type": "scale"}' style="background-image: url(images/image9.jpg);"></div>
+    <div class="demo-gap">
+        <h2>Youtube and Vimeo parallax</h2>
+    </div>
+    <div class="jarallax" data-jarallax-video="https://www.youtube.com/watch?v=F3I0wRGAkxo"></div>
+    <div class="jarallax" data-jarallax='{"type": "scroll-opacity"}' data-jarallax-video="https://www.youtube.com/watch?v=ab0TSkLe-E0"></div>
+    <div class="jarallax" data-jarallax-video="https://vimeo.com/110138539"></div>
+    <div class="jarallax" data-jarallax-video="https://vimeo.com/channels/staffpicks/151926492"></div>
+
+    <div class="demo-gap">
+        <p>
+            Jarallax © 2016 _nK released under WTFPL license
+        </p>
+        <small>
+            All images taken from <a href="https://www.pexels.com/">https://www.pexels.com/</a>
+        </small>
+    </div>
+
+    <script async defer id="github-bjs" src="https://buttons.github.io/buttons.js"></script>
+    <script type="text/javascript">
+        /* init Jarallax */
+        jarallax(document.querySelectorAll('.jarallax'), {
+            imgWidth: 1920,
+            imgHeight: 1080
+        });
+        /* init Jarallax with jQuery */
+        // $('.jarallax').jarallax({
+        //     speed: 0.5,
+        //     imgWidth: 1366,
+        //     imgHeight: 768
+        // });
+    </script>
+</body>
+</html>

@@ -1,5 +1,7 @@
 # Just Another Parallax
-Parallax plugin with NO dependencies. jQuery supported. Used for adding a smooth parallax scrolling effect to background images and Youtube/Vimeo videos using CSS3 transforms (translate3d). With a background-position fallback when CSS transforms are not supported.
+Smooth parallax scrolling effect for background images using ***CSS transforms*** with graceful degradation for old browsers. Parallax plugin with ***NO dependencies***. jQuery supported. ***Youtube*** and ***Vimeo*** parallax supported.
+
+## [Demo](http://free.nkdev.info/jarallax/)
 
 ## Tested Browsers
 * IE9+
@@ -8,14 +10,6 @@ Parallax plugin with NO dependencies. jQuery supported. Used for adding a smooth
 * Latest browsers on Mac and Windows (Chrome, Firefox, Safari, IE, Edge)
 * Latest Chrome on Android
 * Latest Safari on iOs
-
-## Demos
-* [Simple parallax](http://free.nkdev.info/jarallax/simple-parallax.html)
-* [Parallax with smooth scroll](http://free.nkdev.info/jarallax/smooth-scroll.html)
-* [Parallax with full-height blocks](http://free.nkdev.info/jarallax/full-height-blocks.html)
-* [Parallax with Scale and Opacity](http://free.nkdev.info/jarallax/scale-opacity-parallax.html)
-* [Video Parallax (Youtube and Vimeo)](http://free.nkdev.info/jarallax/video-parallax.html)
-* [Parallax with Different Speed](http://free.nkdev.info/jarallax/different-speed.html)
 
 ## Getting Started
 Include Jarallax plugin. Also include jQuery before jarallax if you want to use it.

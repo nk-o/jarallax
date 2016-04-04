@@ -1,3 +1,5 @@
+@import url(https://fonts.googleapis.com/css?family=Open+Sans);
+
 .jarallax {
     position: relative;
     background-size: cover;
@@ -6,17 +8,18 @@
 }
 
 /* demo styles */
-*, *, *:after, *:before {
+*, *:after, *:before {
     -webkit-box-sizing: border-box;
     -moz-box-sizing: border-box;
     box-sizing: border-box;
 }
 
 body {
-    font-family: 'Montserrat', sans-serif;
+    font-family: 'Open Sans', sans-serif;
     margin: 0;
     color: #fff;
     line-height: 1.5;
+    -webkit-font-smoothing: antialiased;
 }
 h1 {
     font-size: 50px;
@@ -39,37 +42,15 @@ a:hover, a:focus {
     color: #ddd;
 }
 .jarallax {
-    height: 600px;
-}
-
-/* demo menu */
-.demo-menu {
-    background-color: #272333;
-}
-.demo-menu ul {
-    list-style-type: none;
-    text-align: center;
-    margin: 0;
-}
-.demo-menu ul li {
-    display: inline-block;
-}
-.demo-menu ul li a {
-    display: block;
-    padding: 20px 30px;
-    text-decoration: none;
-}
-.demo-menu ul li.active a,
-.demo-menu ul li a:hover {
-    background-color: #383344;
+    min-height: 600px;
 }
 
 /* hero block */
 .demo-table {
     display: table;
     width: 100%;
-    height: 600px;
-    background-color: rgba(39,35,51,0.8);
+    height: 700px;
+    background-color: rgba(39, 35, 51, 0.8);
 }
 .demo-table-cell {
     display: table-cell;
@@ -93,30 +74,8 @@ a:hover, a:focus {
 }
 
 /* full height demo */
-html.demo-full-height,
-html.demo-full-height body,
-html.demo-full-height .jarallax,
-html.demo-full-height .demo-table {
-    height: 100%;
-}
-html.demo-full-height .jarallax,
-html.demo-full-height .demo-table {
+.demo-full-height,
+.demo-full-height .demo-table {
+    height: 96vh;
     min-height: 600px;
-}
-
-/* horizontal demo */
-html.demo-horizontal,
-html.demo-horizontal body {
-    height: 100%;
-}
-html.demo-horizontal .demo-table {
-    height: 100%;
-}
-html.demo-horizontal body {
-    width: 400%;
-}
-html.demo-horizontal body > div {
-    float: left;
-    width: 25%;
-    height: 100%;
 }
