@@ -35,11 +35,7 @@
         }());
     }
 
-    var isAndroid = navigator.userAgent.toLowerCase().indexOf('android') > -1;
-    var isOperaOld = !!window.opera;
-    var isIElt10 = document.all && !window.atob;
-
-    var supportTransform = isIElt10 ? false : (function () {
+    var supportTransform = (function () {
         if (!window.getComputedStyle) {
             return false;
         }
@@ -68,6 +64,14 @@
 
         return typeof has3d !== 'undefined' && has3d.length > 0 && has3d !== "none";
     }());
+
+    var isAndroid = navigator.userAgent.toLowerCase().indexOf('android') > -1;
+    var isIOs = /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream;
+    var isOperaOld = !!window.opera;
+    var isEdge = /Edge\/\d+/.test(navigator.userAgent);
+    var isIE11 = /Trident.*rv[ :]*11\./.test(navigator.userAgent);
+    var isIE10 = !!Function('/*@cc_on return document.documentMode===10@*/')();
+    var isIElt10 = document.all && !window.atob;
 
     var wndW;
     var wndH;
@@ -99,6 +103,8 @@
                 imgHeight         : null,
                 enableTransform   : true,
                 zIndex            : -100,
+                noAdnroid         : false,
+                noIos             : true,
 
                 // events
                 onScroll          : null, // function(calculations) {}
@@ -108,6 +114,11 @@
             };
             dataOptions      = JSON.parse(_this.$item.getAttribute('data-jarallax') || '{}');
             _this.options    = _this.extend({}, _this.defaults, dataOptions, userOptions);
+
+            // stop init if android or ios
+            if(isAndroid && _this.options.noAdnroid || isIOs && _this.options.noIos) {
+                return;
+            }
 
             // fix speed option [-1.0, 2.0]
             _this.options.speed = Math.min(2, Math.max(-1, parseFloat(_this.options.speed)));
@@ -120,9 +131,9 @@
                 $item      : null,
                 width      : _this.options.imgWidth || null,
                 height     : _this.options.imgHeight || null,
-                // fix for Android devices
-                // use <img> instead background image - more smoothly
-                useImgTag  : isAndroid || isOperaOld
+                // fix for some devices
+                // use <img> instead of background image - more smoothly
+                useImgTag  : isIOs || isAndroid || isOperaOld || isIE11 || isIE10 || isEdge
             };
 
             if(_this.initImg()) {

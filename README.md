@@ -124,6 +124,18 @@ Options can be passed in data attributes or in object when you initialize jarall
             <td>-100</td>
             <td>z-index of parallax container.</td>
         </tr>
+        <tr>
+            <td>noAndroid</td>
+            <td>boolean</td>
+            <td>false</td>
+            <td>Disable parallax on Android devices.</td>
+        </tr>
+        <tr>
+            <td>noIos</td>
+            <td>boolean</td>
+            <td>true</td>
+            <td>Disable parallax on iOs devices. Jarallax disabled by default on iOs because of strong lags ;(</td>
+        </tr>
     </tbody>
 </table>
 

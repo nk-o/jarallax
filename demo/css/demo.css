@@ -81,10 +81,14 @@ a:hover, a:focus {
     display: table-cell;
     width: 50%;
 }
-.demo-gap-half > div > .jarallax {
+.demo-gap-half .demo-gap-1 .jarallax,
+.demo-gap-half .demo-gap-2 .jarallax {
     padding-top: 56.25%;
     min-height: auto;
     height: 0;
+}
+.demo-gap-half .demo-gap-1 .jarallax {
+    padding-top: 112.5%;
 }
 
 
