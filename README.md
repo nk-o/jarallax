@@ -182,7 +182,10 @@ Console Result:
     afterBottom     : float,
 
     // percent of visible part of section (from 0 to 1)
-    visiblePercent  : float
+    visiblePercent  : float,
+
+    // percent of block position relative to center of viewport from -1 to 1
+    fromViewportCenter: float
 }
 ```
 

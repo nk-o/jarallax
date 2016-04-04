@@ -5,6 +5,7 @@
     background-size: cover;
     background-repeat: no-repeat;
     background-position: 50% 50%;
+    z-index: 1;
 }
 
 /* demo styles */
@@ -20,6 +21,7 @@ body {
     color: #fff;
     line-height: 1.5;
     -webkit-font-smoothing: antialiased;
+    background-color: #272333;
 }
 h1 {
     font-size: 50px;
@@ -61,7 +63,6 @@ a:hover, a:focus {
 /* gap */
 .demo-gap {
     padding: 50px;
-    background-color: #272333;
 }
 .demo-gap h1,
 .demo-gap h2,
@@ -72,6 +73,20 @@ a:hover, a:focus {
     max-width: 800px;
     margin: 0 auto;
 }
+.demo-gap-half {
+    display: table;
+    width: 100%;
+}
+.demo-gap-half > div {
+    display: table-cell;
+    width: 50%;
+}
+.demo-gap-half > div > .jarallax {
+    padding-top: 56.25%;
+    min-height: auto;
+    height: 0;
+}
+
 
 /* full height demo */
 .demo-full-height,

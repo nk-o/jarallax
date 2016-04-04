@@ -185,7 +185,7 @@
                 pointerEvents    : 'none'
             },
             imageStyles = {
-                position              : 'fixed'
+                position         : 'fixed'
             };
 
         // container for parallax image
@@ -199,7 +199,7 @@
         _this.$item.insertBefore(_this.image.$container, _this.$item.firstChild);
 
         // use img tag
-        if(_this.image.useImgTag && supportTransform) {
+        if(_this.image.useImgTag && supportTransform && _this.options.enableTransform) {
             _this.image.$item = document.createElement('img');
             _this.image.$item.setAttribute('src', _this.image.src);
             imageStyles = _this.extend({
@@ -212,7 +212,7 @@
             _this.image.$item = document.createElement('div');
             imageStyles = _this.extend({
                 'background-position' : '50% 50%',
-                'background-size'     : '100% 100%',
+                'background-size'     : '100% auto',
                 'background-repeat'   : 'no-repeat no-repeat',
                 'background-image'    : 'url("' + _this.image.src + '")'
             }, containerStyles, imageStyles);
@@ -226,9 +226,16 @@
         // check if one of parents have transform style (without this check, scroll transform will be inverted)
         _this.parentWithTransform = 0;
         var $itemParents = _this.$item;
-        while ($itemParents !== null && $itemParents !== document) {
+        while ($itemParents !== null && $itemParents !== document && _this.parentWithTransform === 0) {
             if(_this.css($itemParents, '-webkit-transform') || _this.css($itemParents, '-moz-transform') || _this.css($itemParents, 'transform')) {
                 _this.parentWithTransform = 1;
+
+                // add transform on parallax container if there is parent with transform
+                _this.css(_this.image.$container, {
+                    WebkitTransform: 'translateX(0) translateY(0)',
+                    MozTransform: 'translateX(0) translateY(0)',
+                    transform: 'translateX(0) translateY(0)'
+                });
             }
             $itemParents = $itemParents.parentNode;
         }
@@ -369,63 +376,74 @@
             return;
         }
 
-        var rect  = _this.image.$container.getBoundingClientRect(),
-            contW = Math.max(rect.width, wndW),
-            contH = Math.max(rect.height, wndH),
-            imgW  = _this.image.width,
-            imgH  = _this.image.height,
-            resultWidth, resultHeight;
+        var rect       = _this.image.$container.getBoundingClientRect(),
+            contW      = rect.width,
+            contH      = rect.height,
+            contL      = rect.left,
+            imgW       = _this.image.width,
+            imgH       = _this.image.height,
+            speed      = _this.options.speed,
+            isScroll   = _this.options.type === 'scroll' || _this.options.type === 'scroll-opacity',
+            scrollDist = 0,
+            resultW    = 0,
+            resultH    = contH,
+            resultML   = 0,
+            resultMT   = 0;
 
-        var speedFactor = 1;
-        if(_this.options.speed < 0) {
-            speedFactor += Math.abs(_this.options.speed);
-        }
-        else if(_this.options.speed > 1) {
-            speedFactor = _this.options.speed;
-        }
+        // scroll parallax
+        if(isScroll) {
+            // scroll distance
+            scrollDist = speed * (contH + wndH) / 2;
+            if(speed < 0 || speed > 1) {
+                scrollDist = speed * Math.max(contH, wndH) / 2;
+            }
 
-        var styles = {
-            width      : contW * speedFactor,
-            height     : contH * speedFactor,
-            marginLeft : 0,
-            marginTop  : 0
-        };
-
-        // cover by width
-        if(styles.width / styles.height > imgW / imgH) {
-            resultWidth = styles.width;
-            resultHeight = styles.width * imgH / imgW;
-        }
-
-        // cover by height
-        else {
-            resultWidth = styles.height * imgW / imgH;
-            resultHeight = styles.height;
+            // size for scroll parallax
+            if(speed < 0 || speed > 1) {
+                resultH = Math.max(contH, wndH) + Math.abs(scrollDist) * 2;
+            } else {
+                resultH += Math.abs(wndH - contH) * (1 - speed);
+            }
         }
 
-        styles.width = resultWidth;
-        styles.height = resultHeight;
-
-        if(styles.width > contW) {
-            styles.marginLeft = - (resultWidth - contW) / 2;
+        // calculate width relative to height and image size
+        resultW = resultH * imgW / imgH;
+        if(resultW < contW) {
+            resultW = contW;
+            resultH = resultW * imgH / imgW;
         }
-        if(styles.height > contH) {
-            styles.marginTop = - (resultHeight - contH) / 2;
+
+        // when disabled transformations, height should be >= window height
+        _this.bgPosVerticalCenter = 0;
+        if(isScroll && resultH < wndH && (!supportTransform || !_this.options.enableTransform)) {
+            _this.bgPosVerticalCenter = (wndH - resultH) / 2;
+            resultH = wndH;
+        }
+
+        // center parallax image
+        if(isScroll) {
+            resultML = contL + (contW - resultW) / 2;
+            resultMT = (wndH - resultH) / 2;
+        } else {
+            resultML = (contW - resultW) / 2;
+            resultMT = (contH - resultH) / 2;
         }
 
         // fix if parents with transform style
         if(_this.parentWithTransform) {
-            styles.marginLeft -= rect.left;
+            resultML -= contL;
         }
 
-        // add units
-        styles.marginLeft += 'px';
-        styles.marginTop += 'px';
-        styles.width += 'px';
-        styles.height += 'px';
+        // store scroll distance
+        _this.parallaxScrollDistance = scrollDist;
 
-        // apply to item
-        _this.css(_this.image.$item, styles);
+        // apply result to item
+        _this.css(_this.image.$item, {
+            width: resultW + 'px',
+            height: resultH + 'px',
+            marginLeft: resultML + 'px',
+            marginTop: resultMT + 'px'
+        });
 
         // call onCoverImage event
         if(_this.options.onCoverImage) {
@@ -444,17 +462,20 @@
             return;
         }
 
-        var section = _this.$item.getBoundingClientRect();
-        var styles = {
-            visibility         : 'visible',
-            backgroundPosition : '50% 50%'
-        };
+        var rect   = _this.$item.getBoundingClientRect(),
+            contT  = rect.top,
+            contH  = rect.height,
+            styles = {
+                position           : 'absolute',
+                visibility         : 'visible',
+                backgroundPosition : '50% 50%'
+            };
 
         _this.isElementInViewport =
-            section.bottom >= 0 &&
-            section.right >= 0 &&
-            section.top <= wndH &&
-            section.left <= wndW;
+            rect.bottom >= 0 &&
+            rect.right >= 0 &&
+            contT <= wndH &&
+            rect.left <= wndW;
 
         // Check if totally above or totally below viewport
         var check = force ? false : !_this.isElementInViewport;
@@ -463,17 +484,18 @@
         }
 
         // calculate parallax helping variables
-        var beforeTop = Math.max(0, section.top);
-        var beforeTopEnd = Math.max(0, section.height + section.top);
-        var afterTop = Math.max(0, -section.top);
-        var beforeBottom = Math.max(0, section.top + section.height - wndH);
-        var beforeBottomEnd = Math.max(0, section.height - (section.top + section.height - wndH));
-        var afterBottom = Math.max(0, -section.top + wndH - section.height);
+        var beforeTop = Math.max(0, contT),
+            beforeTopEnd = Math.max(0, contH + contT),
+            afterTop = Math.max(0, -contT),
+            beforeBottom = Math.max(0, contT + contH - wndH),
+            beforeBottomEnd = Math.max(0, contH - (contT + contH - wndH)),
+            afterBottom = Math.max(0, -contT + wndH - contH),
+            fromViewportCenter = 1 - 2 * (wndH - contT) / (wndH + contH);
 
         // calculate on how percent of section is visible
         var visiblePercent = 1;
-        if(section.height < wndH) {
-            visiblePercent = 1 - (afterTop || beforeBottom) / section.height;
+        if(contH < wndH) {
+            visiblePercent = 1 - (afterTop || beforeBottom) / contH;
         } else {
             if(beforeTopEnd <= wndH) {
                 visiblePercent = beforeTopEnd / wndH;
@@ -484,7 +506,6 @@
 
         // opacity
         if(_this.options.type === 'opacity' || _this.options.type === 'scale-opacity' || _this.options.type === 'scroll-opacity') {
-            styles.position = 'absolute';
             styles.WebkitTransform = styles.MozTransform = styles.transform = 'translate3d(0, 0, 0)';
             styles.opacity = visiblePercent;
         }
@@ -493,50 +514,29 @@
         if(_this.options.type === 'scale' || _this.options.type === 'scale-opacity') {
             var scale = 1;
             if(_this.options.speed < 0) {
-                scale += -1 * _this.options.speed * visiblePercent;
+                scale -= _this.options.speed * visiblePercent;
             } else {
                 scale += _this.options.speed * (1 - visiblePercent);
             }
-            styles.position = 'absolute';
             styles.WebkitTransform = styles.MozTransform = styles.transform = 'scale(' + scale + ') translate3d(0, 0, 0)';
         }
 
         // scroll
         if(_this.options.type === 'scroll' || _this.options.type === 'scroll-opacity') {
-            var positionY = section.top;
-
-            // centering parallax if block < window height
-            if(section.height < wndH) {
-                positionY -= (wndH - section.height) / 2;
-            }
-
-            // speed from 0 to 1
-            if(_this.options.speed >= 0 && _this.options.speed <= 1) {
-                positionY *= _this.options.speed;
-            }
-
-            // speed from -1 to 0 and from 1 to 2
-            else {
-                var imageRect = _this.image.$item.getBoundingClientRect();
-                var percent = (wndH + section.height - section.height - section.top) / (wndH + section.height);
-                    percent = percent - 0.5; // 0.5 for top and 0.5 for bottom
-                var newPos = percent * (imageRect.height - Math.max(section.height, wndH));
-
-                if(_this.options.speed > 1) {
-                    positionY -= newPos;
-                } else {
-                    positionY = newPos;
-                }
-            }
+            var positionY = _this.parallaxScrollDistance * fromViewportCenter;
 
             if(supportTransform && _this.options.enableTransform) {
                 // fix if parents with transform style
                 if(_this.parentWithTransform) {
-                    positionY -= section.top;
+                    positionY -= contT;
                 }
 
                 styles.WebkitTransform = styles.MozTransform = styles.transform = 'translate3d(0, ' + positionY + 'px, 0)';
             } else {
+                // vertical centering
+                if(_this.bgPosVerticalCenter) {
+                    positionY += _this.bgPosVerticalCenter;
+                }
                 styles.backgroundPosition = '50% ' + positionY + 'px';
             }
 
@@ -550,7 +550,7 @@
         // call onScroll event
         if(_this.options.onScroll) {
             _this.options.onScroll.call(_this, {
-                section: section,
+                section: rect,
 
                 beforeTop: beforeTop,
                 beforeTopEnd: beforeTopEnd,
@@ -559,7 +559,8 @@
                 beforeBottomEnd: beforeBottomEnd,
                 afterBottom: afterBottom,
 
-                visiblePercent: visiblePercent
+                visiblePercent: visiblePercent,
+                fromViewportCenter: fromViewportCenter
             });
         }
     };
