@@ -225,9 +225,9 @@
 
         // check if one of parents have transform style (without this check, scroll transform will be inverted)
         _this.parentWithTransform = 0;
-        var $itemParents = _this.$item.parentNode;
-        while ($itemParents !== null) {
-            if($itemParents !== document && (_this.css($itemParents, '-webkit-transform') || _this.css($itemParents, '-moz-transform') || _this.css($itemParents, 'transform'))) {
+        var $itemParents = _this.$item;
+        while ($itemParents !== null && $itemParents !== document) {
+            if(_this.css($itemParents, '-webkit-transform') || _this.css($itemParents, '-moz-transform') || _this.css($itemParents, 'transform')) {
                 _this.parentWithTransform = 1;
             }
             $itemParents = $itemParents.parentNode;
@@ -411,6 +411,11 @@
         }
         if(styles.height > contH) {
             styles.marginTop = - (resultHeight - contH) / 2;
+        }
+
+        // fix if parents with transform style
+        if(_this.parentWithTransform) {
+            styles.marginLeft -= rect.left;
         }
 
         // add units
