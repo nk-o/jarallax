@@ -138,6 +138,12 @@
         if(typeof styles === 'string') {
             return el.style[styles];
         }
+
+        // add transform prop with vendor prefixes
+        if(styles.transform) {
+            styles.WebkitTransform = styles.MozTransform = styles.transform;
+        }
+
         for(var k in styles) {
             el.style[k] = styles[k];
         }
@@ -196,7 +202,7 @@
             'z-index'  : _this.options.zIndex
         });
         _this.image.$container.setAttribute('id', 'jarallax-container-' + _this.instanceID);
-        _this.$item.insertBefore(_this.image.$container, _this.$item.firstChild);
+        _this.$item.appendChild(_this.image.$container);
 
         // use img tag
         if(_this.image.useImgTag && supportTransform && _this.options.enableTransform) {
@@ -232,8 +238,6 @@
 
                 // add transform on parallax container if there is parent with transform
                 _this.css(_this.image.$container, {
-                    WebkitTransform: 'translateX(0) translateY(0)',
-                    MozTransform: 'translateX(0) translateY(0)',
                     transform: 'translateX(0) translateY(0)'
                 });
             }
@@ -242,7 +246,7 @@
 
         // parallax image
         _this.css(_this.image.$item, imageStyles);
-        _this.image.$container.insertBefore(_this.image.$item, _this.image.$container.firstChild);
+        _this.image.$container.appendChild(_this.image.$item);
 
         // cover image if width and height is ready
         function initAfterReady () {
@@ -506,7 +510,7 @@
 
         // opacity
         if(_this.options.type === 'opacity' || _this.options.type === 'scale-opacity' || _this.options.type === 'scroll-opacity') {
-            styles.WebkitTransform = styles.MozTransform = styles.transform = 'translate3d(0, 0, 0)';
+            styles.transform = 'translate3d(0, 0, 0)';
             styles.opacity = visiblePercent;
         }
 
@@ -518,7 +522,7 @@
             } else {
                 scale += _this.options.speed * (1 - visiblePercent);
             }
-            styles.WebkitTransform = styles.MozTransform = styles.transform = 'scale(' + scale + ') translate3d(0, 0, 0)';
+            styles.transform = 'scale(' + scale + ') translate3d(0, 0, 0)';
         }
 
         // scroll
@@ -531,7 +535,7 @@
                     positionY -= contT;
                 }
 
-                styles.WebkitTransform = styles.MozTransform = styles.transform = 'translate3d(0, ' + positionY + 'px, 0)';
+                styles.transform = 'translate3d(0, ' + positionY + 'px, 0)';
             } else {
                 // vertical centering
                 if(_this.bgPosVerticalCenter) {
