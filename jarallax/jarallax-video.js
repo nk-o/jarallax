@@ -1,6 +1,6 @@
 /*!
  * Name    : Video Worker (wrapper for Youtube and Vimeo)
- * Version : 1.1.0
+ * Version : 1.1.1
  * Author  : _nK http://nkdev.info
  * GitHub  : https://github.com/nk-o/jarallax
  */
@@ -270,6 +270,15 @@
                             ytStarted = 1;
                             _this.fire('started', e);
                         }
+                        if(e.data === YT.PlayerState.PLAYING) {
+                            _this.fire('play', e);
+                        }
+                        if(e.data === YT.PlayerState.PAUSED) {
+                            _this.fire('pause', e);
+                        }
+                        if(e.data === YT.PlayerState.ENDED) {
+                            _this.fire('end', e);
+                        }
                     }
                 };
 
@@ -330,6 +339,15 @@
                             _this.fire('started', eventPlay);
                         }
                         vmStarted = 1;
+                    });
+                    _this.player.addEvent('play', function (e) {
+                        _this.fire('play', e);
+                    });
+                    _this.player.addEvent('pause', function (e) {
+                        _this.fire('pause', e);
+                    });
+                    _this.player.addEvent('finish', function (e) {
+                        _this.fire('end', e);
                     });
 
                     _this.fire('ready', eventReady);
