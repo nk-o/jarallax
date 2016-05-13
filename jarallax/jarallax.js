@@ -147,6 +147,9 @@
     // add styles to element
     Jarallax.prototype.css = function (el, styles) {
         if(typeof styles === 'string') {
+            if(window.getComputedStyle) {
+                return window.getComputedStyle(el).getPropertyValue(styles);
+            }
             return el.style[styles];
         }
 
