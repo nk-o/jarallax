@@ -1,7 +1,7 @@
 # Just Another Parallax
 Smooth parallax scrolling effect for background images using ***CSS transforms*** with graceful degradation for old browsers. Parallax plugin with ***NO dependencies***. jQuery supported. ***Youtube*** and ***Vimeo*** parallax supported.
 
-## [Demo](http://free.nkdev.info/jarallax/)
+## [Demo](https://free.nkdev.info/jarallax/)
 
 ## Tested Browsers
 * IE9+
@@ -202,7 +202,7 @@ Console Result:
 ```
 
 Calculations example:
-[![On Scroll Calculations](http://a.nkdev.info/jarallax/jarallax-calculations.jpg)](http://a.nkdev.info/jarallax/jarallax-calculations.jpg)
+[![On Scroll Calculations](https://a.nkdev.info/jarallax/jarallax-calculations.jpg)](https://a.nkdev.info/jarallax/jarallax-calculations.jpg)
 
 
 # Methods
@@ -269,9 +269,9 @@ jQuery.fn.newJarallax = jQuery.fn.jarallax.noConflict();
 
 
 # Real Usage Examples
-* [Youplay](http://wp.nkdev.info/youplay)
-* [InLove](http://wp.nkdev.info/in-love/home-1/)
-* [Flatness](http://wp.nkdev.info/in-love/flatness/)
+* [Youplay](https://wp.nkdev.info/youplay)
+* [InLove](https://wp.nkdev.info/in-love/home-1/)
+* [Flatness](https://wp.nkdev.info/in-love/flatness/)
 
 # Images
 All demo images from https://www.pexels.com/
