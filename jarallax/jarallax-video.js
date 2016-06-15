@@ -1,7 +1,7 @@
 /*!
  * Name    : Video Worker (wrapper for Youtube and Vimeo)
- * Version : 1.1.1
- * Author  : _nK https://nkdev.info
+ * Version : 1.1.2
+ * Author  : _nK http://nkdev.info
  * GitHub  : https://github.com/nk-o/jarallax
  */
 (function (window) {
@@ -186,8 +186,28 @@
         }
 
         if(_this.type === 'youtube') {
-            _this.videoImage = 'https://img.youtube.com/vi/' + _this.videoID + '/maxresdefault.jpg';
-            callback(_this.videoImage);
+            var availableSizes = [
+                'maxresdefault',
+                'sddefault',
+                'hqdefault',
+                '0'
+            ];
+            var step = 0;
+
+            var tempImg = new Image();
+            tempImg.onload = function () {
+                // if no thumbnail, youtube add their own image with width = 120px
+                if ((this.naturalWidth || this.width) !== 120 || step === (availableSizes.length - 1)) {
+                    // ok
+                    _this.videoImage = 'https://img.youtube.com/vi/' + _this.videoID + '/' + availableSizes[step] + '.jpg';
+                    callback(_this.videoImage);
+                } else {
+                    // try another size
+                    step++;
+                    this.src = 'https://img.youtube.com/vi/' + _this.videoID + '/' + availableSizes[step] + '.jpg';
+                }
+            };
+            tempImg.src = 'https://img.youtube.com/vi/' + _this.videoID + '/' + availableSizes[step] + '.jpg';
         }
 
         if(_this.type === 'vimeo') {
