@@ -197,7 +197,7 @@
             var tempImg = new Image();
             tempImg.onload = function () {
                 // if no thumbnail, youtube add their own image with width = 120px
-                if ((this.naturalWidth || this.width) !== 120 || step === (availableSizes.length - 1)) {
+                if ((this.naturalWidth || this.width) !== 120 || step === availableSizes.length - 1) {
                     // ok
                     _this.videoImage = 'https://img.youtube.com/vi/' + _this.videoID + '/' + availableSizes[step] + '.jpg';
                     callback(_this.videoImage);
