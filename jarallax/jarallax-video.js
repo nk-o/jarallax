@@ -51,6 +51,17 @@
         }
     };
 
+    // init events
+    function addEventListener (el, eventName, handler) {
+        if (el.addEventListener) {
+            el.addEventListener(eventName, handler);
+        } else {
+            el.attachEvent('on' + eventName, function (){
+                handler.call(el);
+            });
+        }
+    }
+
     var VideoWorker = (function () {
         var ID = 0;
 
@@ -158,7 +169,7 @@
             this.player.playVideo();
         }
 
-        if(this.type === 'vimeo') {
+        if(this.type === 'vimeo' && this.$iframe.loaded) {
             this.player.api('play');
         }
     };
@@ -172,7 +183,7 @@
             this.player.pauseVideo();
         }
 
-        if(this.type === 'vimeo') {
+        if(this.type === 'vimeo' && this.$iframe.loaded) {
             this.player.api('pause');
         }
     };
@@ -335,6 +346,13 @@
 
                 if(!_this.$iframe) {
                     _this.$iframe = document.createElement('iframe');
+
+                    // fixed postMessage error because of twice ready event call
+                    // thanks https://github.com/nk-o/jarallax/issues/9
+                    addEventListener(_this.$iframe, 'load', function () {
+                        _this.$iframe.loaded = true;
+                    });
+
                     _this.$iframe.setAttribute('id', _this.playerID);
                     _this.$iframe.setAttribute('src', 'https://player.vimeo.com/video/' + _this.videoID + '?' + _this.playerOptions);
                     _this.$iframe.setAttribute('frameborder', '0');
