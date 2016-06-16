@@ -519,6 +519,7 @@
 
         if(_this.video) {
             _this.video.getIframe(function (iframe) {
+                var $parent = iframe.parentNode;
                 _this.css(iframe, {
                     position: 'fixed',
                     top: '0px', left: '0px', right: '0px', bottom: '0px',
@@ -529,6 +530,9 @@
                 });
                 _this.$video = iframe;
                 _this.image.$container.appendChild(iframe);
+
+                // remove parent iframe element (created by VideoWorker)
+                $parent.parentNode.removeChild($parent);
             });
         }
     };
