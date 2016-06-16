@@ -244,6 +244,7 @@
         }
 
         // check if one of parents have transform style (without this check, scroll transform will be inverted)
+        // discussion - https://github.com/nk-o/jarallax/issues/9
         _this.parentWithTransform = 0;
         var $itemParents = _this.$item;
         while ($itemParents !== null && $itemParents !== document && _this.parentWithTransform === 0) {
