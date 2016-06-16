@@ -317,8 +317,14 @@
         }
 
         // return styles on container as before jarallax init
-        _this.$item.setAttribute('style', _this.$item.getAttribute('data-jarallax-original-styles'));
+        var originalStylesTag = _this.$item.getAttribute('data-jarallax-original-styles');
         _this.$item.removeAttribute('data-jarallax-original-styles');
+        // null occurs if there is no style tag before jarallax init
+        if(originalStylesTag === 'null') {
+            _this.$item.removeAttribute('style');
+        } else {
+            _this.$item.setAttribute('style', originalStylesTag);
+        }
 
         // remove additional dom elements
         if(_this.$clipStyles) {
