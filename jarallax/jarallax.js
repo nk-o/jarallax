@@ -248,7 +248,8 @@
         _this.parentWithTransform = 0;
         var $itemParents = _this.$item;
         while ($itemParents !== null && $itemParents !== document && _this.parentWithTransform === 0) {
-            if(_this.css($itemParents, '-webkit-transform') || _this.css($itemParents, '-moz-transform') || _this.css($itemParents, 'transform')) {
+            var parent_transform = _this.css($itemParents, '-webkit-transform') || _this.css($itemParents, '-moz-transform') || _this.css($itemParents, 'transform');
+            if(parent_transform && parent_transform !== 'none') {
                 _this.parentWithTransform = 1;
 
                 // add transform on parallax container if there is parent with transform
