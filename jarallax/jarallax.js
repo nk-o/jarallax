@@ -104,7 +104,7 @@
                 enableTransform   : true,
                 elementInViewport : null,
                 zIndex            : -100,
-                noAdnroid         : false,
+                noAndroid         : false,
                 noIos             : true,
 
                 // events
@@ -117,7 +117,7 @@
             _this.options    = _this.extend({}, _this.defaults, dataOptions, userOptions);
 
             // stop init if android or ios
-            if(isAndroid && _this.options.noAdnroid || isIOs && _this.options.noIos) {
+            if(isAndroid && _this.options.noAndroid || isIOs && _this.options.noIos) {
                 return;
             }
 
