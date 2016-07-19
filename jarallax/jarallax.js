@@ -102,6 +102,7 @@
                 imgWidth          : null,
                 imgHeight         : null,
                 enableTransform   : true,
+                elementInViewport : null,
                 zIndex            : -100,
                 noAdnroid         : false,
                 noIos             : true,
@@ -122,6 +123,18 @@
 
             // fix speed option [-1.0, 2.0]
             _this.options.speed = Math.min(2, Math.max(-1, parseFloat(_this.options.speed)));
+
+            // custom element to check if parallax in viewport
+            var elementInVP = _this.options.elementInViewport;
+            // get first item from array
+            if(elementInVP && typeof elementInVP === 'object' && typeof elementInVP.length !== 'undefined') {
+                elementInVP = elementInVP[0];
+            }
+            // check of dom element
+            if(!elementInVP instanceof Element) {
+                elementInVP = null;
+            }
+            _this.options.elementInViewport = elementInVP;
 
             _this.instanceID = instanceID++;
 
@@ -497,15 +510,19 @@
                 backgroundPosition : '50% 50%'
             };
 
+        // check if in viewport
+        var viewportRect = rect;
+        if(_this.options.elementInViewport) {
+            var viewportRect = _this.options.elementInViewport.getBoundingClientRect();
+        }
         _this.isElementInViewport =
-            rect.bottom >= 0 &&
-            rect.right >= 0 &&
-            contT <= wndH &&
-            rect.left <= wndW;
+            viewportRect.bottom >= 0 &&
+            viewportRect.right >= 0 &&
+            viewportRect.top <= wndH &&
+            viewportRect.left <= wndW;
 
-        // Check if totally above or totally below viewport
-        var check = force ? false : !_this.isElementInViewport;
-        if (check) {
+        // stop calculations if item is not in viewport
+        if (force ? false : !_this.isElementInViewport) {
             return;
         }
 
