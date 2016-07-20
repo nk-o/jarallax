@@ -113,7 +113,7 @@ Options can be passed in data attributes or in object when you initialize jarall
             <td>null</td>
         </tr>
         <tr>
-            <td>isElementInViewport</td>
+            <td>elementInViewport</td>
             <td>dom</td>
             <td>null</td>
             <td>Use custom DOM / jQuery element to check if parallax block in viewport. More info here - [Issue 13](https://github.com/nk-o/jarallax/issues/13)</td>
