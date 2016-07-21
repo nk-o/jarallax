@@ -1,5 +1,5 @@
 # Just Another Parallax
-Smooth parallax scrolling effect for background images using ***CSS transforms*** with graceful degradation for old browsers. Parallax plugin with ***NO dependencies***. jQuery supported. ***Youtube*** and ***Vimeo*** parallax supported.
+Smooth parallax scrolling effect for background images using ***CSS transforms*** with graceful degradation for old browsers. Parallax plugin with ***NO dependencies***. jQuery supported. ***Youtube***, ***Vimeo*** and ***Local Videos*** parallax supported.
 
 ## [Demo](https://free.nkdev.info/jarallax/)
 
@@ -130,7 +130,7 @@ Options can be passed in data attributes or in object when you initialize jarall
             <td>elementInViewport</td>
             <td>dom</td>
             <td>null</td>
-            <td>Use custom DOM / jQuery element to check if parallax block in viewport. More info here - [Issue 13](https://github.com/nk-o/jarallax/issues/13)</td>
+            <td>Use custom DOM / jQuery element to check if parallax block in viewport. More info here - <a href="https://github.com/nk-o/jarallax/issues/13">Issue 13</a></td>
         </tr>
         <tr>
             <td>enableTransform</td>
@@ -327,8 +327,9 @@ jQuery.fn.newJarallax = jQuery.fn.jarallax.noConflict();
 * [InLove](https://wp.nkdev.info/in-love/home-1/)
 * [Flatness](https://wp.nkdev.info/in-love/flatness/)
 
-# Images
-All demo images from https://www.pexels.com/
+# Credits
+Images https://www.pexels.com/
+Local Video https://www.videezy.com/
 
 # License
 Copyright (c) 2016 _nK Licensed under the WTFPL license.
