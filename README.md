@@ -127,12 +127,6 @@ Options can be passed in data attributes or in object when you initialize jarall
             <td>null</td>
         </tr>
         <tr>
-            <td>videoSrc</td>
-            <td>string</td>
-            <td>null</td>
-            <td>You can use Youtube, Vimeo or local videos. Also you can use data attribute <code>data-jarallax-video</code></td>
-        </tr>
-        <tr>
             <td>elementInViewport</td>
             <td>dom</td>
             <td>null</td>
@@ -161,6 +155,40 @@ Options can be passed in data attributes or in object when you initialize jarall
             <td>boolean</td>
             <td>true</td>
             <td>Disable parallax on iOs devices. Jarallax disabled by default on iOs because of strong lags ;(</td>
+        </tr>
+    </tbody>
+</table>
+
+### Options For Video
+Required `jarallax/jarallax-video.js` file.
+
+<table class='table table-bordered table-striped'>
+    <thead>
+        <tr>
+            <th>name</th>
+            <th>type</th>
+            <th>default</th>
+            <th style='width: 60%;'>description</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td>videoSrc</td>
+            <td>string</td>
+            <td>null</td>
+            <td>You can use Youtube, Vimeo or local videos. Also you can use data attribute <code>data-jarallax-video</code></td>
+        </tr>
+        <tr>
+            <td>videoStartTime</td>
+            <td>float</td>
+            <td>0</td>
+            <td>Start time in milliseconds when video will be started (this value will be applied also after loop)</td>
+        </tr>
+        <tr>
+            <td>videoEndTime</td>
+            <td>float</td>
+            <td>0</td>
+            <td>End time in milliseconds when video will be ended</td>
         </tr>
     </tbody>
 </table>
