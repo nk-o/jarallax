@@ -677,8 +677,8 @@
                     _this.image.$item = _this.$video;
 
                     // set video width and height
-                    _this.image.width  = _this.imgWidth = 1280;
-                    _this.image.height = _this.imgHeight = 720;
+                    _this.image.width  = _this.options.imgWidth = _this.image.width || 1280;
+                    _this.image.height = _this.options.imgHeight = _this.image.height || 720;
                     _this.coverImage();
                     _this.clipContainer();
                     _this.onScroll();
