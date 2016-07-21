@@ -108,8 +108,24 @@
             return match && match[3] ? match[3] : false;
         }
 
+        // parse local string
+        function getLocalVideos (locUrl) {
+            var videoFormats = locUrl.split(/,(?=mp4\:|webm\:|ogv\:|ogg\:)/);
+            var result = {};
+            var ready = 0;
+            for(var k = 0; k < videoFormats.length; k++) {
+                var match = videoFormats[k].match(/^(mp4|webm|ogv|ogg)\:(.*)/);
+                if(match && match[1] && match[2]) {
+                    result[match[1] === 'ogv' ? 'ogg' : match[1]] = match[2];
+                    ready = 1;
+                }
+            }
+            return ready ? result : false;
+        }
+
         var Youtube = getYoutubeID(url);
         var Vimeo = getVimeoID(url);
+        var Local = getLocalVideos(url);
 
         if(Youtube) {
             this.type = 'youtube';
@@ -117,6 +133,9 @@
         } else if (Vimeo) {
             this.type = 'vimeo';
             return Vimeo;
+        } else if (Local) {
+            this.type = 'local';
+            return Local;
         }
 
         return false;
@@ -172,6 +191,10 @@
         if(this.type === 'vimeo' && this.$iframe.loaded) {
             this.player.api('play');
         }
+
+        if(this.type === 'local' && this.player.paused) {
+            this.player.play();
+        }
     };
 
     VideoWorker.prototype.pause = function () {
@@ -185,6 +208,10 @@
 
         if(this.type === 'vimeo' && this.$iframe.loaded) {
             this.player.api('pause');
+        }
+
+        if(this.type === 'local' && !this.player.paused) {
+            this.player.pause();
         }
     };
 
@@ -392,6 +419,62 @@
                 });
             }
 
+            // Local
+            function addSourceToLocal (element, src, type) {
+                var source = document.createElement('source');
+                source.src = src;
+                source.type = type;
+                element.appendChild(source);
+            }
+            if(_this.type === 'local') {
+                if(!_this.$iframe) {
+                    _this.$iframe = document.createElement('video');
+
+                    // mute
+                    if(_this.options.mute) {
+                        _this.$iframe.setAttribute('mute', 'on');
+                    }
+
+                    // loop
+                    if(_this.options.loop) {
+                        _this.$iframe.setAttribute('loop', 'on');
+                    }
+
+                    // autoplay
+                    if(_this.options.autoplay) {
+                        _this.$iframe.setAttribute('autoplay', 'on');
+                    }
+
+                    _this.$iframe.setAttribute('id', _this.playerID);
+                    hiddenDiv.appendChild(_this.$iframe);
+                    document.body.appendChild(hiddenDiv);
+
+                    for(var k in _this.videoID) {
+                        addSourceToLocal(_this.$iframe, _this.videoID[k], 'video/' + k);
+                    }
+                }
+
+                _this.player = _this.player || _this.$iframe;
+
+                var locStarted;
+                addEventListener(_this.player, 'playing', function (e) {
+                    if(!locStarted) {
+                        _this.fire('started', e);
+                    }
+                    locStarted = 1;
+                });
+                addEventListener(_this.player, 'play', function (e) {
+                    _this.fire('play', e);
+                });
+                addEventListener(_this.player, 'pause', function (e) {
+                    _this.fire('pause', e);
+                });
+                addEventListener(_this.player, 'ended', function (e) {
+                    _this.fire('end', e);
+                });
+                _this.fire('ready');
+            }
+
             callback(_this.$iframe);
         });
     };
@@ -423,6 +506,10 @@
         if(_this.type === 'vimeo' && !VimeoAPIadded) {
             VimeoAPIadded = 1;
             src = '//f.vimeocdn.com/js/froogaloop2.min.js';
+        }
+
+        if(!src) {
+            return;
         }
 
         if (window.location.origin === 'file://') {
@@ -487,6 +574,11 @@
                     callback();
                 });
             }
+        }
+
+        // Local
+        if(_this.type === 'local') {
+            callback();
         }
     };
 
@@ -599,13 +691,18 @@
 
                 _this.video = video;
 
-                video.getImageURL(function (url) {
-                    _this.image.src = url;
-                    _this.init();
-                });
+                if(video.type !== 'local') {
+                    video.getImageURL(function (url) {
+                        _this.image.src = url;
+                        _this.init();
+                    });
+                }
             }
 
-            return false;
+            // prevent default image loading when not local video
+            if(video.type !== 'local') {
+                return false;
+            }
         }
 
         return def_initImg.apply(_this);

@@ -27,11 +27,6 @@ Include Jarallax plugin. Also include jQuery before jarallax if you want to use 
 <div class='jarallax' style='background-image: url(<background_image_url_here>)'>
     Your content here...
 </div>
-
-<!-- Video Parallax -->
-<div class='jarallax' data-jarallax-video='https://www.youtube.com/watch?v=ab0TSkLe-E0'>
-    Your content here...
-</div>
 ```
 
 ### Additional styles
@@ -69,6 +64,25 @@ $('.jarallax').jarallax({
     speed: 0.2
 });
 ```
+
+## Video Usage Examples
+```html
+<!-- YouTube Parallax -->
+<div class='jarallax' data-jarallax-video='https://www.youtube.com/watch?v=ab0TSkLe-E0'>
+    Your content here...
+</div>
+
+<!-- Vimeo Parallax -->
+<div class='jarallax' data-jarallax-video='https://vimeo.com/110138539'>
+    Your content here...
+</div>
+
+<!-- Local Video Parallax -->
+<div class='jarallax' data-jarallax-video='mp4:./video/local-video.mp4,webm:./video/local-video.webm,ogv:./video/local-video.ogv'>
+    Your content here...
+</div>
+```
+Note: for local videos required only 1 video type, not necessary use all mp4, webm and ogv. This need only for maximum compatibility with all browsers.
 
 # Options
 Options can be passed in data attributes or in object when you initialize jarallax from script.
@@ -111,6 +125,12 @@ Options can be passed in data attributes or in object when you initialize jarall
             <td>imgHeight</td>
             <td>number</td>
             <td>null</td>
+        </tr>
+        <tr>
+            <td>videoSrc</td>
+            <td>string</td>
+            <td>null</td>
+            <td>You can use Youtube, Vimeo or local videos. Also you can use data attribute <code>data-jarallax-video</code></td>
         </tr>
         <tr>
             <td>elementInViewport</td>
