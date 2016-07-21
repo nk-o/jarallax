@@ -188,8 +188,8 @@
             this.player.playVideo();
         }
 
-        if(this.type === 'vimeo' && this.$iframe.loaded) {
-            this.player.api('play');
+        if(this.type === 'vimeo') {
+            this.player.play();
         }
 
         if(this.type === 'local' && this.player.paused) {
@@ -206,8 +206,8 @@
             this.player.pauseVideo();
         }
 
-        if(this.type === 'vimeo' && this.$iframe.loaded) {
-            this.player.api('pause');
+        if(this.type === 'vimeo') {
+            this.player.pause();
         }
 
         if(this.type === 'local' && !this.player.paused) {
@@ -373,13 +373,6 @@
 
                 if(!_this.$iframe) {
                     _this.$iframe = document.createElement('iframe');
-
-                    // fixed postMessage error because of twice ready event call
-                    // thanks https://github.com/nk-o/jarallax/issues/9
-                    addEventListener(_this.$iframe, 'load', function () {
-                        _this.$iframe.loaded = true;
-                    });
-
                     _this.$iframe.setAttribute('id', _this.playerID);
                     _this.$iframe.setAttribute('src', 'https://player.vimeo.com/video/' + _this.videoID + '?' + _this.playerOptions);
                     _this.$iframe.setAttribute('frameborder', '0');
@@ -387,35 +380,34 @@
                     document.body.appendChild(hiddenDiv);
                 }
 
-                _this.player = _this.player || $f(_this.$iframe);
+                _this.player = _this.player || new Vimeo.Player(_this.$iframe);
 
-                _this.player.addEvent('ready', function (eventReady) {
-                    // mute
-                    _this.player.api('setVolume', _this.options.mute ? 0 : 100);
+                // mute
+                _this.player.setVolume(_this.options.mute ? 0 : 100);
 
-                    // autoplay
-                    if(_this.options.autoplay) {
-                        _this.play();
+                // autoplay
+                if(_this.options.autoplay) {
+                    _this.play();
+                }
+
+                var vmStarted;
+                _this.player.on('timeupdate', function (e) {
+                    if(!vmStarted) {
+                        _this.fire('started', e);
                     }
-
-                    var vmStarted;
-                    _this.player.addEvent('playProgress', function (eventPlay) {
-                        if(!vmStarted) {
-                            _this.fire('started', eventPlay);
-                        }
-                        vmStarted = 1;
-                    });
-                    _this.player.addEvent('play', function (e) {
-                        _this.fire('play', e);
-                    });
-                    _this.player.addEvent('pause', function (e) {
-                        _this.fire('pause', e);
-                    });
-                    _this.player.addEvent('finish', function (e) {
-                        _this.fire('end', e);
-                    });
-
-                    _this.fire('ready', eventReady);
+                    vmStarted = 1;
+                });
+                _this.player.on('play', function (e) {
+                    _this.fire('play', e);
+                });
+                _this.player.on('pause', function (e) {
+                    _this.fire('pause', e);
+                });
+                _this.player.on('ended', function (e) {
+                    _this.fire('end', e);
+                });
+                _this.player.on('loaded', function (e) {
+                    _this.fire('ready', e);
                 });
             }
 
@@ -505,7 +497,7 @@
         // load Vimeo API
         if(_this.type === 'vimeo' && !VimeoAPIadded) {
             VimeoAPIadded = 1;
-            src = '//f.vimeocdn.com/js/froogaloop2.min.js';
+            src = '//player.vimeo.com/api/player.js';
         }
 
         if(!src) {
@@ -558,16 +550,16 @@
 
         // Vimeo
         if(_this.type === 'vimeo') {
-            if(typeof $f === 'undefined' && !loadingVimeoPlayer) {
+            if(typeof Vimeo === 'undefined' && !loadingVimeoPlayer) {
                 loadingVimeoPlayer = 1;
-                var frooga_interval = setInterval(function () {
-                    if(typeof $f !== 'undefined') {
-                        clearInterval(frooga_interval);
+                var vimeo_interval = setInterval(function () {
+                    if(typeof Vimeo !== 'undefined') {
+                        clearInterval(vimeo_interval);
                         loadingVimeoDeffer.resolve('done');
                         callback();
                     }
                 }, 20);
-            } else if(typeof $f !== 'undefined') {
+            } else if (typeof Vimeo !== 'undefined') {
                 callback();
             } else {
                 loadingVimeoDeffer.done(function () {
