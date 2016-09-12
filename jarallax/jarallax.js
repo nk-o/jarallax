@@ -200,10 +200,7 @@
         if(_this.image.src === null) {
             _this.image.src = _this.css(_this.$item, 'background-image').replace(/^url\(['"]?/g,'').replace(/['"]?\)$/g,'');
         }
-        if(!_this.image.src || _this.image.src === 'none') {
-            return false;
-        }
-        return true;
+        return !(!_this.image.src || _this.image.src === 'none');
     };
 
     Jarallax.prototype.init = function () {
