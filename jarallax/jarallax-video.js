@@ -23,7 +23,7 @@
         return out;
     }
 
-    // Deffered
+    // Deferred
     // thanks http://stackoverflow.com/questions/18096715/implement-deferred-object-without-using-jquery
     function Deferred () {
         this._done = [];
@@ -76,7 +76,7 @@
                 mute: 1,
                 controls: 0,
 
-                // start / end video in ms
+                // start / end video time in ms
                 startTime: 0,
                 endTime: 0
             };
@@ -520,7 +520,7 @@
                 addEventListener(_this.player, 'ended', function (e) {
                     _this.fire('end', e);
                 });
-                addEventListener(_this.player, 'loadedmetadata', function (e) {
+                addEventListener(_this.player, 'loadedmetadata', function () {
                     _this.fire('ready');
                     // autoplay
                     if(_this.options.autoplay) {
@@ -590,9 +590,9 @@
 
         // Youtube
         if(_this.type === 'youtube') {
-            // Listen for Gobal YT player callback
+            // Listen for global YT player callback
             if ((typeof YT === 'undefined' || YT.loaded === 0) && !loadingYoutubePlayer) {
-                // Prevents Ready Event from being called twice
+                // Prevents Ready event from being called twice
                 loadingYoutubePlayer = 1;
 
                 // Creates deferred so, other players know when to wait.
@@ -683,7 +683,7 @@
         }
     };
 
-    // append video after init Jarallax
+    // cover video
     var def_coverImage = Jarallax.prototype.coverImage;
     Jarallax.prototype.coverImage = function () {
         var _this = this;
@@ -699,7 +699,7 @@
         }
     };
 
-    // init video parallax
+    // init video
     var def_initImg = Jarallax.prototype.initImg;
     Jarallax.prototype.initImg = function () {
         var _this = this;
