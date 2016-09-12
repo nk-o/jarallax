@@ -694,7 +694,7 @@
         if(_this.video && _this.image.$item.nodeName === 'IFRAME') {
             _this.css(_this.image.$item, {
                 height: _this.image.$item.getBoundingClientRect().height + 400 + 'px',
-                top: '-200px'
+                marginTop: (-200 + parseFloat(_this.css(_this.image.$item, 'margin-top'))) + 'px'
             });
         }
     };

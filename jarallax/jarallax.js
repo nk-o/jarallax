@@ -572,6 +572,8 @@
                 }
 
                 styles.transform = 'translate3d(0, ' + positionY + 'px, 0)';
+            } else if (_this.image.useImgTag) {
+                styles.top = positionY + 'px';
             } else {
                 // vertical centering
                 if(_this.bgPosVerticalCenter) {
