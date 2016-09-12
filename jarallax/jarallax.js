@@ -130,7 +130,7 @@
             if(elementInVP && typeof elementInVP === 'object' && typeof elementInVP.length !== 'undefined') {
                 elementInVP = elementInVP[0];
             }
-            // check of dom element
+            // check if dom element
             if(!elementInVP instanceof Element) {
                 elementInVP = null;
             }
@@ -166,7 +166,7 @@
             return el.style[styles];
         }
 
-        // add transform prop with vendor prefixes
+        // add transform property with vendor prefixes
         if(styles.transform) {
             styles.WebkitTransform = styles.MozTransform = styles.transform;
         }
@@ -373,7 +373,7 @@
     };
 
     // it will remove some image overlapping
-    // overlapping occur due to an image position fixed inside absolute possition element (webkit based browsers works without any fix)
+    // overlapping occur due to an image position fixed inside absolute position element (webkit based browsers works without any fix)
     Jarallax.prototype.clipContainer = function () {
         // clip is not working properly on real IE9 and less
         if(isIElt10) {
@@ -513,7 +513,7 @@
         // check if in viewport
         var viewportRect = rect;
         if(_this.options.elementInViewport) {
-            var viewportRect = _this.options.elementInViewport.getBoundingClientRect();
+            viewportRect = _this.options.elementInViewport.getBoundingClientRect();
         }
         _this.isElementInViewport =
             viewportRect.bottom >= 0 &&
