@@ -469,7 +469,7 @@
         }
 
         // fix if parents with transform style
-        if(_this.parentWithTransform) {
+        if(supportTransform && _this.options.enableTransform && _this.parentWithTransform) {
             resultML -= contL;
         }
 
