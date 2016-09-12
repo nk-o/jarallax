@@ -699,6 +699,6 @@
 
     // data-jarallax initialization
     addEventListener(window, 'DOMContentLoaded', function () {
-        plugin(document.querySelectorAll('[data-jarallax]'));
+        plugin(document.querySelectorAll('[data-jarallax], [data-jarallax-video]'));
     });
 }(window));
