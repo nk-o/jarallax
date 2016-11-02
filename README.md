@@ -11,6 +11,16 @@ Smooth parallax scrolling effect for background images using ***CSS transforms**
 * Latest Chrome on Android
 * Latest Safari on iOs
 
+## Want WordPress Plugin?
+
+[![Advanced WordPress Backgrounds](https://a.nkdev.info/jarallax/awb-preview.jpg)](https://nkdev.info/downloads/advanced-wordpress-backgrounds/)
+
+We made WordPress plugin to easily make backgrounds for content in your blog with all Jarallax features.
+
+Demo: https://wp.nkdev.info/free-advanced-wordpress-backgrounds/
+
+Download: https://nkdev.info/downloads/advanced-wordpress-backgrounds/
+
 ## Getting Started
 Include Jarallax plugin. Also include jQuery before jarallax if you want to use it.
 ```html
