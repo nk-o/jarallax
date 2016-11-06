@@ -1,9 +1,11 @@
 {
     "name": "jarallax",
+    "version": "1.7.1",
     "description": "Parallax plugin for background images and videos",
     "license": "WTFPL",
     "homepage": "https://github.com/nk-o/jarallax",
     "author": "_nK <https://nkdev.info>",
+    "main": "dist/jarallax.min.js",
     "scripts": {
         "build": "gulp",
         "watch": "gulp watch"
@@ -11,6 +13,9 @@
     "repository": {
         "type": "git",
         "url": "git://github.com/nk-o/jarallax.git"
+    },
+    "bugs": {
+        "url": "https://github.com/nk-o/jarallax/issues"
     },
     "keywords": [
         "parallax",

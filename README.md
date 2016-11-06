@@ -21,8 +21,11 @@ Demo: https://wp.nkdev.info/free-advanced-wordpress-backgrounds/
 
 Download: https://nkdev.info/downloads/advanced-wordpress-backgrounds/
 
-## Getting Started
+## Install
 Include Jarallax plugin. Also include jQuery before jarallax if you want to use it.
+
+### Download
+Download scripts directly from this repository and link it in your HTML file
 ```html
 <!-- Jarallax -->
 <script src='jarallax/jarallax.js'></script>
@@ -30,6 +33,21 @@ Include Jarallax plugin. Also include jQuery before jarallax if you want to use 
 <!-- Include it if you want to use Video parallax -->
 <script src='jarallax/jarallax-video.js'></script>
 ```
+
+### CDN
+Link directly from [cdnjs](https://cdnjs.com/)
+```html
+<!-- Jarallax -->
+<script src='https://cdnjs.cloudflare.com/ajax/libs/jarallax/1.7.1/jarallax.min.js'></script>
+
+<!-- Include it if you want to use Video parallax -->
+<script src='https://cdnjs.cloudflare.com/ajax/libs/jarallax/1.7.1/jarallax-video.min.js'></script>
+```
+
+### Package managers
+npm: `npm install jarallax -- save`
+
+Bower: `bower install jarallax --save`
 
 ## Set up your HTML
 ```html
