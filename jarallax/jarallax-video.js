@@ -473,7 +473,7 @@
 
                     // mute
                     if(_this.options.mute) {
-                        _this.$iframe.setAttribute('mute', 'on');
+                        _this.$iframe.setAttribute('muted', 'on');
                     }
 
                     // loop
