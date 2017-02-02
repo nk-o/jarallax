@@ -183,7 +183,6 @@
         }
     };
 
-    var vimeoPlayBusy = 0;
     VideoWorker.prototype.play = function (start) {
         var _this = this;
         if(!_this.player) {
@@ -197,16 +196,15 @@
             _this.player.playVideo();
         }
 
-        if(_this.type === 'vimeo' && !vimeoPlayBusy) {
-            if(typeof start !== 'undefined') {
-                vimeoPlayBusy = 1;
-                _this.player.setCurrentTime(start || 0).then(function () {
-                    _this.player.play();
-                    vimeoPlayBusy = 0;
-                });
-            } else {
-                _this.player.play();
+        if(_this.type === 'vimeo') {
+            if (typeof start !== 'undefined') {
+                _this.player.setCurrentTime(start);
             }
+            _this.player.getPaused().then(function(paused) {
+                if (paused) {
+                    _this.player.play();
+                }
+            });
         }
 
         if(_this.type === 'local') {
@@ -404,7 +402,7 @@
                 }
 
                 // autoplay
-                _this.playerOptions += '&autoplay=0';
+                _this.playerOptions += '&autoplay=' + (_this.options.autoplay ? '1' : '0');
 
                 // loop
                 _this.playerOptions += '&loop=' + (_this.options.loop ? 1 : 0);
@@ -422,11 +420,6 @@
 
                 // mute
                 _this.player.setVolume(_this.options.mute ? 0 : 100);
-
-                // autoplay
-                if(_this.options.autoplay) {
-                    _this.play(_this.options.startTime);
-                }
 
                 var vmStarted;
                 _this.player.on('timeupdate', function (e) {
@@ -448,6 +441,11 @@
                 });
                 _this.player.on('play', function (e) {
                     _this.fire('play', e);
+
+                    // check for the start time and start with it
+                    if(_this.options.startTime && e.seconds === 0) {
+                        _this.play(_this.options.startTime);
+                    }
                 });
                 _this.player.on('pause', function (e) {
                     _this.fire('pause', e);
