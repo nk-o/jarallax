@@ -209,13 +209,13 @@ Required `jarallax/jarallax-video.js` file.
             <td>videoStartTime</td>
             <td>float</td>
             <td>0</td>
-            <td>Start time in milliseconds when video will be started (this value will be applied also after loop)</td>
+            <td>Start time in seconds when video will be started (this value will be applied also after loop)</td>
         </tr>
         <tr>
             <td>videoEndTime</td>
             <td>float</td>
             <td>0</td>
-            <td>End time in milliseconds when video will be ended</td>
+            <td>End time in seconds when video will be ended</td>
         </tr>
     </tbody>
 </table>
