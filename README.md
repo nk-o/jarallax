@@ -350,6 +350,7 @@ jQuery.fn.newJarallax = jQuery.fn.jarallax.noConflict();
 
 
 # Real Usage Examples
+* [Godlike](https://wp.nkdev.info/godlike)
 * [Youplay](https://wp.nkdev.info/youplay)
 * [InLove](https://wp.nkdev.info/in-love/home-1/)
 * [Flatness](https://wp.nkdev.info/in-love/flatness/)
@@ -359,4 +360,4 @@ Images https://www.pexels.com/
 Local Video https://www.videezy.com/
 
 # License
-Copyright (c) 2016 _nK Licensed under the WTFPL license.
+Copyright (c) 2017 nK Licensed under the WTFPL license.
