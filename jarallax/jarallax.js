@@ -218,6 +218,21 @@
                 position         : 'fixed'
             };
 
+        // save default user styles
+        _this.$item.setAttribute('data-jarallax-original-styles', _this.$item.getAttribute('style'));
+
+        // set relative position and z-index to the parent
+        if (_this.css(_this.$item, 'position') === 'static') {
+            _this.css(_this.$item, {
+                position: 'relative'
+            });
+        }
+        if (_this.css(_this.$item, 'z-index') === 'auto') {
+            _this.css(_this.$item, {
+                zIndex: 0
+            });
+        }
+
         // container for parallax image
         _this.image.$container = document.createElement('div');
         _this.css(_this.image.$container, containerStyles);
@@ -279,9 +294,6 @@
             _this.coverImage();
             _this.clipContainer();
             _this.onScroll(true);
-
-            // save default user styles
-            _this.$item.setAttribute('data-jarallax-original-styles', _this.$item.getAttribute('style'));
 
             // call onInit event
             if(_this.options.onInit) {

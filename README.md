@@ -63,7 +63,6 @@ Mandatory requirement for plugin works properly - the selected item should be NO
 This styles need to add relative position and correct background image position before Jarallax initialize end.
 ```css
 .jarallax {
-    position: relative;
     background-size: cover;
     background-repeat: no-repeat;
     background-position: 50% 50%;

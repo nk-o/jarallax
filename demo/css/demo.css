@@ -1,11 +1,9 @@
 @import url(https://fonts.googleapis.com/css?family=Open+Sans);
 
 .jarallax {
-    position: relative;
     background-size: cover;
     background-repeat: no-repeat;
     background-position: 50% 50%;
-    z-index: 1;
 }
 
 /* demo styles */
