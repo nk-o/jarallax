@@ -307,7 +307,6 @@
             if(_this.type === 'youtube') {
                 _this.playerOptions = {};
                 _this.playerOptions.videoId = _this.videoID;
-                _this.playerOptions.width = window.innerWidth || document.documentElement.clientWidth;
                 _this.playerOptions.playerVars = {
                     autohide: 1,
                     rel: 0,
@@ -386,6 +385,10 @@
                 _this.player = _this.player || new window.YT.Player(_this.playerID, _this.playerOptions);
                 if(firstInit) {
                     _this.$iframe = document.getElementById(_this.playerID);
+
+                    // get video width and height
+                    _this.videoWidth = parseInt(_this.$iframe.getAttribute('width'), 10) || 1280;
+                    _this.videoHeight = parseInt(_this.$iframe.getAttribute('height'), 10) || 720;
                 }
             }
 
@@ -417,6 +420,14 @@
                 }
 
                 _this.player = _this.player || new Vimeo.Player(_this.$iframe);
+
+                // get video width and height
+                _this.player.getVideoWidth().then(function (width) {
+                    _this.videoWidth = width || 1280;
+                });
+                _this.player.getVideoHeight().then(function (height) {
+                    _this.videoHeight = height || 720;
+                });
 
                 // mute
                 _this.player.setVolume(_this.options.mute ? 0 : 100);
@@ -519,7 +530,12 @@
                     _this.fire('end', e);
                 });
                 addEventListener(_this.player, 'loadedmetadata', function () {
+                    // get video width and height
+                    _this.videoWidth = this.videoWidth || 1280;
+                    _this.videoHeight = this.videoHeight || 720;
+
                     _this.fire('ready');
+
                     // autoplay
                     if(_this.options.autoplay) {
                         _this.play(_this.options.startTime);
@@ -736,8 +752,8 @@
                     _this.image.$item = _this.$video;
 
                     // set video width and height
-                    _this.image.width  = _this.options.imgWidth = _this.image.width || 1280;
-                    _this.image.height = _this.options.imgHeight = _this.image.height || 720;
+                    _this.image.width  = _this.options.imgWidth = _this.video.videoWidth || 1280;
+                    _this.image.height = _this.options.imgHeight = _this.video.videoHeight || 720;
                     _this.coverImage();
                     _this.clipContainer();
                     _this.onScroll();
