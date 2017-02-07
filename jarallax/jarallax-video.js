@@ -704,6 +704,7 @@
     var def_initImg = Jarallax.prototype.initImg;
     Jarallax.prototype.initImg = function () {
         var _this = this;
+        var defaultResult = def_initImg.apply(_this);
 
         if(!_this.options.videoSrc) {
             _this.options.videoSrc = _this.$item.getAttribute('data-jarallax-video') || false;
@@ -761,9 +762,15 @@
             if(video.type !== 'local') {
                 return false;
             }
+
+            // set empty image on local video if not defined
+            else if (!defaultResult) {
+                _this.image.src = 'data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7';
+                return true;
+            }
         }
 
-        return def_initImg.apply(_this);
+        return defaultResult;
     };
 
     // Destroy video parallax
