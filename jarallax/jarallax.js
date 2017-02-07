@@ -440,18 +440,23 @@
 
         // scroll parallax
         if(isScroll) {
-            // scroll distance
-            scrollDist = speed * (contH + wndH) / 2;
-            if(speed < 0 || speed > 1) {
-                scrollDist = speed * Math.max(contH, wndH) / 2;
+            // scroll distance and height for image
+            if (speed < 0) {
+                scrollDist = speed * Math.max(contH, wndH);
+            } else {
+                scrollDist = speed * (contH + wndH);
             }
 
             // size for scroll parallax
-            if(speed < 0 || speed > 1) {
-                resultH = Math.max(contH, wndH) + Math.abs(scrollDist) * 2;
-            } else {
+            if (speed > 1) {
+                resultH = Math.abs(scrollDist - wndH);
+            } else if (speed < 0) {
+                resultH = scrollDist / speed + Math.abs(scrollDist);
+            }  else {
                 resultH += Math.abs(wndH - contH) * (1 - speed);
             }
+
+            scrollDist /= 2;
         }
 
         // calculate width relative to height and image size
