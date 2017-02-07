@@ -471,12 +471,12 @@
 
                     // mute
                     if(_this.options.mute) {
-                        _this.$iframe.setAttribute('muted', 'on');
+                        _this.$iframe.muted = true;
                     }
 
                     // loop
                     if(_this.options.loop) {
-                        _this.$iframe.setAttribute('loop', 'on');
+                        _this.$iframe.loop = true;
                     }
 
                     _this.$iframe.setAttribute('id', _this.playerID);
