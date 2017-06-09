@@ -681,13 +681,13 @@
             _this.video.getIframe(function (iframe) {
                 var $parent = iframe.parentNode;
                 _this.css(iframe, {
-                    position: 'fixed',
+                    position: _this.image.position,
                     top: '0px', left: '0px', right: '0px', bottom: '0px',
                     width: '100%',
                     height: '100%',
                     maxWidth: 'none',
                     maxHeight: 'none',
-                    visibility: 'visible',
+                    visibility: 'hidden',
                     margin: 0,
                     zIndex: -1
                 });

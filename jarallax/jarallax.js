@@ -35,43 +35,31 @@
         }());
     }
 
-    var supportTransform = (function () {
-        if (!window.getComputedStyle) {
-            return false;
+    // test if css property supported by browser
+    // like "transform"
+    var tempDiv = document.createElement('div');
+    function isPropertySupported (property) {
+        var prefixes = ['O','Moz','ms','Ms','Webkit'];
+        var i = prefixes.length;
+        if (tempDiv.style[property] !== undefined) {
+            return true;
         }
+        property = property.charAt(0).toUpperCase() + property.substr(1);
+        while (--i > -1 && tempDiv.style[prefixes[i] + property] === undefined) { }
+        return i >= 0;
+    }
 
-        var el = document.createElement('p'),
-            has3d,
-            transforms = {
-                'webkitTransform':'-webkit-transform',
-                'OTransform':'-o-transform',
-                'msTransform':'-ms-transform',
-                'MozTransform':'-moz-transform',
-                'transform':'transform'
-            };
+    var supportTransform = isPropertySupported('transform');
+    var supportTransform3D = isPropertySupported('perspective');
 
-        // Add it to the body to get the computed style.
-        (document.body || document.documentElement).insertBefore(el, null);
-
-        for (var t in transforms) {
-            if (typeof el.style[t] !== 'undefined') {
-                el.style[t] = "translate3d(1px,1px,1px)";
-                has3d = window.getComputedStyle(el).getPropertyValue(transforms[t]);
-            }
-        }
-
-        (document.body || document.documentElement).removeChild(el);
-
-        return typeof has3d !== 'undefined' && has3d.length > 0 && has3d !== "none";
-    }());
-
-    var isAndroid = navigator.userAgent.toLowerCase().indexOf('android') > -1;
-    var isIOs = /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream;
-    var isOperaOld = !!window.opera;
-    var isEdge = /Edge\/\d+/.test(navigator.userAgent);
-    var isIE11 = /Trident.*rv[ :]*11\./.test(navigator.userAgent);
-    var isIE10 = !!Function('/*@cc_on return document.documentMode===10@*/')();
-    var isIElt10 = document.all && !window.atob;
+    var ua = navigator.userAgent;
+    var isAndroid = ua.toLowerCase().indexOf('android') > -1;
+    var isIOs = /iPad|iPhone|iPod/.test(ua) && !window.MSStream;
+    var isFirefox = ua.toLowerCase().indexOf('firefox') > -1;
+    var isIE = ua.indexOf('MSIE ') > -1    // IE 10 or older
+            || ua.indexOf('Trident/') > -1 // IE 11
+            || ua.indexOf('Edge/') > -1;   // Edge
+    var isIElt10 = document.all && !window.atob; // IE 9 or older
 
     var wndW;
     var wndH;
@@ -101,7 +89,6 @@
                 imgSrc            : null,
                 imgWidth          : null,
                 imgHeight         : null,
-                enableTransform   : true,
                 elementInViewport : null,
                 zIndex            : -100,
                 noAndroid         : false,
@@ -117,7 +104,7 @@
             _this.options    = _this.extend({}, _this.defaults, dataOptions, userOptions);
 
             // stop init if android or ios
-            if(isAndroid && _this.options.noAndroid || isIOs && _this.options.noIos) {
+            if(!supportTransform || isAndroid && _this.options.noAndroid || isIOs && _this.options.noIos) {
                 return;
             }
 
@@ -146,7 +133,8 @@
                 height     : _this.options.imgHeight || null,
                 // fix for some devices
                 // use <img> instead of background image - more smoothly
-                useImgTag  : isIOs || isAndroid || isOperaOld || isIE11 || isIE10 || isEdge
+                useImgTag  : isIOs || isAndroid || isIE,
+                position   : !supportTransform3D || isFirefox ? 'absolute' : 'fixed'
             };
 
             if(_this.initImg()) {
@@ -168,7 +156,10 @@
 
         // add transform property with vendor prefixes
         if(styles.transform) {
-            styles.WebkitTransform = styles.MozTransform = styles.transform;
+            if (supportTransform3D) {
+                styles.transform += ' translateZ(0)';
+            }
+            styles.WebkitTransform = styles.MozTransform = styles.msTransform = styles.OTransform = styles.transform;
         }
 
         for(var k in styles) {
@@ -214,9 +205,7 @@
                 overflow         : 'hidden',
                 pointerEvents    : 'none'
             },
-            imageStyles = {
-                position         : 'fixed'
-            };
+            imageStyles = {};
 
         // save default user styles
         _this.$item.setAttribute('data-jarallax-original-styles', _this.$item.getAttribute('style'));
@@ -244,7 +233,7 @@
         _this.$item.appendChild(_this.image.$container);
 
         // use img tag
-        if(_this.image.useImgTag && supportTransform && _this.options.enableTransform) {
+        if(_this.image.useImgTag) {
             _this.image.$item = document.createElement('img');
             _this.image.$item.setAttribute('src', _this.image.src);
             imageStyles = _this.extend({
@@ -263,19 +252,14 @@
             }, containerStyles, imageStyles);
         }
 
-        // fix for IE9 and less
-        if(isIElt10) {
-            imageStyles.backgroundAttachment = 'fixed';
-        }
-
         // check if one of parents have transform style (without this check, scroll transform will be inverted)
         // discussion - https://github.com/nk-o/jarallax/issues/9
-        _this.parentWithTransform = 0;
+        var parentWithTransform = 0;
         var $itemParents = _this.$item;
-        while ($itemParents !== null && $itemParents !== document && _this.parentWithTransform === 0) {
+        while ($itemParents !== null && $itemParents !== document && parentWithTransform === 0) {
             var parent_transform = _this.css($itemParents, '-webkit-transform') || _this.css($itemParents, '-moz-transform') || _this.css($itemParents, 'transform');
             if(parent_transform && parent_transform !== 'none') {
-                _this.parentWithTransform = 1;
+                parentWithTransform = 1;
 
                 // add transform on parallax container if there is parent with transform
                 _this.css(_this.image.$container, {
@@ -284,6 +268,14 @@
             }
             $itemParents = $itemParents.parentNode;
         }
+
+        // absolute position if one of parents have transformations or parallax without scroll
+        if (parentWithTransform || _this.options.type === 'opacity'|| _this.options.type === 'scale' || _this.options.type === 'scale-opacity') {
+            _this.image.position = 'absolute';
+        }
+
+        // add position to parallax block
+        imageStyles.position = _this.image.position;
 
         // parallax image
         _this.css(_this.image.$item, imageStyles);
@@ -466,13 +458,6 @@
             resultH = resultW * imgH / imgW;
         }
 
-        // when disabled transformations, height should be >= window height
-        _this.bgPosVerticalCenter = 0;
-        if(isScroll && resultH < wndH && (!supportTransform || !_this.options.enableTransform)) {
-            _this.bgPosVerticalCenter = (wndH - resultH) / 2;
-            resultH = wndH;
-        }
-
         // center parallax image
         if(isScroll) {
             resultML = contL + (contW - resultW) / 2;
@@ -482,8 +467,8 @@
             resultMT = (contH - resultH) / 2;
         }
 
-        // fix if parents with transform style
-        if(supportTransform && _this.options.enableTransform && _this.parentWithTransform) {
+        // fix if parallax block in absolute position
+        if(_this.image.position === 'absolute') {
             resultML -= contL;
         }
 
@@ -519,7 +504,6 @@
             contT  = rect.top,
             contH  = rect.height,
             styles = {
-                position           : 'absolute',
                 visibility         : 'visible',
                 backgroundPosition : '50% 50%'
             };
@@ -563,7 +547,7 @@
 
         // opacity
         if(_this.options.type === 'opacity' || _this.options.type === 'scale-opacity' || _this.options.type === 'scroll-opacity') {
-            styles.transform = 'translate3d(0, 0, 0)';
+            styles.transform = ''; // empty to add translateZ(0) where it is possible
             styles.opacity = visiblePercent;
         }
 
@@ -575,33 +559,19 @@
             } else {
                 scale += _this.options.speed * (1 - visiblePercent);
             }
-            styles.transform = 'scale(' + scale + ') translate3d(0, 0, 0)';
+            styles.transform = 'scale(' + scale + ')';
         }
 
         // scroll
         if(_this.options.type === 'scroll' || _this.options.type === 'scroll-opacity') {
             var positionY = _this.parallaxScrollDistance * fromViewportCenter;
 
-            if(supportTransform && _this.options.enableTransform) {
-                // fix if parents with transform style
-                if(_this.parentWithTransform) {
-                    positionY -= contT;
-                }
-
-                styles.transform = 'translate3d(0, ' + positionY + 'px, 0)';
-            } else if (_this.image.useImgTag) {
-                styles.top = positionY + 'px';
-            } else {
-                // vertical centering
-                if(_this.bgPosVerticalCenter) {
-                    positionY += _this.bgPosVerticalCenter;
-                }
-                styles.backgroundPosition = '50% ' + positionY + 'px';
+            // fix if parallax block in absolute position
+            if(_this.image.position === 'absolute') {
+                positionY -= contT;
             }
 
-            // fixed position is not work properly for IE9 and less
-            // solution - use absolute position and emulate fixed by using container offset
-            styles.position = isIElt10 ? 'absolute' : 'fixed';
+            styles.transform = 'translateY(' + positionY + 'px)';
         }
 
         _this.css(_this.image.$item, styles);
