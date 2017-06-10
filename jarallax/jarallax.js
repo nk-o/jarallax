@@ -134,6 +134,8 @@
                 // fix for some devices
                 // use <img> instead of background image - more smoothly
                 useImgTag  : isIOs || isAndroid || isIE,
+
+                // position absolute is needed on IE9 and FireFox because fixed position have glitches
                 position   : !supportTransform3D || isFirefox ? 'absolute' : 'fixed'
             };
 
