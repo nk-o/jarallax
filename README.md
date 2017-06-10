@@ -160,12 +160,6 @@ Options can be passed in data attributes or in object when you initialize jarall
             <td>Use custom DOM / jQuery element to check if parallax block in viewport. More info here - <a href="https://github.com/nk-o/jarallax/issues/13">Issue 13</a></td>
         </tr>
         <tr>
-            <td>enableTransform</td>
-            <td>boolean</td>
-            <td>true</td>
-            <td>Enable transformations for effect if supported. When option is false - used background-position instead.</td>
-        </tr>
-        <tr>
             <td>zIndex</td>
             <td>number</td>
             <td>-100</td>
