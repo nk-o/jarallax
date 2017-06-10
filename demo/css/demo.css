@@ -45,7 +45,7 @@ a:hover, a:focus {
 .demo-table {
     display: table;
     width: 100%;
-    height: 700px;
+    height: 600px;
     background-color: rgba(39, 35, 51, 0.8);
     color: #fff;
 }
@@ -87,9 +87,21 @@ a:hover, a:focus {
 }
 
 
-/* full height demo */
-.demo-full-height,
-.demo-full-height .demo-table {
-    height: 96vh;
-    min-height: 600px;
+/* Carousel */
+.demo-carousel {
+    background-color: rgb(39, 35, 51);
+}
+.demo-carousel .demo-carousel-item {
+    width: 33.33%;
+    min-height: 300px;
+}
+@media screen and (max-width: 780px) {
+    .demo-carousel .demo-carousel-item {
+        width: 50%;
+    }
+}
+@media screen and (max-width: 400px) {
+    .demo-carousel .demo-carousel-item {
+        width: 100%;
+    }
 }

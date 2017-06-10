@@ -6,28 +6,38 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Jarallax | JavaScript parallax scrolling with NO dependencies</title>
     <meta name="description" content="Pure JavaScript parallax scrolling effect. jQuery supported. Youtube and Vimeo parallax supported.">
-    <link href='css/demo.css' rel='stylesheet' type='text/css'>
+    <link href="css/demo.css" rel="stylesheet" type="text/css">
+
+    <!-- Jarallax -->
     <script src="../jarallax/jarallax.js"></script>
     <script src="../jarallax/jarallax-video.js"></script>
+
+    <!-- Flickity -->
+    <link href="https://unpkg.com/flickity@2/dist/flickity.min.css" rel="stylesheet" type="text/css">
+    <script src="https://unpkg.com/flickity@2/dist/flickity.pkgd.min.js"></script>
 </head>
 <body>
     <div class="jarallax" style="background-image: url(images/image1.jpg);">
         <div class="demo-table">
             <div class="demo-table-cell">
                 <h1>Jarallax</h1>
-                <h2>High-Performance JavaScript Parallax Effect</h2>
-
-                <br>
-                <a class="github-button" href="https://github.com/nk-o/jarallax" data-size="large" data-count-href="/nk-o/jarallax/stargazers" data-show-count="true" data-count-aria-label="# stargazers on GitHub" aria-label="Star nk-o/jarallax on GitHub">Star</a>
-                <a class="github-button" href="https://github.com/nk-o/jarallax/archive/master.zip" data-size="large" aria-label="Download nk-o/jarallax on GitHub">Download</a>
             </div>
         </div>
+    </div>
+    <div class="demo-carousel">
+        <div class="demo-carousel-item jarallax" data-jarallax='{"speed": 0.1}' style="background-image: url('images/image3.jpg');"></div>
+        <div class="demo-carousel-item jarallax" data-jarallax='{"speed": 0.4}' style="background-image: url('video/local-video.jpg');" data-jarallax-video="mp4:video/local-video.mp4,webm:video/local-video.webm,ogv:video/local-video.ogv"></div>
+        <div class="demo-carousel-item jarallax" data-jarallax='{"speed": 0.2}' style="background-image: url('images/image7.jpg');"></div>
+        <div class="demo-carousel-item jarallax" data-jarallax='{"speed": 0.3}' style="background-image: url('images/image6.jpg');"></div>
     </div>
     <div class="demo-gap">
         <div class="container">
             <p>Smooth parallax scrolling effect for background images using <strong>CSS transforms</strong> with graceful degradation for old browsers. Parallax plugin with <strong>NO dependencies</strong>. jQuery supported. <strong>Youtube</strong> and <strong>Vimeo</strong> parallax supported.</p>
             <p>Documentation on Github - <a href="https://github.com/nk-o/jarallax">https://github.com/nk-o/jarallax</a></p>
             <p>Plugin for <strong>WordPress</strong> - <a href="https://nkdev.info/downloads/advanced-wordpress-backgrounds/" target="_blank">https://nkdev.info/downloads/advanced-wordpress-backgrounds/</a></p>
+            <br>
+            <a class="github-button" href="https://github.com/nk-o/jarallax" data-size="large" data-count-href="/nk-o/jarallax/stargazers" data-show-count="true" data-count-aria-label="# stargazers on GitHub" aria-label="Star nk-o/jarallax on GitHub">Star</a>
+            <a class="github-button" href="https://github.com/nk-o/jarallax/archive/master.zip" data-size="large" aria-label="Download nk-o/jarallax on GitHub">Download</a>
         </div>
     </div>
     <div class="jarallax" style="background-image: url(images/image2.jpg);"></div>
@@ -37,13 +47,15 @@
     <div class="jarallax" data-jarallax='{"speed": 0.2}' style="background-image: url(images/image3.jpg);"></div>
     <div class="jarallax" data-jarallax='{"speed": -0.2}' style="background-image: url(images/image4.jpg);"></div>
     <div class="jarallax" data-jarallax='{"speed": 1.4}' style="background-image: url(images/image5.jpg);"></div>
-    <div class="demo-gap">
-        <h2>Scale and Opacity</h2>
-    </div>
-    <div class="jarallax" data-jarallax='{"speed": 0.2, "type": "scale-opacity"}' style="background-image: url(images/image6.jpg);"></div>
-    <div class="jarallax" data-jarallax='{"type": "scroll-opacity"}' style="background-image: url(images/image7.jpg);"></div>
-    <div class="jarallax" data-jarallax='{"type": "opacity"}' style="background-image: url(images/image8.jpg);"></div>
-    <div class="jarallax" data-jarallax='{"speed": -0.2, "type": "scale"}' style="background-image: url(images/image9.jpg);"></div>
+
+    <!--<div class="demo-gap">-->
+        <!--<h2>Scale and Opacity</h2>-->
+    <!--</div>-->
+    <!--<div class="jarallax" data-jarallax='{"speed": 0.2, "type": "scale-opacity"}' style="background-image: url(images/image6.jpg);"></div>-->
+    <!--<div class="jarallax" data-jarallax='{"type": "scroll-opacity"}' style="background-image: url(images/image7.jpg);"></div>-->
+    <!--<div class="jarallax" data-jarallax='{"type": "opacity"}' style="background-image: url(images/image8.jpg);"></div>-->
+    <!--<div class="jarallax" data-jarallax='{"speed": -0.2, "type": "scale"}' style="background-image: url(images/image9.jpg);"></div>-->
+
     <div class="demo-gap">
         <h2>Youtube and Vimeo parallax</h2>
     </div>
@@ -84,11 +96,27 @@
 
     <script async defer id="github-bjs" src="https://buttons.github.io/buttons.js"></script>
     <script type="text/javascript">
+        /* init Flickity Carousel + Jarallax inside it */
+        new Flickity( '.demo-carousel', {
+            initialIndex: 1,
+            autoPlay: 3000,
+            pauseAutoPlayOnHover: false,
+            pageDots: false,
+            prevNextButtons: false,
+            wrapAround: true
+        });
+        jarallax(document.querySelectorAll('.demo-carousel .jarallax'), {
+            imgWidth: 1920,
+            imgHeight: 1080,
+            elementInViewport: document.querySelectorAll('.demo-carousel')
+        });
+
         /* init Jarallax */
         jarallax(document.querySelectorAll('.jarallax'), {
             imgWidth: 1920,
             imgHeight: 1080
         });
+
         /* init Jarallax with jQuery */
         // $('.jarallax').jarallax({
         //     speed: 0.5,
