@@ -344,10 +344,9 @@ jQuery.fn.newJarallax = jQuery.fn.jarallax.noConflict();
 
 
 # Real Usage Examples
-* [Godlike](https://wp.nkdev.info/godlike/)
-* [Youplay](https://wp.nkdev.info/youplay/)
-* [InLove](https://wp.nkdev.info/in-love/home-1/)
-* [Flatness](https://wp.nkdev.info/flatness/)
+* [Khaki](https://demo.nkdev.info/#khaki)
+* [Godlike](https://demo.nkdev.info/#godlike)
+* [Youplay](https://demo.nkdev.info/#youplay)
 
 # Credits
 Images https://www.pexels.com/
