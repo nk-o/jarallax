@@ -7,34 +7,6 @@
 (function (window) {
     'use strict';
 
-    // Adapted from https://gist.github.com/paulirish/1579671
-    if(!Date.now) {
-        Date.now = function () { return new Date().getTime(); };
-    }
-    if(!window.requestAnimationFrame) {
-        (function () {
-
-            var vendors = ['webkit', 'moz'];
-            for (var i = 0; i < vendors.length && !window.requestAnimationFrame; ++i) {
-                var vp = vendors[i];
-                window.requestAnimationFrame = window[vp+'RequestAnimationFrame'];
-                window.cancelAnimationFrame = window[vp+'CancelAnimationFrame']
-                                           || window[vp+'CancelRequestAnimationFrame'];
-            }
-            if (/iP(ad|hone|od).*OS 6/.test(window.navigator.userAgent) // iOS6 is buggy
-                || !window.requestAnimationFrame || !window.cancelAnimationFrame) {
-                var lastTime = 0;
-                window.requestAnimationFrame = function (callback) {
-                    var now = Date.now();
-                    var nextTime = Math.max(lastTime + 16, now);
-                    return setTimeout(function () { callback(lastTime = nextTime); },
-                                      nextTime - now);
-                };
-                window.cancelAnimationFrame = clearTimeout;
-            }
-        }());
-    }
-
     // test if css property supported by browser
     // like "transform"
     var tempDiv = document.createElement('div');
@@ -596,6 +568,13 @@
         }
     };
 
+    // requestAnimationFrame polyfill
+    var rAF = window.requestAnimationFrame ||
+        window.webkitRequestAnimationFrame ||
+        window.mozRequestAnimationFrame ||
+        function (callback) {
+            setTimeout(callback, 1000 / 60);
+        };
 
     // init events
     function addEventListener (el, eventName, handler) {
@@ -609,7 +588,7 @@
     }
 
     function update (e) {
-        window.requestAnimationFrame(function () {
+        rAF(function () {
             if(e.type !== 'scroll') {
                 updateWndVars();
             }
