@@ -429,6 +429,11 @@
                     _this.videoHeight = height || 720;
                 });
 
+                // set current time for autoplay
+                if(_this.options.startTime && _this.options.autoplay) {
+                    _this.player.setCurrentTime(_this.options.startTime);
+                }
+
                 // mute
                 _this.player.setVolume(_this.options.mute ? 0 : 100);
 
