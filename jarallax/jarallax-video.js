@@ -692,7 +692,6 @@
                     height: '100%',
                     maxWidth: 'none',
                     maxHeight: 'none',
-                    visibility: 'hidden',
                     margin: 0,
                     zIndex: -1
                 });
@@ -709,16 +708,37 @@
     var def_coverImage = Jarallax.prototype.coverImage;
     Jarallax.prototype.coverImage = function () {
         var _this = this;
+        var imageData = def_coverImage.apply(_this);
+        var node = _this.image.$item.nodeName;
 
-        def_coverImage.apply(_this);
+        if(imageData && _this.video && (node === 'IFRAME' || node === 'VIDEO')) {
+            var h = imageData.image.height;
+            var w = h * _this.image.width / _this.image.height;
+            var ml = (imageData.container.width - w) / 2;
+            var mt = imageData.image.marginTop;
 
-        // add video height over than need to hide controls
-        if(_this.video && _this.image.$item.nodeName === 'IFRAME') {
-            _this.css(_this.image.$item, {
-                height: _this.image.$item.getBoundingClientRect().height + 400 + 'px',
-                marginTop: (-200 + parseFloat(_this.css(_this.image.$item, 'margin-top'))) + 'px'
+            if (imageData.container.width > w) {
+                w = imageData.container.width;
+                h = w * _this.image.height / _this.image.width;
+                ml = 0;
+                mt = (imageData.container.height - h) / 2;
+            }
+
+            // add video height over than need to hide controls
+            if (node === 'IFRAME') {
+                h += 400;
+                mt -= 200;
+            }
+
+            _this.css(_this.$video, {
+                width: w + 'px',
+                marginLeft: ml + 'px',
+                height: h + 'px',
+                marginTop: mt + 'px'
             });
         }
+
+        return imageData;
     };
 
     // init video

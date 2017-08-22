@@ -59,8 +59,6 @@
                 type              : 'scroll', // type of parallax: scroll, scale, opacity, scale-opacity, scroll-opacity
                 speed             : 0.5, // supported value from -1 to 2
                 imgSrc            : null,
-                imgWidth          : null,
-                imgHeight         : null,
                 elementInViewport : null,
                 zIndex            : -100,
                 noAndroid         : false,
@@ -97,15 +95,22 @@
 
             _this.instanceID = instanceID++;
 
+            // find children image
+            var $childImg = null;
+            for (var i = 0; i < _this.$item.childNodes.length; i++) {
+                if (_this.$item.childNodes[i].className && _this.$item.childNodes[i].className.indexOf('jarallax-img') > -1) {
+                    $childImg = _this.$item.childNodes[i];
+                    break;
+                }
+            }
+
             _this.image      = {
                 src        : _this.options.imgSrc || null,
                 $container : null,
-                $item      : null,
-                width      : _this.options.imgWidth || null,
-                height     : _this.options.imgHeight || null,
+                $item      : $childImg,
                 // fix for some devices
                 // use <img> instead of background image - more smoothly
-                useImgTag  : isIOs || isAndroid || isIE,
+                useImgTag  : !!$childImg || isIOs || isAndroid || isIE,
 
                 // position absolute is needed on IE9 and FireFox because fixed position have glitches
                 position   : !supportTransform3D || isFirefox ? 'absolute' : 'fixed'
@@ -161,6 +166,11 @@
     Jarallax.prototype.initImg = function () {
         var _this = this;
 
+        // prevent if there is img tag
+        if (_this.image.$item) {
+            return true;
+        }
+
         // get image src
         if(_this.image.src === null) {
             _this.image.src = _this.css(_this.$item, 'background-image').replace(/^url\(['"]?/g,'').replace(/['"]?\)$/g,'');
@@ -200,7 +210,6 @@
         _this.image.$container = document.createElement('div');
         _this.css(_this.image.$container, containerStyles);
         _this.css(_this.image.$container, {
-            visibility : 'hidden',
             'z-index'  : _this.options.zIndex
         });
         _this.image.$container.setAttribute('id', 'jarallax-container-' + _this.instanceID);
@@ -208,9 +217,13 @@
 
         // use img tag
         if(_this.image.useImgTag) {
-            _this.image.$item = document.createElement('img');
-            _this.image.$item.setAttribute('src', _this.image.src);
+            if (!_this.image.$item) {
+                _this.image.$item = document.createElement('img');
+                _this.image.$item.setAttribute('src', _this.image.src);
+            }
+
             imageStyles = _this.extend({
+                'object-fit' : 'cover',
                 'max-width' : 'none'
             }, containerStyles, imageStyles);
         }
@@ -220,7 +233,7 @@
             _this.image.$item = document.createElement('div');
             imageStyles = _this.extend({
                 'background-position' : '50% 50%',
-                'background-size'     : '100% auto',
+                'background-size'     : 'cover',
                 'background-repeat'   : 'no-repeat no-repeat',
                 'background-image'    : 'url("' + _this.image.src + '")'
             }, containerStyles, imageStyles);
@@ -251,45 +264,31 @@
         // add position to parallax block
         imageStyles.position = _this.image.position;
 
-        // parallax image
+        // insert parallax image
         _this.css(_this.image.$item, imageStyles);
         _this.image.$container.appendChild(_this.image.$item);
 
-        // cover image if width and height is ready
-        function initAfterReady () {
-            _this.coverImage();
-            _this.clipContainer();
-            _this.onScroll(true);
+        // set initial position and size
+        _this.coverImage();
+        _this.clipContainer();
+        _this.onScroll(true);
 
-            // call onInit event
-            if(_this.options.onInit) {
-                _this.options.onInit.call(_this);
+        // call onInit event
+        if(_this.options.onInit) {
+            _this.options.onInit.call(_this);
+        }
+
+        // timeout to fix IE blinking
+        setTimeout(function () {
+            if(_this.$item) {
+                // remove default user background
+                _this.css(_this.$item, {
+                    'background-image'      : 'none',
+                    'background-attachment' : 'scroll',
+                    'background-size'       : 'auto'
+                });
             }
-
-            // timeout to fix IE blinking
-            setTimeout(function () {
-                if(_this.$item) {
-                    // remove default user background
-                    _this.css(_this.$item, {
-                        'background-image'      : 'none',
-                        'background-attachment' : 'scroll',
-                        'background-size'       : 'auto'
-                    });
-                }
-            }, 0);
-        }
-
-        if(_this.image.width && _this.image.height) {
-            // init if width and height already exists
-            initAfterReady();
-        } else {
-            // load image and get width and height
-            _this.getImageSize(_this.image.src, function (width, height) {
-                _this.image.width  = width;
-                _this.image.height = height;
-                initAfterReady();
-            });
-        }
+        }, 0);
 
         jarallaxList.push(_this);
     };
@@ -386,22 +385,12 @@
     Jarallax.prototype.coverImage = function () {
         var _this = this;
 
-        if(!_this.image.width || !_this.image.height) {
-            return;
-        }
-
         var rect       = _this.image.$container.getBoundingClientRect(),
-            contW      = rect.width,
             contH      = rect.height,
-            contL      = rect.left,
-            imgW       = _this.image.width,
-            imgH       = _this.image.height,
             speed      = _this.options.speed,
             isScroll   = _this.options.type === 'scroll' || _this.options.type === 'scroll-opacity',
             scrollDist = 0,
-            resultW    = 0,
             resultH    = contH,
-            resultML   = 0,
             resultMT   = 0;
 
         // scroll parallax
@@ -425,41 +414,34 @@
             scrollDist /= 2;
         }
 
-        // calculate width relative to height and image size
-        resultW = resultH * imgW / imgH;
-        if(resultW < contW) {
-            resultW = contW;
-            resultH = resultW * imgH / imgW;
-        }
-
-        // center parallax image
-        if(isScroll) {
-            resultML = contL + (contW - resultW) / 2;
-            resultMT = (wndH - resultH) / 2;
-        } else {
-            resultML = (contW - resultW) / 2;
-            resultMT = (contH - resultH) / 2;
-        }
-
-        // fix if parallax block in absolute position
-        if(_this.image.position === 'absolute') {
-            resultML -= contL;
-        }
-
         // store scroll distance
         _this.parallaxScrollDistance = scrollDist;
 
+        // vertical center
+        if (isScroll) {
+            resultMT = (wndH - resultH) / 2;
+        } else {
+            resultMT = (contH - resultH) / 2;
+        }
+
         // apply result to item
         _this.css(_this.image.$item, {
-            width: resultW + 'px',
             height: resultH + 'px',
-            marginLeft: resultML + 'px',
             marginTop: resultMT + 'px'
         });
 
         // call onCoverImage event
         if(_this.options.onCoverImage) {
             _this.options.onCoverImage.call(_this);
+        }
+
+        // return some useful data. Used in the video cover function
+        return {
+            image: {
+                height: resultH,
+                marginTop: resultMT
+            },
+            container: rect
         }
     };
 
@@ -470,17 +452,10 @@
     Jarallax.prototype.onScroll = function (force) {
         var _this = this;
 
-        if(!_this.image.width || !_this.image.height) {
-            return;
-        }
-
         var rect   = _this.$item.getBoundingClientRect(),
             contT  = rect.top,
             contH  = rect.height,
-            styles = {
-                visibility         : 'visible',
-                backgroundPosition : '50% 50%'
-            };
+            styles = {};
 
         // check if in viewport
         var viewportRect = rect;
