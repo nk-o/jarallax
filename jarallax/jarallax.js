@@ -53,12 +53,15 @@
             var _this = this,
                 dataOptions;
 
+            _this.instanceID = instanceID++;
+
             _this.$item      = item;
 
             _this.defaults   = {
                 type              : 'scroll', // type of parallax: scroll, scale, opacity, scale-opacity, scroll-opacity
                 speed             : 0.5, // supported value from -1 to 2
                 imgSrc            : null,
+                imgElement        : '.jarallax-img',
                 elementInViewport : null,
                 zIndex            : -100,
                 noAndroid         : false,
@@ -93,24 +96,23 @@
             }
             _this.options.elementInViewport = elementInVP;
 
-            _this.instanceID = instanceID++;
-
-            // find children image
-            var $childImg = null;
-            for (var i = 0; i < _this.$item.childNodes.length; i++) {
-                if (_this.$item.childNodes[i].className && _this.$item.childNodes[i].className.indexOf('jarallax-img') > -1) {
-                    $childImg = _this.$item.childNodes[i];
-                    break;
-                }
+            // find image element
+            var $imgElement = _this.options.imgElement;
+            if ($imgElement && typeof $imgElement === 'string') {
+                $imgElement = _this.$item.querySelector($imgElement);
+            }
+            // check if dom element
+            if(!$imgElement instanceof Element) {
+                $imgElement = null;
             }
 
             _this.image      = {
                 src        : _this.options.imgSrc || null,
                 $container : null,
-                $item      : $childImg,
+                $item      : $imgElement,
                 // fix for some devices
                 // use <img> instead of background image - more smoothly
-                useImgTag  : !!$childImg || isIOs || isAndroid || isIE,
+                useImgTag  : !!$imgElement || isIOs || isAndroid || isIE,
 
                 // position absolute is needed on IE9 and FireFox because fixed position have glitches
                 position   : !supportTransform3D || isFirefox ? 'absolute' : 'fixed'
