@@ -721,7 +721,7 @@
                 w = imageData.container.width;
                 h = w * _this.image.height / _this.image.width;
                 ml = 0;
-                mt = (imageData.container.height - h) / 2;
+                mt += (imageData.image.height - h) / 2;
             }
 
             // add video height over than need to hide controls
