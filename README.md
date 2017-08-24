@@ -28,20 +28,20 @@ Include Jarallax plugin. Also include jQuery before jarallax if you want to use 
 Download scripts directly from this repository and link it in your HTML file
 ```html
 <!-- Jarallax -->
-<script src='jarallax/jarallax.js'></script>
+<script src="jarallax/jarallax.js"></script>
 
 <!-- Include it if you want to use Video parallax -->
-<script src='jarallax/jarallax-video.js'></script>
+<script src="jarallax/jarallax-video.js"></script>
 ```
 
 ### CDN
 Link directly from [cdnjs](https://cdnjs.com/)
 ```html
 <!-- Jarallax -->
-<script src='https://cdnjs.cloudflare.com/ajax/libs/jarallax/1.7.3/jarallax.min.js'></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jarallax/1.7.3/jarallax.min.js"></script>
 
 <!-- Include it if you want to use Video parallax -->
-<script src='https://cdnjs.cloudflare.com/ajax/libs/jarallax/1.7.3/jarallax-video.min.js'></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jarallax/1.7.3/jarallax-video.min.js"></script>
 ```
 
 ### Package managers
@@ -49,10 +49,21 @@ npm: `npm install jarallax -- save`
 
 Bower: `bower install jarallax --save`
 
+## Supported plugins
+You can add these plugins before jarallax initialize.
+- [object-fit-images](https://github.com/bfred-it/object-fit-images) polyfill for `object-fit` styles;
+- [lazysizes](https://github.com/aFarkas/lazysizes) lazy-load images with srcset support;
+
 ## Set up your HTML
 ```html
-<!-- Image Parallax -->
-<div class='jarallax' style='background-image: url(<background_image_url_here>)'>
+<!-- Background Image Parallax -->
+<div class="jarallax">
+    <img class="jarallax-img" src="<background_image_url_here>" alt="">
+    Your content here...
+</div>
+
+<!-- Alternate: Background Image Parallax -->
+<div class="jarallax" style="background-image: url('<background_image_url_here>');">
     Your content here...
 </div>
 ```
@@ -60,12 +71,20 @@ Bower: `bower install jarallax --save`
 ### Additional styles
 Mandatory requirement for plugin works properly - the selected item should be NOT position: static (for ex. relative).
 
-This styles need to add relative position and correct background image position before Jarallax initialize end.
+These styles need to correct background image position before Jarallax initialize end:
 ```css
 .jarallax {
-    background-size: cover;
-    background-repeat: no-repeat;
-    background-position: 50% 50%;
+    position: relative;
+    z-index: 0;
+}
+.jarallax > .jarallax-img {
+    position: absolute;
+    object-fit: cover;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: -1;
 }
 ```
 
@@ -73,7 +92,8 @@ This styles need to add relative position and correct background image position 
 
 ### A. Data attribute way
 ```html
-<div data-jarallax='{"speed": 0.2}' class='jarallax' style='background-image: url(<background_image_url_here>)'>
+<div data-jarallax='{"speed": 0.2}' class="jarallax">
+    <img class="jarallax-img" src="<background_image_url_here>" alt="">
     Your content here...
 </div>
 ```
@@ -92,20 +112,20 @@ $('.jarallax').jarallax({
 });
 ```
 
-## Video Usage Examples
+## Background Video Usage Examples
 ```html
-<!-- YouTube Parallax -->
-<div class='jarallax' data-jarallax-video='https://www.youtube.com/watch?v=ab0TSkLe-E0'>
+<!-- Background YouTube Parallax -->
+<div class="jarallax" data-jarallax-video="https://www.youtube.com/watch?v=ab0TSkLe-E0">
     Your content here...
 </div>
 
-<!-- Vimeo Parallax -->
-<div class='jarallax' data-jarallax-video='https://vimeo.com/110138539'>
+<!-- Background Vimeo Parallax -->
+<div class="jarallax" data-jarallax-video="https://vimeo.com/110138539">
     Your content here...
 </div>
 
-<!-- Local Video Parallax -->
-<div class='jarallax' data-jarallax-video='mp4:./video/local-video.mp4,webm:./video/local-video.webm,ogv:./video/local-video.ogv'>
+<!-- Background Local Video Parallax -->
+<div class="jarallax" data-jarallax-video="mp4:./video/local-video.mp4,webm:./video/local-video.webm,ogv:./video/local-video.ogv">
     Your content here...
 </div>
 ```
@@ -140,18 +160,13 @@ Options can be passed in data attributes or in object when you initialize jarall
             <td>imgSrc</td>
             <td>path</td>
             <td>null</td>
-            <td>Image path. By default used image from background.</td>
+            <td>Image url. By default used image from background.</td>
         </tr>
         <tr>
-            <td>imgWidth</td>
-            <td>number</td>
-            <td>null</td>
-            <td rowspan='2'>You can provide the natural width and natural height of an image to speed up loading.</td>
-        </tr>
-        <tr>
-            <td>imgHeight</td>
-            <td>number</td>
-            <td>null</td>
+            <td>imgElement</td>
+            <td>dom / selector</td>
+            <td>'.jarallax-img'</td>
+            <td>Image tag that will be used as background</td>
         </tr>
         <tr>
             <td>elementInViewport</td>
