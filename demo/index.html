@@ -8,6 +8,12 @@
     <meta name="description" content="Pure JavaScript parallax scrolling effect. jQuery supported. Youtube and Vimeo parallax supported.">
     <link href="css/demo.css" rel="stylesheet" type="text/css">
 
+    <!-- Object Fit polyfill -->
+    <script src="https://unpkg.com/object-fit-images/dist/ofi.min.js"></script>
+
+    <!-- Lazy Load images -->
+    <!-- <script src="https://unpkg.com/object-fit-images/dist/ofi.min.js"></script> -->
+
     <!-- Jarallax -->
     <script src="../jarallax/jarallax.js"></script>
     <script src="../jarallax/jarallax-video.js"></script>
@@ -127,6 +133,9 @@
 
     <script async defer id="github-bjs" src="https://buttons.github.io/buttons.js"></script>
     <script type="text/javascript">
+        // object-fit polyfill run
+        objectFitImages();
+
         /* init Flickity Carousel + Jarallax inside it */
         new Flickity( '.demo-carousel', {
             initialIndex: 1,

@@ -226,6 +226,8 @@
 
             imageStyles = _this.extend({
                 'object-fit' : 'cover',
+                // support for plugin https://github.com/bfred-it/object-fit-images
+                'font-family': 'object-fit: cover;',
                 'max-width' : 'none'
             }, containerStyles, imageStyles);
         }
