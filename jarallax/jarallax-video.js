@@ -572,21 +572,17 @@
         // load Youtube API
         if(_this.type === 'youtube' && !YoutubeAPIadded) {
             YoutubeAPIadded = 1;
-            src = '//www.youtube.com/iframe_api';
+            src = 'https://www.youtube.com/iframe_api';
         }
 
         // load Vimeo API
         if(_this.type === 'vimeo' && !VimeoAPIadded) {
             VimeoAPIadded = 1;
-            src = '//player.vimeo.com/api/player.js';
+            src = 'https://player.vimeo.com/api/player.js';
         }
 
         if(!src) {
             return;
-        }
-
-        if (window.location.origin === 'file://') {
-            src = 'http:' + src;
         }
 
         // add script in head section
