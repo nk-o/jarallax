@@ -419,7 +419,9 @@
         // apply result to item
         _this.css(_this.image.$item, {
             height: resultH + 'px',
-            marginTop: resultMT + 'px'
+            marginTop: resultMT + 'px',
+            left: _this.image.position === 'fixed' ? (rect.left + 'px') : '0',
+            width: rect.width + 'px'
         });
 
         // call onCoverImage event

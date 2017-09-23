@@ -720,11 +720,6 @@
                 mt += (imageData.image.height - h) / 2;
             }
 
-            // fix if parallax block in fixed position
-            if(_this.image.position === 'fixed') {
-                ml += imageData.container.left;
-            }
-
             // add video height over than need to hide controls
             if (node === 'IFRAME') {
                 h += 400;
