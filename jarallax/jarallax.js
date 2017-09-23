@@ -338,18 +338,6 @@
         }
     };
 
-    Jarallax.prototype.getImageSize = function (src, callback) {
-        if(!src || !callback) {
-            return;
-        }
-
-        var tempImg = new Image();
-        tempImg.onload = function () {
-            callback(tempImg.width, tempImg.height);
-        };
-        tempImg.src = src;
-    };
-
     // it will remove some image overlapping
     // overlapping occur due to an image position fixed inside absolute position element (webkit based browsers works without any fix)
     Jarallax.prototype.clipContainer = function () {
