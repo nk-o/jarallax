@@ -261,7 +261,7 @@
         }
 
         // absolute position if one of parents have transformations or parallax without scroll
-        if (parentWithTransform || _this.options.type === 'opacity'|| _this.options.type === 'scale' || _this.options.type === 'scale-opacity') {
+        if (parentWithTransform || _this.options.type === 'opacity'|| _this.options.type === 'scale' || _this.options.type === 'scale-opacity' || _this.options.speed === 1) {
             _this.image.position = 'absolute';
         }
 
