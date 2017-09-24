@@ -8,7 +8,7 @@ gulp.task('clean', function() {
 });
 
 gulp.task('build', ['clean'], function() {
-    gulp.src('jarallax/*.js')
+    gulp.src('src/*.js')
         .pipe(rename({suffix: '.min'}))
         .pipe(uglify({
             preserveComments: 'license'
@@ -17,7 +17,7 @@ gulp.task('build', ['clean'], function() {
 });
 
 gulp.task('watch', function() {
-    gulp.watch('jarallax/*.js', ['build']);
+    gulp.watch('src/*.js', ['build']);
 });
 
 gulp.task('default', ['build']);
