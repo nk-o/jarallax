@@ -50,8 +50,7 @@
         var instanceID = 0;
 
         function Jarallax_inner (item, userOptions) {
-            var _this = this,
-                dataOptions;
+            var _this = this;
 
             _this.instanceID = instanceID++;
 
@@ -67,14 +66,46 @@
                 noAndroid         : false,
                 noIos             : true,
 
+                // video
+                videoSrc          : null,
+                videoStartTime    : 0,
+                videoEndTime      : 0,
+
                 // events
                 onScroll          : null, // function(calculations) {}
                 onInit            : null, // function() {}
                 onDestroy         : null, // function() {}
                 onCoverImage      : null  // function() {}
             };
-            dataOptions      = JSON.parse(_this.$item.getAttribute('data-jarallax') || '{}');
-            _this.options    = _this.extend({}, _this.defaults, dataOptions, userOptions);
+
+            // DEPRECATED: old data-options
+            var deprecatedDataAttribute = _this.$item.getAttribute('data-jarallax');
+            var oldDataOptions = JSON.parse(deprecatedDataAttribute || '{}');
+            if ( deprecatedDataAttribute ) {
+                console.warn('Detected usage of deprecated data-jarallax JSON options, you should use pure data-attribute options. See info here - https://github.com/nk-o/jarallax/issues/53');
+            }
+
+            // prepare data-options
+            var dataOptions = _this.$item.dataset;
+            var pureDataOptions = {};
+            for (var k in dataOptions) {
+                var loweCaseOption = k.substr(0, 1).toLowerCase() + k.substr(1);
+                if ( loweCaseOption && typeof _this.defaults[loweCaseOption] !== 'undefined' ) {
+                    pureDataOptions[loweCaseOption] = dataOptions[k];
+                }
+            }
+
+            _this.options    = _this.extend({}, _this.defaults, oldDataOptions, pureDataOptions, userOptions);
+
+            // prepare 'true' and 'false' strings to boolean
+            for (var n in _this.options) {
+                if ( _this.options[n] === 'true' ) {
+                    _this.options[n] = true;
+                } else if ( _this.options[n] === 'false' ) {
+                    _this.options[n] = false;
+                }
+            }
+            console.log(_this.options);
 
             // stop init if android or ios
             if(!supportTransform || isAndroid && _this.options.noAndroid || isIOs && _this.options.noIos) {
