@@ -190,10 +190,12 @@
         }
 
         if(_this.type === 'youtube' && _this.player.playVideo) {
-            if(typeof start !== 'undefined') {
+            if (typeof start !== 'undefined') {
                 _this.player.seekTo(start || 0);
             }
-            _this.player.playVideo();
+            if (YT.PlayerState.PLAYING !== _this.player.getPlayerState()) {
+                _this.player.playVideo();
+            }
         }
 
         if(_this.type === 'vimeo') {
@@ -211,25 +213,36 @@
             if(typeof start !== 'undefined') {
                 _this.player.currentTime = start;
             }
-            _this.player.play();
+            if (_this.player.paused) {
+                _this.player.play();
+            }
         }
     };
 
     VideoWorker.prototype.pause = function () {
-        if(!this.player) {
+        var _this = this;
+        if(!_this.player) {
             return;
         }
 
-        if(this.type === 'youtube' && this.player.pauseVideo) {
-            this.player.pauseVideo();
+        if(_this.type === 'youtube' && _this.player.pauseVideo) {
+            if (YT.PlayerState.PLAYING === _this.player.getPlayerState()) {
+                _this.player.pauseVideo();
+            }
         }
 
-        if(this.type === 'vimeo') {
-            this.player.pause();
+        if(_this.type === 'vimeo') {
+            _this.player.getPaused().then(function(paused) {
+                if (!paused) {
+                    _this.player.pause();
+                }
+            });
         }
 
-        if(this.type === 'local') {
-            this.player.pause();
+        if(_this.type === 'local') {
+            if (!_this.player.paused) {
+                _this.player.pause();
+            }
         }
     };
 
