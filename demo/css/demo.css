@@ -24,6 +24,7 @@
 
 body {
     font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen-Sans, Ubuntu, Cantarell, "Helvetica Neue", sans-serif;
+    font-size: 20px;
     margin: 0;
     line-height: 1.5;
     -webkit-font-smoothing: antialiased;
@@ -37,6 +38,9 @@ h2 {
 p {
     margin-top: 0;
     margin-bottom: 5px;
+}
+p + p {
+    margin-top: 15px;
 }
 small {
     font-size: 75%;
@@ -57,7 +61,7 @@ a:hover, a:focus {
     display: table;
     width: 100%;
     height: 600px;
-    background-color: rgba(39, 35, 51, 0.8);
+    background-color: rgba(39, 35, 51, 0.6);
     color: #fff;
 }
 .demo-table-cell {
