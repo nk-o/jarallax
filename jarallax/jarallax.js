@@ -105,7 +105,6 @@
                     _this.options[n] = false;
                 }
             }
-            console.log(_this.options);
 
             // stop init if android or ios
             if(!supportTransform || isAndroid && _this.options.noAndroid || isIOs && _this.options.noIos) {
