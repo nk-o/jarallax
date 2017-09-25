@@ -94,7 +94,6 @@ function updateParallax() {
 
     rAF(updateParallax);
 }
-updateParallax();
 
 
 let instanceID = 0;
@@ -375,6 +374,10 @@ class Jarallax {
         }, 0);
 
         jarallaxList.push(_this);
+
+        if (jarallaxList.length === 1) {
+            updateParallax();
+        }
     }
 
     destroy() {
