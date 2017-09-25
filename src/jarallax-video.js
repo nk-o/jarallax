@@ -762,14 +762,51 @@ window.VideoWorker = VideoWorker;
         }
 
         if (_this.options.videoSrc) {
-            const video = new VideoWorker(_this.options.videoSrc, {
-                startTime: _this.options.videoStartTime || 0,
-                endTime: _this.options.videoEndTime || 0,
-                mute: _this.options.videoVolume ? 0 : 1,
-                volume: _this.options.videoVolume || 0,
-            });
+            _this.defaultInitImgResult = defaultResult;
+            return true;
+        }
 
-            if (video.isValid()) {
+        return defaultResult;
+    };
+
+    const defCanInitParallax = Jarallax.prototype.canInitParallax;
+    Jarallax.prototype.canInitParallax = function () {
+        const _this = this;
+        const defaultResult = defCanInitParallax.apply(_this);
+
+        if (!_this.options.videoSrc) {
+            return defaultResult;
+        }
+
+        const video = new VideoWorker(_this.options.videoSrc, {
+            startTime: _this.options.videoStartTime || 0,
+            endTime: _this.options.videoEndTime || 0,
+            mute: _this.options.videoVolume ? 0 : 1,
+            volume: _this.options.videoVolume || 0,
+        });
+
+        if (video.isValid()) {
+            // if parallax will not be inited, we can add thumbnail on background.
+            if (!defaultResult) {
+                if (!_this.defaultInitImgResult) {
+                    video.getImageURL((url) => {
+                        // save default user styles
+                        const curStyle = _this.$item.getAttribute('style');
+                        if (curStyle) {
+                            _this.$item.setAttribute('data-jarallax-original-styles', curStyle);
+                        }
+
+                        // set new background
+                        _this.css(_this.$item, {
+                            'background-image': `url("${url}")`,
+                            'background-position': 'center',
+                            'background-size': 'cover',
+                        });
+                    });
+                }
+
+                // init video
+            } else {
                 _this.image.useImgTag = true;
 
                 video.on('ready', () => {
@@ -815,16 +852,16 @@ window.VideoWorker = VideoWorker;
                         _this.init();
                     });
                 }
-            }
 
-            // prevent default image loading when not local video
-            if (video.type !== 'local') {
-                return false;
+                // prevent default image loading when not local video
+                if (video.type !== 'local') {
+                    return false;
 
-            // set empty image on local video if not defined
-            } else if (!defaultResult) {
-                _this.image.src = 'data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7';
-                return true;
+                // set empty image on local video if not defined
+                } else if (!_this.defaultInitImgResult) {
+                    _this.image.src = 'data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7';
+                    return true;
+                }
             }
         }
 

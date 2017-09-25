@@ -159,11 +159,6 @@ class Jarallax {
             }
         });
 
-        // stop init if android or ios
-        if (!supportTransform || isAndroid && _this.options.noAndroid || isIOs && _this.options.noIos) {
-            return;
-        }
-
         // fix speed option [-1.0, 2.0]
         _this.options.speed = Math.min(2, Math.max(-1, parseFloat(_this.options.speed)));
 
@@ -190,7 +185,7 @@ class Jarallax {
             position: !supportTransform3D || isFirefox ? 'absolute' : 'fixed',
         };
 
-        if (_this.initImg()) {
+        if (_this.initImg() && _this.canInitParallax()) {
             _this.init();
         }
     }
@@ -266,6 +261,12 @@ class Jarallax {
             _this.image.src = _this.css(_this.$item, 'background-image').replace(/^url\(['"]?/g, '').replace(/['"]?\)$/g, '');
         }
         return !(!_this.image.src || _this.image.src === 'none');
+    }
+
+    canInitParallax() {
+        return supportTransform &&
+               !(isAndroid && this.options.noAndroid) &&
+               !(isIOs && this.options.noIos);
     }
 
     init() {
@@ -433,7 +434,9 @@ class Jarallax {
         if (_this.$clipStyles) {
             _this.$clipStyles.parentNode.removeChild(_this.$clipStyles);
         }
-        _this.image.$container.parentNode.removeChild(_this.image.$container);
+        if (_this.image.$container) {
+            _this.image.$container.parentNode.removeChild(_this.image.$container);
+        }
 
         // call onDestroy event
         if (_this.options.onDestroy) {
