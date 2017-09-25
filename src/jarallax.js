@@ -280,9 +280,15 @@ class Jarallax {
         let imageStyles = {};
 
         // save default user styles
-        _this.$item.setAttribute('data-jarallax-original-styles', _this.$item.getAttribute('style') || '');
+        const curStyle = _this.$item.getAttribute('style');
+        if (curStyle) {
+            _this.$item.setAttribute('data-jarallax-original-styles', curStyle);
+        }
         if (_this.image.$item && _this.image.useCustomImgTag) {
-            _this.image.$item.setAttribute('data-jarallax-original-styles', _this.image.$item.getAttribute('style') || '');
+            const curImgStyle = _this.image.$item.getAttribute('style');
+            if (curImgStyle) {
+                _this.image.$item.setAttribute('data-jarallax-original-styles', curImgStyle);
+            }
         }
 
         // set relative position and z-index to the parent
@@ -370,17 +376,12 @@ class Jarallax {
             _this.options.onInit.call(_this);
         }
 
-        // timeout to fix IE blinking
-        setTimeout(() => {
-            if (_this.$item) {
-                // remove default user background
-                _this.css(_this.$item, {
-                    'background-image': 'none',
-                    'background-attachment': 'scroll',
-                    'background-size': 'auto',
-                });
-            }
-        }, 0);
+        // remove default user background
+        if (_this.css(_this.$item, 'background-image') !== 'none') {
+            _this.css(_this.$item, {
+                'background-image': 'none',
+            });
+        }
 
         jarallaxList.push(_this);
 
