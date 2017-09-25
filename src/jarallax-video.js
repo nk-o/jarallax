@@ -1,137 +1,134 @@
-/*!
- * Name    : Video Worker (wrapper for Youtube, Vimeo and Local videos)
- * Version : 1.2.1
- * Author  : _nK https://nkdev.info
- * GitHub  : https://github.com/nk-o/jarallax
- */
-(function (window) {
-    'use strict';
 
-    // Extend like jQuery.extend
-    function extend (out) {
-        out = out || {};
-        for (var i = 1; i < arguments.length; i++) {
-            if (!arguments[i]) {
-                continue;
-            }
-            for (var key in arguments[i]) {
-                if (arguments[i].hasOwnProperty(key)) {
-                    out[key] = arguments[i][key];
-                }
-            }
+// Extend like jQuery.extend
+function extend(out) {
+    out = out || {};
+    Object.keys(arguments).forEach((i) => {
+        if (!arguments[i]) {
+            return;
         }
-        return out;
+        Object.keys(arguments[i]).forEach((key) => {
+            out[key] = arguments[i][key];
+        });
+    });
+    return out;
+}
+
+// Deferred
+// thanks http://stackoverflow.com/questions/18096715/implement-deferred-object-without-using-jquery
+function Deferred() {
+    this._done = [];
+    this._fail = [];
+}
+Deferred.prototype = {
+    execute(list, args) {
+        let i = list.length;
+        args = Array.prototype.slice.call(args);
+        while (i--) {
+            list[i].apply(null, args);
+        }
+    },
+    resolve() {
+        this.execute(this._done, arguments);
+    },
+    reject() {
+        this.execute(this._fail, arguments);
+    },
+    done(callback) {
+        this._done.push(callback);
+    },
+    fail(callback) {
+        this._fail.push(callback);
+    },
+};
+
+// init events
+function addEventListener(el, eventName, handler) {
+    if (el.addEventListener) {
+        el.addEventListener(eventName, handler);
+    } else {
+        el.attachEvent(`on${eventName}`, () => {
+            handler.call(el);
+        });
+    }
+}
+
+let ID = 0;
+let YoutubeAPIadded = 0;
+let VimeoAPIadded = 0;
+let loadingYoutubePlayer = 0;
+let loadingVimeoPlayer = 0;
+const loadingYoutubeDeffer = new Deferred();
+const loadingVimeoDeffer = new Deferred();
+
+class VideoWorker {
+    constructor(url, options) {
+        const _this = this;
+
+        _this.url = url;
+
+        _this.options_default = {
+            autoplay: 1,
+            loop: 1,
+            mute: 1,
+            controls: 0,
+
+            // start / end video time in ms
+            startTime: 0,
+            endTime: 0,
+        };
+
+        _this.options = extend({}, _this.options_default, options);
+
+        // check URL
+        _this.videoID = _this.parseURL(url);
+
+        // init
+        if (_this.videoID) {
+            _this.ID = ID++;
+            _this.loadAPI();
+            _this.init();
+        }
     }
 
-    // Deferred
-    // thanks http://stackoverflow.com/questions/18096715/implement-deferred-object-without-using-jquery
-    function Deferred () {
-        this._done = [];
-        this._fail = [];
-    }
-    Deferred.prototype = {
-        execute: function (list, args) {
-            var i = list.length;
-            args = Array.prototype.slice.call(args);
-            while(i--) {
-                list[i].apply(null, args);
-            }
-        },
-        resolve: function () {
-            this.execute(this._done, arguments);
-        },
-        reject: function () {
-            this.execute(this._fail, arguments);
-        },
-        done: function (callback) {
-            this._done.push(callback);
-        },
-        fail: function (callback) {
-            this._fail.push(callback);
-        }
-    };
-
-    // init events
-    function addEventListener (el, eventName, handler) {
-        if (el.addEventListener) {
-            el.addEventListener(eventName, handler);
-        } else {
-            el.attachEvent('on' + eventName, function (){
-                handler.call(el);
-            });
-        }
-    }
-
-    var VideoWorker = (function () {
-        var ID = 0;
-
-        function VideoWorker_inner (url, options) {
-            var _this = this;
-
-            _this.url = url;
-
-            _this.options_default = {
-                autoplay: 1,
-                loop: 1,
-                mute: 1,
-                controls: 0,
-
-                // start / end video time in ms
-                startTime: 0,
-                endTime: 0
-            };
-
-            _this.options = extend({}, _this.options_default, options);
-
-            // check URL
-            _this.videoID = _this.parseURL(url);
-
-            // init
-            if(_this.videoID) {
-                _this.ID = ID++;
-                _this.loadAPI();
-                _this.init();
-            }
-        }
-
-        return VideoWorker_inner;
-    }());
-
-    VideoWorker.prototype.parseURL = function (url) {
+    parseURL(url) {
         // parse youtube ID
-        function getYoutubeID (ytUrl) {
-            var regExp = /.*(?:youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=)([^#\&\?]*).*/;
-            var match = ytUrl.match(regExp);
+        function getYoutubeID(ytUrl) {
+            // eslint-disable-next-line no-useless-escape
+            const regExp = /.*(?:youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=)([^#\&\?]*).*/;
+            const match = ytUrl.match(regExp);
             return match && match[1].length === 11 ? match[1] : false;
         }
 
         // parse vimeo ID
-        function getVimeoID (vmUrl) {
-            var regExp = /https?:\/\/(?:www\.|player\.)?vimeo.com\/(?:channels\/(?:\w+\/)?|groups\/([^\/]*)\/videos\/|album\/(\d+)\/video\/|video\/|)(\d+)(?:$|\/|\?)/;
-            var match = vmUrl.match(regExp);
+        function getVimeoID(vmUrl) {
+            // eslint-disable-next-line no-useless-escape
+            const regExp = /https?:\/\/(?:www\.|player\.)?vimeo.com\/(?:channels\/(?:\w+\/)?|groups\/([^\/]*)\/videos\/|album\/(\d+)\/video\/|video\/|)(\d+)(?:$|\/|\?)/;
+            const match = vmUrl.match(regExp);
             return match && match[3] ? match[3] : false;
         }
 
         // parse local string
-        function getLocalVideos (locUrl) {
-            var videoFormats = locUrl.split(/,(?=mp4\:|webm\:|ogv\:|ogg\:)/);
-            var result = {};
-            var ready = 0;
-            for(var k = 0; k < videoFormats.length; k++) {
-                var match = videoFormats[k].match(/^(mp4|webm|ogv|ogg)\:(.*)/);
-                if(match && match[1] && match[2]) {
+        function getLocalVideos(locUrl) {
+            // eslint-disable-next-line no-useless-escape
+            const videoFormats = locUrl.split(/,(?=mp4\:|webm\:|ogv\:|ogg\:)/);
+            const result = {};
+            let ready = 0;
+            videoFormats.forEach((val) => {
+                // eslint-disable-next-line no-useless-escape
+                const match = val.match(/^(mp4|webm|ogv|ogg)\:(.*)/);
+                if (match && match[1] && match[2]) {
                     result[match[1] === 'ogv' ? 'ogg' : match[1]] = match[2];
                     ready = 1;
                 }
-            }
+            });
             return ready ? result : false;
         }
 
-        var Youtube = getYoutubeID(url);
-        var Vimeo = getVimeoID(url);
-        var Local = getLocalVideos(url);
+        const Youtube = getYoutubeID(url);
+        const Vimeo = getVimeoID(url);
+        const Local = getLocalVideos(url);
 
-        if(Youtube) {
+        if (Youtube) {
             this.type = 'youtube';
             return Youtube;
         } else if (Vimeo) {
@@ -143,53 +140,53 @@
         }
 
         return false;
-    };
+    }
 
-    VideoWorker.prototype.isValid = function () {
+    isValid() {
         return !!this.videoID;
-    };
+    }
 
     // events
-    VideoWorker.prototype.on = function (name, callback) {
+    on(name, callback) {
         this.userEventsList = this.userEventsList || [];
 
         // add new callback in events list
         (this.userEventsList[name] || (this.userEventsList[name] = [])).push(callback);
-    };
-    VideoWorker.prototype.off = function (name, callback) {
-        if(!this.userEventsList || !this.userEventsList[name]) {
+    }
+    off(name, callback) {
+        if (!this.userEventsList || !this.userEventsList[name]) {
             return;
         }
 
-        if(!callback) {
+        if (!callback) {
             delete this.userEventsList[name];
         } else {
-            for(var k = 0; k < this.userEventsList[name].length; k++) {
-                if(this.userEventsList[name][k] === callback) {
-                    this.userEventsList[name][k] = false;
+            this.userEventsList[name].forEach((val, key) => {
+                if (val === callback) {
+                    this.userEventsList[name][key] = false;
                 }
-            }
+            });
         }
-    };
-    VideoWorker.prototype.fire = function (name) {
-        var args = [].slice.call(arguments, 1);
-        if(this.userEventsList && typeof this.userEventsList[name] !== 'undefined') {
-            for(var k in this.userEventsList[name]) {
+    }
+    fire(name) {
+        const args = [].slice.call(arguments, 1);
+        if (this.userEventsList && typeof this.userEventsList[name] !== 'undefined') {
+            this.userEventsList[name].forEach((val) => {
                 // call with all arguments
-                if(this.userEventsList[name][k]) {
-                    this.userEventsList[name][k].apply(this, args);
+                if (val) {
+                    val.apply(this, args);
                 }
-            }
+            });
         }
-    };
+    }
 
-    VideoWorker.prototype.play = function (start) {
-        var _this = this;
-        if(!_this.player) {
+    play(start) {
+        const _this = this;
+        if (!_this.player) {
             return;
         }
 
-        if(_this.type === 'youtube' && _this.player.playVideo) {
+        if (_this.type === 'youtube' && _this.player.playVideo) {
             if (typeof start !== 'undefined') {
                 _this.player.seekTo(start || 0);
             }
@@ -198,95 +195,95 @@
             }
         }
 
-        if(_this.type === 'vimeo') {
+        if (_this.type === 'vimeo') {
             if (typeof start !== 'undefined') {
                 _this.player.setCurrentTime(start);
             }
-            _this.player.getPaused().then(function(paused) {
+            _this.player.getPaused().then((paused) => {
                 if (paused) {
                     _this.player.play();
                 }
             });
         }
 
-        if(_this.type === 'local') {
-            if(typeof start !== 'undefined') {
+        if (_this.type === 'local') {
+            if (typeof start !== 'undefined') {
                 _this.player.currentTime = start;
             }
             if (_this.player.paused) {
                 _this.player.play();
             }
         }
-    };
+    }
 
-    VideoWorker.prototype.pause = function () {
-        var _this = this;
-        if(!_this.player) {
+    pause() {
+        const _this = this;
+        if (!_this.player) {
             return;
         }
 
-        if(_this.type === 'youtube' && _this.player.pauseVideo) {
+        if (_this.type === 'youtube' && _this.player.pauseVideo) {
             if (YT.PlayerState.PLAYING === _this.player.getPlayerState()) {
                 _this.player.pauseVideo();
             }
         }
 
-        if(_this.type === 'vimeo') {
-            _this.player.getPaused().then(function(paused) {
+        if (_this.type === 'vimeo') {
+            _this.player.getPaused().then((paused) => {
                 if (!paused) {
                     _this.player.pause();
                 }
             });
         }
 
-        if(_this.type === 'local') {
+        if (_this.type === 'local') {
             if (!_this.player.paused) {
                 _this.player.pause();
             }
         }
-    };
+    }
 
-    VideoWorker.prototype.getImageURL = function (callback) {
-        var _this = this;
+    getImageURL(callback) {
+        const _this = this;
 
-        if(_this.videoImage) {
+        if (_this.videoImage) {
             callback(_this.videoImage);
             return;
         }
 
-        if(_this.type === 'youtube') {
-            var availableSizes = [
+        if (_this.type === 'youtube') {
+            const availableSizes = [
                 'maxresdefault',
                 'sddefault',
                 'hqdefault',
-                '0'
+                '0',
             ];
-            var step = 0;
+            let step = 0;
 
-            var tempImg = new Image();
+            const tempImg = new Image();
             tempImg.onload = function () {
                 // if no thumbnail, youtube add their own image with width = 120px
                 if ((this.naturalWidth || this.width) !== 120 || step === availableSizes.length - 1) {
                     // ok
-                    _this.videoImage = 'https://img.youtube.com/vi/' + _this.videoID + '/' + availableSizes[step] + '.jpg';
+                    _this.videoImage = `https://img.youtube.com/vi/${_this.videoID}/${availableSizes[step]}.jpg`;
                     callback(_this.videoImage);
                 } else {
                     // try another size
                     step++;
-                    this.src = 'https://img.youtube.com/vi/' + _this.videoID + '/' + availableSizes[step] + '.jpg';
+                    this.src = `https://img.youtube.com/vi/${_this.videoID}/${availableSizes[step]}.jpg`;
                 }
             };
-            tempImg.src = 'https://img.youtube.com/vi/' + _this.videoID + '/' + availableSizes[step] + '.jpg';
+            tempImg.src = `https://img.youtube.com/vi/${_this.videoID}/${availableSizes[step]}.jpg`;
         }
 
-        if(_this.type === 'vimeo') {
-            var request = new XMLHttpRequest();
-            request.open('GET', 'https://vimeo.com/api/v2/video/' + _this.videoID + '.json', true);
+        if (_this.type === 'vimeo') {
+            let request = new XMLHttpRequest();
+            request.open('GET', `https://vimeo.com/api/v2/video/${_this.videoID}.json`, true);
             request.onreadystatechange = function () {
                 if (this.readyState === 4) {
                     if (this.status >= 200 && this.status < 400) {
                         // Success!
-                        var response = JSON.parse(this.responseText);
+                        const response = JSON.parse(this.responseText);
                         _this.videoImage = response[0].thumbnail_large;
                         callback(_this.videoImage);
                     } else {
@@ -297,37 +294,37 @@
             request.send();
             request = null;
         }
-    };
+    }
 
-    VideoWorker.prototype.getIframe = function (callback) {
-        var _this = this;
+    getIframe(callback) {
+        const _this = this;
 
         // return generated iframe
-        if(_this.$iframe) {
+        if (_this.$iframe) {
             callback(_this.$iframe);
             return;
         }
 
         // generate new iframe
-        _this.onAPIready(function () {
-            var hiddenDiv;
-            if(!_this.$iframe) {
+        _this.onAPIready(() => {
+            let hiddenDiv;
+            if (!_this.$iframe) {
                 hiddenDiv = document.createElement('div');
                 hiddenDiv.style.display = 'none';
             }
 
             // Youtube
-            if(_this.type === 'youtube') {
+            if (_this.type === 'youtube') {
                 _this.playerOptions = {};
                 _this.playerOptions.videoId = _this.videoID;
                 _this.playerOptions.playerVars = {
                     autohide: 1,
                     rel: 0,
-                    autoplay: 0
+                    autoplay: 0,
                 };
 
                 // hide controls
-                if(!_this.options.controls) {
+                if (!_this.options.controls) {
                     _this.playerOptions.playerVars.iv_load_policy = 3;
                     _this.playerOptions.playerVars.modestbranding = 1;
                     _this.playerOptions.playerVars.controls = 0;
@@ -336,45 +333,45 @@
                 }
 
                 // events
-                var ytStarted;
-                var ytProgressInterval;
+                let ytStarted;
+                let ytProgressInterval;
                 _this.playerOptions.events = {
-                    onReady: function (e) {
+                    onReady(e) {
                         // mute
-                        if(_this.options.mute) {
+                        if (_this.options.mute) {
                             e.target.mute();
                         }
                         // autoplay
-                        if(_this.options.autoplay) {
+                        if (_this.options.autoplay) {
                             _this.play(_this.options.startTime);
                         }
                         _this.fire('ready', e);
                     },
-                    onStateChange: function (e) {
+                    onStateChange(e) {
                         // loop
-                        if(_this.options.loop && e.data === YT.PlayerState.ENDED) {
+                        if (_this.options.loop && e.data === YT.PlayerState.ENDED) {
                             _this.play(_this.options.startTime);
                         }
-                        if(!ytStarted && e.data === YT.PlayerState.PLAYING) {
+                        if (!ytStarted && e.data === YT.PlayerState.PLAYING) {
                             ytStarted = 1;
                             _this.fire('started', e);
                         }
-                        if(e.data === YT.PlayerState.PLAYING) {
+                        if (e.data === YT.PlayerState.PLAYING) {
                             _this.fire('play', e);
                         }
-                        if(e.data === YT.PlayerState.PAUSED) {
+                        if (e.data === YT.PlayerState.PAUSED) {
                             _this.fire('pause', e);
                         }
-                        if(e.data === YT.PlayerState.ENDED) {
+                        if (e.data === YT.PlayerState.ENDED) {
                             _this.fire('end', e);
                         }
 
                         // check for end of video and play again or stop
-                        if(_this.options.endTime) {
-                            if(e.data === YT.PlayerState.PLAYING) {
-                                ytProgressInterval = setInterval(function () {
-                                    if(_this.options.endTime && _this.player.getCurrentTime() >= _this.options.endTime) {
-                                        if(_this.options.loop) {
+                        if (_this.options.endTime) {
+                            if (e.data === YT.PlayerState.PLAYING) {
+                                ytProgressInterval = setInterval(() => {
+                                    if (_this.options.endTime && _this.player.getCurrentTime() >= _this.options.endTime) {
+                                        if (_this.options.loop) {
                                             _this.play(_this.options.startTime);
                                         } else {
                                             _this.pause();
@@ -385,18 +382,18 @@
                                 clearInterval(ytProgressInterval);
                             }
                         }
-                    }
+                    },
                 };
 
-                var firstInit = !_this.$iframe;
-                if(firstInit) {
-                    var div = document.createElement('div');
+                const firstInit = !_this.$iframe;
+                if (firstInit) {
+                    const div = document.createElement('div');
                     div.setAttribute('id', _this.playerID);
                     hiddenDiv.appendChild(div);
                     document.body.appendChild(hiddenDiv);
                 }
                 _this.player = _this.player || new window.YT.Player(_this.playerID, _this.playerOptions);
-                if(firstInit) {
+                if (firstInit) {
                     _this.$iframe = document.getElementById(_this.playerID);
 
                     // get video width and height
@@ -406,27 +403,27 @@
             }
 
             // Vimeo
-            if(_this.type === 'vimeo') {
+            if (_this.type === 'vimeo') {
                 _this.playerOptions = '';
 
-                _this.playerOptions += 'player_id=' + _this.playerID;
+                _this.playerOptions += `player_id=${_this.playerID}`;
                 _this.playerOptions += '&autopause=0';
 
                 // hide controls
-                if(!_this.options.controls) {
+                if (!_this.options.controls) {
                     _this.playerOptions += '&badge=0&byline=0&portrait=0&title=0';
                 }
 
                 // autoplay
-                _this.playerOptions += '&autoplay=' + (_this.options.autoplay ? '1' : '0');
+                _this.playerOptions += `&autoplay=${_this.options.autoplay ? '1' : '0'}`;
 
                 // loop
-                _this.playerOptions += '&loop=' + (_this.options.loop ? 1 : 0);
+                _this.playerOptions += `&loop=${_this.options.loop ? 1 : 0}`;
 
-                if(!_this.$iframe) {
+                if (!_this.$iframe) {
                     _this.$iframe = document.createElement('iframe');
                     _this.$iframe.setAttribute('id', _this.playerID);
-                    _this.$iframe.setAttribute('src', 'https://player.vimeo.com/video/' + _this.videoID + '?' + _this.playerOptions);
+                    _this.$iframe.setAttribute('src', `https://player.vimeo.com/video/${_this.videoID}?${_this.playerOptions}`);
                     _this.$iframe.setAttribute('frameborder', '0');
                     hiddenDiv.appendChild(_this.$iframe);
                     document.body.appendChild(hiddenDiv);
@@ -435,32 +432,32 @@
                 _this.player = _this.player || new Vimeo.Player(_this.$iframe);
 
                 // get video width and height
-                _this.player.getVideoWidth().then(function (width) {
+                _this.player.getVideoWidth().then((width) => {
                     _this.videoWidth = width || 1280;
                 });
-                _this.player.getVideoHeight().then(function (height) {
+                _this.player.getVideoHeight().then((height) => {
                     _this.videoHeight = height || 720;
                 });
 
                 // set current time for autoplay
-                if(_this.options.startTime && _this.options.autoplay) {
+                if (_this.options.startTime && _this.options.autoplay) {
                     _this.player.setCurrentTime(_this.options.startTime);
                 }
 
                 // mute
                 _this.player.setVolume(_this.options.mute ? 0 : 100);
 
-                var vmStarted;
-                _this.player.on('timeupdate', function (e) {
-                    if(!vmStarted) {
+                let vmStarted;
+                _this.player.on('timeupdate', (e) => {
+                    if (!vmStarted) {
                         _this.fire('started', e);
                     }
                     vmStarted = 1;
 
                     // check for end of video and play again or stop
-                    if(_this.options.endTime) {
-                        if(_this.options.endTime && e.seconds >= _this.options.endTime) {
-                            if(_this.options.loop) {
+                    if (_this.options.endTime) {
+                        if (_this.options.endTime && e.seconds >= _this.options.endTime) {
+                            if (_this.options.loop) {
                                 _this.play(_this.options.startTime);
                             } else {
                                 _this.pause();
@@ -468,43 +465,43 @@
                         }
                     }
                 });
-                _this.player.on('play', function (e) {
+                _this.player.on('play', (e) => {
                     _this.fire('play', e);
 
                     // check for the start time and start with it
-                    if(_this.options.startTime && e.seconds === 0) {
+                    if (_this.options.startTime && e.seconds === 0) {
                         _this.play(_this.options.startTime);
                     }
                 });
-                _this.player.on('pause', function (e) {
+                _this.player.on('pause', (e) => {
                     _this.fire('pause', e);
                 });
-                _this.player.on('ended', function (e) {
+                _this.player.on('ended', (e) => {
                     _this.fire('end', e);
                 });
-                _this.player.on('loaded', function (e) {
+                _this.player.on('loaded', (e) => {
                     _this.fire('ready', e);
                 });
             }
 
             // Local
-            function addSourceToLocal (element, src, type) {
-                var source = document.createElement('source');
+            function addSourceToLocal(element, src, type) {
+                const source = document.createElement('source');
                 source.src = src;
                 source.type = type;
                 element.appendChild(source);
             }
-            if(_this.type === 'local') {
-                if(!_this.$iframe) {
+            if (_this.type === 'local') {
+                if (!_this.$iframe) {
                     _this.$iframe = document.createElement('video');
 
                     // mute
-                    if(_this.options.mute) {
+                    if (_this.options.mute) {
                         _this.$iframe.muted = true;
                     }
 
                     // loop
-                    if(_this.options.loop) {
+                    if (_this.options.loop) {
                         _this.$iframe.loop = true;
                     }
 
@@ -512,25 +509,25 @@
                     hiddenDiv.appendChild(_this.$iframe);
                     document.body.appendChild(hiddenDiv);
 
-                    for(var k in _this.videoID) {
-                        addSourceToLocal(_this.$iframe, _this.videoID[k], 'video/' + k);
-                    }
+                    Object.keys(_this.videoID).forEach((key) => {
+                        addSourceToLocal(_this.$iframe, _this.videoID[key], `video/${key}`);
+                    });
                 }
 
                 _this.player = _this.player || _this.$iframe;
 
-                var locStarted;
-                addEventListener(_this.player, 'playing', function (e) {
-                    if(!locStarted) {
+                let locStarted;
+                addEventListener(_this.player, 'playing', (e) => {
+                    if (!locStarted) {
                         _this.fire('started', e);
                     }
                     locStarted = 1;
                 });
                 addEventListener(_this.player, 'timeupdate', function () {
                     // check for end of video and play again or stop
-                    if(_this.options.endTime) {
-                        if(_this.options.endTime && this.currentTime >= _this.options.endTime) {
-                            if(_this.options.loop) {
+                    if (_this.options.endTime) {
+                        if (_this.options.endTime && this.currentTime >= _this.options.endTime) {
+                            if (_this.options.loop) {
                                 _this.play(_this.options.startTime);
                             } else {
                                 _this.pause();
@@ -538,13 +535,13 @@
                         }
                     }
                 });
-                addEventListener(_this.player, 'play', function (e) {
+                addEventListener(_this.player, 'play', (e) => {
                     _this.fire('play', e);
                 });
-                addEventListener(_this.player, 'pause', function (e) {
+                addEventListener(_this.player, 'pause', (e) => {
                     _this.fire('pause', e);
                 });
-                addEventListener(_this.player, 'ended', function (e) {
+                addEventListener(_this.player, 'ended', (e) => {
                     _this.fire('end', e);
                 });
                 addEventListener(_this.player, 'loadedmetadata', function () {
@@ -555,7 +552,7 @@
                     _this.fire('ready');
 
                     // autoplay
-                    if(_this.options.autoplay) {
+                    if (_this.options.autoplay) {
                         _this.play(_this.options.startTime);
                     }
                 });
@@ -563,61 +560,55 @@
 
             callback(_this.$iframe);
         });
-    };
+    }
 
-    VideoWorker.prototype.init = function () {
-        var _this = this;
+    init() {
+        const _this = this;
 
-        _this.playerID = 'VideoWorker-' + _this.ID;
-    };
+        _this.playerID = `VideoWorker-${_this.ID}`;
+    }
 
-    var YoutubeAPIadded = 0;
-    var VimeoAPIadded = 0;
-    VideoWorker.prototype.loadAPI = function () {
-        var _this = this;
+    loadAPI() {
+        const _this = this;
 
-        if(YoutubeAPIadded && VimeoAPIadded) {
+        if (YoutubeAPIadded && VimeoAPIadded) {
             return;
         }
 
-        var src = '';
+        let src = '';
 
         // load Youtube API
-        if(_this.type === 'youtube' && !YoutubeAPIadded) {
+        if (_this.type === 'youtube' && !YoutubeAPIadded) {
             YoutubeAPIadded = 1;
             src = 'https://www.youtube.com/iframe_api';
         }
 
         // load Vimeo API
-        if(_this.type === 'vimeo' && !VimeoAPIadded) {
+        if (_this.type === 'vimeo' && !VimeoAPIadded) {
             VimeoAPIadded = 1;
             src = 'https://player.vimeo.com/api/player.js';
         }
 
-        if(!src) {
+        if (!src) {
             return;
         }
 
         // add script in head section
-        var tag = document.createElement('script');
-        var head = document.getElementsByTagName('head')[0];
+        let tag = document.createElement('script');
+        let head = document.getElementsByTagName('head')[0];
         tag.src = src;
 
         head.appendChild(tag);
 
         head = null;
         tag = null;
-    };
+    }
 
-    var loadingYoutubePlayer = 0;
-    var loadingVimeoPlayer = 0;
-    var loadingYoutubeDeffer = new Deferred();
-    var loadingVimeoDeffer = new Deferred();
-    VideoWorker.prototype.onAPIready = function (callback) {
-        var _this = this;
+    onAPIready(callback) {
+        const _this = this;
 
         // Youtube
-        if(_this.type === 'youtube') {
+        if (_this.type === 'youtube') {
             // Listen for global YT player callback
             if ((typeof YT === 'undefined' || YT.loaded === 0) && !loadingYoutubePlayer) {
                 // Prevents Ready event from being called twice
@@ -629,22 +620,22 @@
                     loadingYoutubeDeffer.resolve('done');
                     callback();
                 };
-            } else if (typeof YT === 'object' && YT.loaded === 1)  {
+            } else if (typeof YT === 'object' && YT.loaded === 1) {
                 callback();
             } else {
-                loadingYoutubeDeffer.done(function () {
+                loadingYoutubeDeffer.done(() => {
                     callback();
                 });
             }
         }
 
         // Vimeo
-        if(_this.type === 'vimeo') {
-            if(typeof Vimeo === 'undefined' && !loadingVimeoPlayer) {
+        if (_this.type === 'vimeo') {
+            if (typeof Vimeo === 'undefined' && !loadingVimeoPlayer) {
                 loadingVimeoPlayer = 1;
-                var vimeo_interval = setInterval(function () {
-                    if(typeof Vimeo !== 'undefined') {
-                        clearInterval(vimeo_interval);
+                const vimeoInterval = setInterval(() => {
+                    if (typeof Vimeo !== 'undefined') {
+                        clearInterval(vimeoInterval);
                         loadingVimeoDeffer.resolve('done');
                         callback();
                     }
@@ -652,21 +643,20 @@
             } else if (typeof Vimeo !== 'undefined') {
                 callback();
             } else {
-                loadingVimeoDeffer.done(function () {
+                loadingVimeoDeffer.done(() => {
                     callback();
                 });
             }
         }
 
         // Local
-        if(_this.type === 'local') {
+        if (_this.type === 'local') {
             callback();
         }
-    };
+    }
+}
 
-    window.VideoWorker = VideoWorker;
-}(window));
-
+window.VideoWorker = VideoWorker;
 
 
 /*!
@@ -676,33 +666,34 @@
  * GitHub  : https://github.com/nk-o/jarallax
  */
 (function () {
-    'use strict';
-
-    if(typeof jarallax === 'undefined') {
+    if (typeof jarallax === 'undefined') {
         return;
     }
 
-    var Jarallax = jarallax.constructor;
+    const Jarallax = jarallax.constructor;
 
     // append video after init Jarallax
-    var def_init = Jarallax.prototype.init;
+    const defInit = Jarallax.prototype.init;
     Jarallax.prototype.init = function () {
-        var _this = this;
+        const _this = this;
 
-        def_init.apply(_this);
+        defInit.apply(_this);
 
-        if(_this.video) {
-            _this.video.getIframe(function (iframe) {
-                var $parent = iframe.parentNode;
+        if (_this.video) {
+            _this.video.getIframe((iframe) => {
+                const $parent = iframe.parentNode;
                 _this.css(iframe, {
                     position: _this.image.position,
-                    top: '0px', left: '0px', right: '0px', bottom: '0px',
+                    top: '0px',
+                    left: '0px',
+                    right: '0px',
+                    bottom: '0px',
                     width: '100%',
                     height: '100%',
                     maxWidth: 'none',
                     maxHeight: 'none',
                     margin: 0,
-                    zIndex: -1
+                    zIndex: -1,
                 });
                 _this.$video = iframe;
                 _this.image.$container.appendChild(iframe);
@@ -714,17 +705,17 @@
     };
 
     // cover video
-    var def_coverImage = Jarallax.prototype.coverImage;
+    const defCoverImage = Jarallax.prototype.coverImage;
     Jarallax.prototype.coverImage = function () {
-        var _this = this;
-        var imageData = def_coverImage.apply(_this);
-        var node = _this.image.$item.nodeName;
+        const _this = this;
+        const imageData = defCoverImage.apply(_this);
+        const node = _this.image.$item.nodeName;
 
-        if(imageData && _this.video && (node === 'IFRAME' || node === 'VIDEO')) {
-            var h = imageData.image.height;
-            var w = h * _this.image.width / _this.image.height;
-            var ml = (imageData.container.width - w) / 2;
-            var mt = imageData.image.marginTop;
+        if (imageData && _this.video && (node === 'IFRAME' || node === 'VIDEO')) {
+            let h = imageData.image.height;
+            let w = h * _this.image.width / _this.image.height;
+            let ml = (imageData.container.width - w) / 2;
+            let mt = imageData.image.marginTop;
 
             if (imageData.container.width > w) {
                 w = imageData.container.width;
@@ -740,10 +731,10 @@
             }
 
             _this.css(_this.$video, {
-                width: w + 'px',
-                marginLeft: ml + 'px',
-                height: h + 'px',
-                marginTop: mt + 'px'
+                width: `${w}px`,
+                marginLeft: `${ml}px`,
+                height: `${h}px`,
+                marginTop: `${mt}px`,
             });
         }
 
@@ -751,29 +742,29 @@
     };
 
     // init video
-    var def_initImg = Jarallax.prototype.initImg;
+    const defInitImg = Jarallax.prototype.initImg;
     Jarallax.prototype.initImg = function () {
-        var _this = this;
-        var defaultResult = def_initImg.apply(_this);
+        const _this = this;
+        const defaultResult = defInitImg.apply(_this);
 
-        if(!_this.options.videoSrc) {
+        if (!_this.options.videoSrc) {
             _this.options.videoSrc = _this.$item.getAttribute('data-jarallax-video') || false;
         }
 
-        if(_this.options.videoSrc) {
-            var video = new VideoWorker(_this.options.videoSrc, {
+        if (_this.options.videoSrc) {
+            const video = new VideoWorker(_this.options.videoSrc, {
                 startTime: _this.options.videoStartTime || 0,
-                endTime: _this.options.videoEndTime || 0
+                endTime: _this.options.videoEndTime || 0,
             });
 
-            if(video.isValid()) {
+            if (video.isValid()) {
                 _this.image.useImgTag = true;
 
-                video.on('ready', function () {
-                    var oldOnScroll = _this.onScroll;
+                video.on('ready', () => {
+                    const oldOnScroll = _this.onScroll;
                     _this.onScroll = function () {
                         oldOnScroll.apply(_this);
-                        if(_this.isVisible()) {
+                        if (_this.isVisible()) {
                             video.play();
                         } else {
                             video.pause();
@@ -781,27 +772,29 @@
                     };
                 });
 
-                video.on('started', function () {
+                video.on('started', () => {
                     _this.image.$default_item = _this.image.$item;
                     _this.image.$item = _this.$video;
 
                     // set video width and height
-                    _this.image.width  = _this.options.imgWidth = _this.video.videoWidth || 1280;
-                    _this.image.height = _this.options.imgHeight = _this.video.videoHeight || 720;
+                    _this.image.width = _this.video.videoWidth || 1280;
+                    _this.image.height = _this.video.videoHeight || 720;
+                    _this.options.imgWidth = _this.image.width;
+                    _this.options.imgHeight = _this.image.height;
                     _this.coverImage();
                     _this.clipContainer();
                     _this.onScroll();
 
                     // hide image
-                    if(_this.image.$default_item) {
+                    if (_this.image.$default_item) {
                         _this.image.$default_item.style.display = 'none';
                     }
                 });
 
                 _this.video = video;
 
-                if(video.type !== 'local') {
-                    video.getImageURL(function (url) {
+                if (video.type !== 'local') {
+                    video.getImageURL((url) => {
                         _this.image.src = url;
                         _this.init();
                     });
@@ -809,12 +802,11 @@
             }
 
             // prevent default image loading when not local video
-            if(video.type !== 'local') {
+            if (video.type !== 'local') {
                 return false;
-            }
 
             // set empty image on local video if not defined
-            else if (!defaultResult) {
+            } else if (!defaultResult) {
                 _this.image.src = 'data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7';
                 return true;
             }
@@ -824,10 +816,10 @@
     };
 
     // Destroy video parallax
-    var def_destroy = Jarallax.prototype.destroy;
+    const defDestroy = Jarallax.prototype.destroy;
     Jarallax.prototype.destroy = function () {
-        var _this = this;
+        const _this = this;
 
-        def_destroy.apply(_this);
+        defDestroy.apply(_this);
     };
 }());

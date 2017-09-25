@@ -26,9 +26,22 @@
         "video"
     ],
     "devDependencies": {
+        "babel-preset-env": "^1.6.0",
+        "babel": "^6.23.0",
         "del": "^2.2.2",
+        "eslint": "^4.6.0",
+        "eslint-config-airbnb": "^15.1.0",
+        "eslint-plugin-import": "^2.7.0",
+        "eslint-plugin-jsx-a11y": "^5.1.1",
+        "eslint-plugin-react": "^7.4.0",
         "gulp": "^3.9.1",
+        "gulp-header": "^1.8.9",
+        "gulp-if": "^2.0.2",
+        "gulp-iife": "^0.3.0",
+        "gulp-load-plugins": "^1.5.0",
+        "gulp-babel": "^6.1.2",
         "gulp-rename": "^1.2.2",
-        "gulp-uglify": "^2.0.0"
+        "gulp-uglify": "^2.0.0",
+        "json-file": "^0.1.0"
     }
 }
