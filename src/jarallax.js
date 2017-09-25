@@ -112,6 +112,9 @@ class Jarallax {
             speed: 0.5, // supported value from -1 to 2
             imgSrc: null,
             imgElement: '.jarallax-img',
+            imgSize: 'cover',
+            imgPosition: '50% 50%',
+            imgRepeat: 'no-repeat', // supported only for background, not for <img> tag
             elementInViewport: null,
             zIndex: -100,
             noAndroid: false,
@@ -323,9 +326,9 @@ class Jarallax {
             }
 
             imageStyles = _this.extend({
-                'object-fit': 'cover',
+                'object-fit': _this.options.imgSize,
                 // support for plugin https://github.com/bfred-it/object-fit-images
-                'font-family': 'object-fit: cover;',
+                'font-family': `object-fit: ${_this.options.imgSize}; object-position: ${_this.options.imgPosition};`,
                 'max-width': 'none',
             }, containerStyles, imageStyles);
 
@@ -333,9 +336,9 @@ class Jarallax {
         } else {
             _this.image.$item = document.createElement('div');
             imageStyles = _this.extend({
-                'background-position': '50% 50%',
-                'background-size': 'cover',
-                'background-repeat': 'no-repeat no-repeat',
+                'background-position': _this.options.imgPosition,
+                'background-size': _this.options.imgSize,
+                'background-repeat': _this.options.imgRepeat,
                 'background-image': `url("${_this.image.src}")`,
             }, containerStyles, imageStyles);
         }
