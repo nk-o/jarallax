@@ -30,9 +30,15 @@ gulp.task('build', ['clean'], () => {
             presets: ['env'],
             compact: false,
         }))
+        .on('error', (error) => {
+            console.error(error);
+        })
         .pipe($.iife({
             useStrict: false,
         }))
+        .on('error', (error) => {
+            console.error(error);
+        })
         .pipe($.if(file => file.path.match(/jarallax.js$/), $.header(getMainHeader())))
         .pipe($.if(file => file.path.match(/jarallax-video.js$/), $.header(getVideoHeader())))
         .pipe(gulp.dest('dist'))
