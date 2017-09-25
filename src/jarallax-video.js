@@ -846,19 +846,18 @@ window.VideoWorker = VideoWorker;
 
                 _this.video = video;
 
-                if (video.type !== 'local') {
-                    video.getImageURL((url) => {
-                        _this.image.src = url;
-                        _this.init();
-                    });
-                }
+                // set image if not exists
+                if (!_this.defaultInitImgResult) {
+                    if (video.type !== 'local') {
+                        video.getImageURL((url) => {
+                            _this.image.src = url;
+                            _this.init();
+                        });
 
-                // prevent default image loading when not local video
-                if (video.type !== 'local') {
-                    return false;
+                        return false;
+                    }
 
-                // set empty image on local video if not defined
-                } else if (!_this.defaultInitImgResult) {
+                    // set empty image on local video if not defined
                     _this.image.src = 'data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7';
                     return true;
                 }
