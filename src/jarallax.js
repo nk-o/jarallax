@@ -177,23 +177,12 @@ class Jarallax {
         }
         _this.options.elementInViewport = elementInVP;
 
-        // find image element
-        let $imgElement = _this.options.imgElement;
-        if ($imgElement && typeof $imgElement === 'string') {
-            $imgElement = _this.$item.querySelector($imgElement);
-        }
-        // check if dom element
-        if (!($imgElement instanceof Element)) {
-            $imgElement = null;
-        }
-
         _this.image = {
             src: _this.options.imgSrc || null,
             $container: null,
-            $item: $imgElement,
             // fix for some devices
             // use <img> instead of background image - more smoothly
-            useImgTag: !!$imgElement || isIOs || isAndroid || isIE,
+            useImgTag: isIOs || isAndroid || isIE,
 
             // position absolute is needed on IE9 and FireFox because fixed position have glitches
             position: !supportTransform3D || isFirefox ? 'absolute' : 'fixed',
@@ -248,7 +237,22 @@ class Jarallax {
     initImg() {
         const _this = this;
 
-        // prevent if there is img tag
+        // find image element
+        let $imgElement = _this.options.imgElement;
+        if ($imgElement && typeof $imgElement === 'string') {
+            $imgElement = _this.$item.querySelector($imgElement);
+        }
+        // check if dom element
+        if (!($imgElement instanceof Element)) {
+            $imgElement = null;
+        }
+
+        if ($imgElement) {
+            _this.image.$item = $imgElement;
+            _this.image.useImgTag = true;
+        }
+
+        // true if there is img tag
         if (_this.image.$item) {
             return true;
         }
