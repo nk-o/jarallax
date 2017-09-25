@@ -70,6 +70,7 @@ class VideoWorker {
             autoplay: 1,
             loop: 1,
             mute: 1,
+            volume: 0,
             controls: 0,
 
             // start / end video time in ms
@@ -340,7 +341,10 @@ class VideoWorker {
                         // mute
                         if (_this.options.mute) {
                             e.target.mute();
+                        } else if (_this.options.volume) {
+                            e.target.setVolume(_this.options.volume);
                         }
+
                         // autoplay
                         if (_this.options.autoplay) {
                             _this.play(_this.options.startTime);
@@ -445,7 +449,11 @@ class VideoWorker {
                 }
 
                 // mute
-                _this.player.setVolume(_this.options.mute ? 0 : 100);
+                if (_this.options.mute) {
+                    _this.player.setVolume(0);
+                } else if (_this.options.volume) {
+                    _this.player.setVolume(_this.options.volume);
+                }
 
                 let vmStarted;
                 _this.player.on('timeupdate', (e) => {
@@ -498,6 +506,8 @@ class VideoWorker {
                     // mute
                     if (_this.options.mute) {
                         _this.$iframe.muted = true;
+                    } else if (_this.$iframe.volume) {
+                        _this.$iframe.volume = _this.options.volume / 100;
                     }
 
                     // loop
@@ -755,21 +765,27 @@ window.VideoWorker = VideoWorker;
             const video = new VideoWorker(_this.options.videoSrc, {
                 startTime: _this.options.videoStartTime || 0,
                 endTime: _this.options.videoEndTime || 0,
+                mute: _this.options.videoVolume ? 0 : 1,
+                volume: _this.options.videoVolume || 0,
             });
 
             if (video.isValid()) {
                 _this.image.useImgTag = true;
 
                 video.on('ready', () => {
-                    const oldOnScroll = _this.onScroll;
-                    _this.onScroll = function () {
-                        oldOnScroll.apply(_this);
-                        if (_this.isVisible()) {
-                            video.play();
-                        } else {
-                            video.pause();
-                        }
-                    };
+                    if (_this.options.videoPlayOnlyVisible) {
+                        const oldOnScroll = _this.onScroll;
+                        _this.onScroll = function () {
+                            oldOnScroll.apply(_this);
+                            if (_this.isVisible()) {
+                                video.play();
+                            } else {
+                                video.pause();
+                            }
+                        };
+                    } else {
+                        video.play();
+                    }
                 });
 
                 video.on('started', () => {
