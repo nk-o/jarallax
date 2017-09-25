@@ -23,6 +23,26 @@ const isFirefox = ua.toLowerCase().indexOf('firefox') > -1;
 const isIE = ua.indexOf('MSIE ') > -1 || ua.indexOf('Trident/') > -1 || ua.indexOf('Edge/') > -1;
 const isIElt10 = document.all && !window.atob;
 
+// requestAnimationFrame polyfill
+const rAF = window.requestAnimationFrame ||
+    window.webkitRequestAnimationFrame ||
+    window.mozRequestAnimationFrame ||
+    function (callback) {
+        setTimeout(callback, 1000 / 60);
+    };
+
+// init events
+function addEventListener(el, eventName, handler) {
+    if (el.addEventListener) {
+        el.addEventListener(eventName, handler);
+    } else {
+        el.attachEvent(`on${eventName}`, () => {
+            handler.call(el);
+        });
+    }
+}
+
+// Window data
 let wndW;
 let wndH;
 function updateWndVars() {
@@ -30,10 +50,52 @@ function updateWndVars() {
     wndH = window.innerHeight || document.documentElement.clientHeight;
 }
 updateWndVars();
+addEventListener(window, 'resize', updateWndVars);
+addEventListener(window, 'orientationchange', updateWndVars);
+addEventListener(window, 'load', updateWndVars);
 
 // list with all jarallax instances
 // need to render all in one scroll/resize event
 const jarallaxList = [];
+
+// Animate if changed window size or scrolled page
+let oldPageData = false;
+function updateParallax() {
+    if (!jarallaxList.length) {
+        return;
+    }
+
+    let wndY;
+    if (window.pageYOffset !== undefined) {
+        wndY = window.pageYOffset;
+    } else {
+        wndY = (document.documentElement || document.body.parentNode || document.body).scrollTop;
+    }
+
+    const isResized = !oldPageData || oldPageData.width !== wndW || oldPageData.height !== wndH;
+    const isScrolled = !oldPageData || oldPageData.y !== wndY;
+
+    if (isResized || isScrolled) {
+        jarallaxList.forEach((item) => {
+            if (isResized) {
+                item.onResize();
+            }
+            if (isScrolled) {
+                item.onScroll();
+            }
+        });
+    }
+
+    oldPageData = {
+        width: wndW,
+        height: wndH,
+        y: wndY,
+    };
+
+    rAF(updateParallax);
+}
+updateParallax();
+
 
 let instanceID = 0;
 
@@ -546,46 +608,12 @@ class Jarallax {
             });
         }
     }
-}
 
-// requestAnimationFrame polyfill
-const rAF = window.requestAnimationFrame ||
-    window.webkitRequestAnimationFrame ||
-    window.mozRequestAnimationFrame ||
-    function (callback) {
-        setTimeout(callback, 1000 / 60);
-    };
-
-// init events
-function addEventListener(el, eventName, handler) {
-    if (el.addEventListener) {
-        el.addEventListener(eventName, handler);
-    } else {
-        el.attachEvent(`on${eventName}`, () => {
-            handler.call(el);
-        });
+    onResize() {
+        this.coverImage();
+        this.clipContainer();
     }
 }
-
-function update(e) {
-    rAF(() => {
-        if (e.type !== 'scroll') {
-            updateWndVars();
-        }
-        jarallaxList.forEach((item) => {
-            // cover image and clip needed only when parallax container was changed
-            if (e.type !== 'scroll') {
-                item.coverImage();
-                item.clipContainer();
-            }
-            item.onScroll();
-        });
-    });
-}
-addEventListener(window, 'scroll', update);
-addEventListener(window, 'resize', update);
-addEventListener(window, 'orientationchange', update);
-addEventListener(window, 'load', update);
 
 
 // global definition
