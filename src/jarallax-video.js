@@ -820,6 +820,11 @@ window.VideoWorker = VideoWorker;
     Jarallax.prototype.destroy = function () {
         const _this = this;
 
+        if (_this.image.$default_item) {
+            _this.image.$item = _this.image.$default_item;
+            delete _this.image.$default_item;
+        }
+
         defDestroy.apply(_this);
     };
 }());

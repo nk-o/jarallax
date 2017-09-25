@@ -249,7 +249,9 @@ class Jarallax {
 
         if ($imgElement) {
             _this.image.$item = $imgElement;
+            _this.image.$itemParent = _this.image.$item.parentNode;
             _this.image.useImgTag = true;
+            _this.image.useCustomImgTag = true;
         }
 
         // true if there is img tag
@@ -278,7 +280,10 @@ class Jarallax {
         let imageStyles = {};
 
         // save default user styles
-        _this.$item.setAttribute('data-jarallax-original-styles', _this.$item.getAttribute('style'));
+        _this.$item.setAttribute('data-jarallax-original-styles', _this.$item.getAttribute('style') || '');
+        if (_this.image.$item && _this.image.useCustomImgTag) {
+            _this.image.$item.setAttribute('data-jarallax-original-styles', _this.image.$item.getAttribute('style') || '');
+        }
 
         // set relative position and z-index to the parent
         if (_this.css(_this.$item, 'position') === 'static') {
@@ -398,10 +403,27 @@ class Jarallax {
         const originalStylesTag = _this.$item.getAttribute('data-jarallax-original-styles');
         _this.$item.removeAttribute('data-jarallax-original-styles');
         // null occurs if there is no style tag before jarallax init
-        if (originalStylesTag === 'null') {
+        if (!originalStylesTag) {
             _this.$item.removeAttribute('style');
         } else {
             _this.$item.setAttribute('style', originalStylesTag);
+        }
+
+        if (_this.image.$item && _this.image.useCustomImgTag) {
+            // return styles on img tag as before jarallax init
+            const originalStylesImgTag = _this.image.$item.getAttribute('data-jarallax-original-styles');
+            _this.image.$item.removeAttribute('data-jarallax-original-styles');
+            // null occurs if there is no style tag before jarallax init
+            if (!originalStylesImgTag) {
+                _this.image.$item.removeAttribute('style');
+            } else {
+                _this.image.$item.setAttribute('style', originalStylesTag);
+            }
+
+            // move img tag to its default position
+            if (_this.image.$itemParent) {
+                _this.image.$itemParent.appendChild(_this.image.$item);
+            }
         }
 
         // remove additional dom elements
