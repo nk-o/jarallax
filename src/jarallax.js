@@ -118,7 +118,7 @@ class Jarallax {
             elementInViewport: null,
             zIndex: -100,
             noAndroid: false,
-            noIos: true,
+            noIos: false,
 
             // video
             videoSrc: null,
