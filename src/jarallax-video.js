@@ -672,7 +672,7 @@ window.VideoWorker = VideoWorker;
 /*!
  * Name    : Video Background Extension for Jarallax
  * Version : 1.0.0
- * Author  : _nK http://nkdev.info
+ * Author  : nK http://nkdev.info
  * GitHub  : https://github.com/nk-o/jarallax
  */
 (function () {
