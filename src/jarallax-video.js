@@ -758,7 +758,7 @@ window.VideoWorker = VideoWorker;
         const defaultResult = defInitImg.apply(_this);
 
         if (!_this.options.videoSrc) {
-            _this.options.videoSrc = _this.$item.getAttribute('data-jarallax-video') || false;
+            _this.options.videoSrc = _this.$item.getAttribute('data-jarallax-video') || null;
         }
 
         if (_this.options.videoSrc) {
