@@ -466,7 +466,7 @@ class Jarallax {
         if (!_this.$clipStyles) {
             _this.$clipStyles = document.createElement('style');
             _this.$clipStyles.setAttribute('type', 'text/css');
-            _this.$clipStyles.setAttribute('id', `#jarallax-clip-${_this.instanceID}`);
+            _this.$clipStyles.setAttribute('id', `jarallax-clip-${_this.instanceID}`);
             const head = document.head || document.getElementsByTagName('head')[0];
             head.appendChild(_this.$clipStyles);
         }
