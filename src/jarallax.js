@@ -532,7 +532,7 @@ class Jarallax {
         _this.css(_this.image.$item, {
             height: `${resultH}px`,
             marginTop: `${resultMT}px`,
-            left: _this.image.position === 'fixed' ? (`${rect.left}px`) : '0',
+            left: _this.image.position === 'fixed' ? `${rect.left}px` : '0',
             width: `${rect.width}px`,
         });
 
