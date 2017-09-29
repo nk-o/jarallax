@@ -73,7 +73,7 @@ function updateParallax() {
     }
 
     const isResized = !oldPageData || oldPageData.width !== wndW || oldPageData.height !== wndH;
-    const isScrolled = !oldPageData || oldPageData.y !== wndY;
+    const isScrolled = isResized || !oldPageData || oldPageData.y !== wndY;
 
     if (isResized || isScrolled) {
         jarallaxList.forEach((item) => {
