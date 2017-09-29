@@ -2,9 +2,7 @@ QUnit.module('video', function () {
     QUnit.test('parse urls', function (assert) {
         assert.expect(7);
 
-        var $jarallax = $(UTILS.selector);
-        UTILS.insertImage($jarallax, UTILS.image);
-        $jarallax = $jarallax[0];
+        var $jarallax = UTILS.get('img')[0];
 
         jarallax($jarallax, {
             videoSrc: 'https://youtu.be/mru3Q5m4lkY',
@@ -57,9 +55,7 @@ QUnit.module('video', function () {
         assert.expect(1);
         assert.timeout(10000);
 
-        var $jarallax = $(UTILS.selector);
-        UTILS.insertImage($jarallax, UTILS.image);
-        $jarallax = $jarallax[0];
+        var $jarallax = UTILS.get('img')[0];
 
         jarallax($jarallax, {
             videoSrc: 'https://youtu.be/mru3Q5m4lkY',
@@ -81,9 +77,7 @@ QUnit.module('video', function () {
         assert.expect(1);
         assert.timeout(10000);
 
-        var $jarallax = $(UTILS.selector);
-        UTILS.insertImage($jarallax, UTILS.image);
-        $jarallax = $jarallax[0];
+        var $jarallax = UTILS.get('img')[0];
 
         jarallax($jarallax, {
             videoSrc: 'https://vimeo.com/235212527',
@@ -105,9 +99,7 @@ QUnit.module('video', function () {
         assert.expect(1);
         assert.timeout(10000);
 
-        var $jarallax = $(UTILS.selector);
-        UTILS.insertImage($jarallax, UTILS.image);
-        $jarallax = $jarallax[0];
+        var $jarallax = UTILS.get('img')[0];
 
         jarallax($jarallax, {
             videoSrc: 'mp4:../demo/video/local-video.mp4,webm:../demo/video/local-video.webm,ogv:../demo/video/local-video.ogv',

@@ -2,9 +2,7 @@ QUnit.module('init', function () {
     QUnit.test('init', function (assert) {
         assert.expect(2);
 
-        var $jarallax = $(UTILS.selector);
-        UTILS.insertImage($jarallax, UTILS.image);
-        $jarallax = $jarallax[0];
+        var $jarallax = UTILS.get('img')[0];
 
         jarallax($jarallax);
 
@@ -18,9 +16,7 @@ QUnit.module('init', function () {
     QUnit.test('save current styles to attribute', function (assert) {
         assert.expect(2);
 
-        var $jarallax = $(UTILS.selector);
-        UTILS.insertImage($jarallax, UTILS.image);
-        $jarallax = $jarallax[0];
+        var $jarallax = UTILS.get('img')[0];
 
         jarallax($jarallax);
 
@@ -40,9 +36,7 @@ QUnit.module('init', function () {
     QUnit.test('change container position to relative if current static', function (assert) {
         assert.expect(1);
 
-        var $jarallax = $(UTILS.selector);
-        UTILS.insertImage($jarallax, UTILS.image);
-        $jarallax = $jarallax[0];
+        var $jarallax = UTILS.get('img')[0];
 
         $($jarallax).css({
             position: 'static',
@@ -56,9 +50,7 @@ QUnit.module('init', function () {
     QUnit.test('use absolute position if one of the parents have transform', function (assert) {
         assert.expect(1);
 
-        var $jarallax = $(UTILS.selector);
-        UTILS.insertImage($jarallax, UTILS.image);
-        $jarallax = $jarallax[0];
+        var $jarallax = UTILS.get('img')[0];
 
         $('body').css('transform', 'scale(1)');
         jarallax($jarallax);

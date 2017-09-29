@@ -55,7 +55,7 @@ gulp.task('watch', ['build'], () => {
 });
 
 gulp.task('test', ['build'], () => {
-    qunit('./tests/tests.html', {
+    qunit('./tests/index.html', {
         page: {
             viewportSize: { width: 1280, height: 800 },
         },

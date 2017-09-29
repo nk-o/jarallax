@@ -2,9 +2,7 @@ QUnit.module('options', function () {
     QUnit.test('default options', function (assert) {
         assert.expect(1);
 
-        var $jarallax = $(UTILS.selector);
-        UTILS.insertBackground($jarallax, UTILS.image);
-        $jarallax = $jarallax[0];
+        var $jarallax = UTILS.get('background')[0];
         jarallax($jarallax);
 
         var options = $jarallax.jarallax.options;
@@ -71,9 +69,7 @@ QUnit.module('options', function () {
             return 4;
         }
 
-        var $jarallax = $(UTILS.selector);
-        UTILS.insertBackground($jarallax, UTILS.image);
-        $jarallax = $jarallax[0];
+        var $jarallax = UTILS.get('background')[0];
 
         var customOptions = {
             type: 'opacity',
@@ -130,9 +126,7 @@ QUnit.module('options', function () {
     QUnit.test('data-* options', function (assert) {
         assert.expect(1);
 
-        var $jarallax = $(UTILS.selector);
-        UTILS.insertBackground($jarallax, UTILS.image);
-        $jarallax = $jarallax[0];
+        var $jarallax = UTILS.get('background')[0];
 
         $($jarallax).attr({
             'data-type': 'scale',
@@ -195,9 +189,7 @@ QUnit.module('options', function () {
     QUnit.test('cascading options', function (assert) {
         assert.expect(1);
 
-        var $jarallax = $(UTILS.selector);
-        UTILS.insertBackground($jarallax, UTILS.image);
-        $jarallax = $jarallax[0];
+        var $jarallax = UTILS.get('background')[0];
 
         $($jarallax).attr({
             'data-speed': '1.3',
@@ -214,9 +206,7 @@ QUnit.module('options', function () {
     QUnit.test('speed option correction', function (assert) {
         assert.expect(2);
 
-        var $jarallax = $(UTILS.selector);
-        UTILS.insertBackground($jarallax, UTILS.image);
-        $jarallax = $jarallax[0];
+        var $jarallax = UTILS.get('background')[0];
 
         jarallax($jarallax, {
             speed: 2.1,

@@ -2,9 +2,7 @@ QUnit.module('methods', function () {
     QUnit.test('css', function (assert) {
         assert.expect(3);
 
-        var $jarallax = $(UTILS.selector);
-        UTILS.insertBackground($jarallax, UTILS.image);
-        $jarallax = $jarallax[0];
+        var $jarallax = UTILS.get('background')[0];
         jarallax($jarallax);
 
         var $testDiv = $('<div>').appendTo('body');
@@ -24,9 +22,7 @@ QUnit.module('methods', function () {
     QUnit.test('extend', function (assert) {
         assert.expect(1);
 
-        var $jarallax = $(UTILS.selector);
-        UTILS.insertBackground($jarallax, UTILS.image);
-        $jarallax = $jarallax[0];
+        var $jarallax = UTILS.get('background')[0];
         jarallax($jarallax);
 
         var data = $jarallax.jarallax.extend({
@@ -52,18 +48,16 @@ QUnit.module('methods', function () {
     QUnit.test('destroy', function (assert) {
         assert.expect(4);
 
-        var $jarallax = $(UTILS.selector);
-        UTILS.insertBackground($jarallax, UTILS.image);
-        $jarallax = $jarallax[0];
-        jarallax($jarallax);
+        var $jarallax = UTILS.get('background')[0];
 
+        jarallax($jarallax);
         jarallax($jarallax, 'destroy');
 
         assert.equal($jarallax.jarallax, undefined, 'removed jarallax instance from dom element');
         assert.ok($($jarallax).css('background-image') === 'url(' + UTILS.image + ')' || $($jarallax).css('background-image') === 'url("' + UTILS.image + '")', 'restored div with background image');
 
         $($jarallax).removeAttr('style');
-        UTILS.insertImage($($jarallax), UTILS.image);
+        $jarallax = UTILS.get('img')[0];
         jarallax($jarallax);
         jarallax($jarallax, 'destroy');
         assert.equal($($jarallax).children('.jarallax-img').attr('src'), UTILS.image, 'restored div with <img> tag');
@@ -82,9 +76,7 @@ QUnit.module('methods', function () {
     QUnit.test('clipContainer', function (assert) {
         assert.expect(1);
 
-        var $jarallax = $(UTILS.selector);
-        UTILS.insertBackground($jarallax, UTILS.image);
-        $jarallax = $jarallax[0];
+        var $jarallax = UTILS.get('background')[0];
         jarallax($jarallax);
 
         $($jarallax).css({
@@ -129,9 +121,7 @@ QUnit.module('methods', function () {
             return resultH;
         }
 
-        var $jarallax = $(UTILS.selector);
-        UTILS.insertImage($jarallax, UTILS.image);
-        $jarallax = $jarallax[0];
+        var $jarallax = UTILS.get('img')[0];
 
         jarallax($jarallax, {
             speed: 0.85,
@@ -152,9 +142,7 @@ QUnit.module('methods', function () {
     QUnit.test('isVisible', function (assert) {
         assert.expect(8);
 
-        var $jarallax = $(UTILS.selector);
-        UTILS.insertBackground($jarallax, UTILS.image);
-        $jarallax = $jarallax[0];
+        var $jarallax = UTILS.get('background')[0];
         jarallax($jarallax);
 
         var clientRect = $jarallax.getBoundingClientRect();

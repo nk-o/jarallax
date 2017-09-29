@@ -4,8 +4,7 @@ QUnit.module('jquery', function () {
 
         assert.ok($(document.body).jarallax, 'jarallax method is defined');
 
-        var $jarallax = $(UTILS.selector);
-        UTILS.insertImage($jarallax, UTILS.image);
+        var $jarallax = UTILS.get('img');
 
         $jarallax.jarallax({
             speed: 0.7,

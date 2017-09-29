@@ -2,9 +2,7 @@ QUnit.module('events', function () {
     QUnit.test('call', function (assert) {
         assert.expect(4);
 
-        var $jarallax = $(UTILS.selector);
-        UTILS.insertImage($jarallax, UTILS.image);
-        $jarallax = $jarallax[0];
+        var $jarallax = UTILS.get('img')[0];
 
         var scrollOnce;
         var coverOnce;
