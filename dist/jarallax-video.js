@@ -1,7 +1,7 @@
 /*!
  * Name    : Video Worker (wrapper for Youtube, Vimeo and Local videos)
  * Version : 1.8.0
- * Author  : _nK <https://nkdev.info>
+ * Author  : nK <https://nkdev.info>
  * GitHub  : https://github.com/nk-o/jarallax
  */
 ;(function() {
@@ -88,6 +88,7 @@ var VideoWorker = function () {
             autoplay: 1,
             loop: 1,
             mute: 1,
+            volume: 0,
             controls: 0,
 
             // start / end video time in ms
@@ -371,7 +372,10 @@ var VideoWorker = function () {
                             // mute
                             if (_this.options.mute) {
                                 e.target.mute();
+                            } else if (_this.options.volume) {
+                                e.target.setVolume(_this.options.volume);
                             }
+
                             // autoplay
                             if (_this.options.autoplay) {
                                 _this.play(_this.options.startTime);
@@ -476,7 +480,11 @@ var VideoWorker = function () {
                     }
 
                     // mute
-                    _this.player.setVolume(_this.options.mute ? 0 : 100);
+                    if (_this.options.mute) {
+                        _this.player.setVolume(0);
+                    } else if (_this.options.volume) {
+                        _this.player.setVolume(_this.options.volume);
+                    }
 
                     var vmStarted = void 0;
                     _this.player.on('timeupdate', function (e) {
@@ -529,6 +537,8 @@ var VideoWorker = function () {
                         // mute
                         if (_this.options.mute) {
                             _this.$iframe.muted = true;
+                        } else if (_this.$iframe.volume) {
+                            _this.$iframe.volume = _this.options.volume / 100;
                         }
 
                         // loop
@@ -698,7 +708,7 @@ window.VideoWorker = VideoWorker;
 /*!
  * Name    : Video Background Extension for Jarallax
  * Version : 1.0.0
- * Author  : _nK http://nkdev.info
+ * Author  : nK http://nkdev.info
  * GitHub  : https://github.com/nk-o/jarallax
  */
 (function () {
@@ -784,28 +794,71 @@ window.VideoWorker = VideoWorker;
         var defaultResult = defInitImg.apply(_this);
 
         if (!_this.options.videoSrc) {
-            _this.options.videoSrc = _this.$item.getAttribute('data-jarallax-video') || false;
+            _this.options.videoSrc = _this.$item.getAttribute('data-jarallax-video') || null;
         }
 
         if (_this.options.videoSrc) {
-            var video = new VideoWorker(_this.options.videoSrc, {
-                startTime: _this.options.videoStartTime || 0,
-                endTime: _this.options.videoEndTime || 0
-            });
+            _this.defaultInitImgResult = defaultResult;
+            return true;
+        }
 
-            if (video.isValid()) {
+        return defaultResult;
+    };
+
+    var defCanInitParallax = Jarallax.prototype.canInitParallax;
+    Jarallax.prototype.canInitParallax = function () {
+        var _this = this;
+        var defaultResult = defCanInitParallax.apply(_this);
+
+        if (!_this.options.videoSrc) {
+            return defaultResult;
+        }
+
+        var video = new VideoWorker(_this.options.videoSrc, {
+            startTime: _this.options.videoStartTime || 0,
+            endTime: _this.options.videoEndTime || 0,
+            mute: _this.options.videoVolume ? 0 : 1,
+            volume: _this.options.videoVolume || 0
+        });
+
+        if (video.isValid()) {
+            // if parallax will not be inited, we can add thumbnail on background.
+            if (!defaultResult) {
+                if (!_this.defaultInitImgResult) {
+                    video.getImageURL(function (url) {
+                        // save default user styles
+                        var curStyle = _this.$item.getAttribute('style');
+                        if (curStyle) {
+                            _this.$item.setAttribute('data-jarallax-original-styles', curStyle);
+                        }
+
+                        // set new background
+                        _this.css(_this.$item, {
+                            'background-image': 'url("' + url + '")',
+                            'background-position': 'center',
+                            'background-size': 'cover'
+                        });
+                    });
+                }
+
+                // init video
+            } else {
                 _this.image.useImgTag = true;
 
                 video.on('ready', function () {
-                    var oldOnScroll = _this.onScroll;
-                    _this.onScroll = function () {
-                        oldOnScroll.apply(_this);
-                        if (_this.isVisible()) {
-                            video.play();
-                        } else {
-                            video.pause();
-                        }
-                    };
+                    if (_this.options.videoPlayOnlyVisible) {
+                        var oldOnScroll = _this.onScroll;
+                        _this.onScroll = function () {
+                            oldOnScroll.apply(_this);
+                            if (_this.isVisible()) {
+                                video.play();
+                            } else {
+                                video.pause();
+                            }
+                        };
+                    } else {
+                        video.play();
+                    }
                 });
 
                 video.on('started', function () {
@@ -829,22 +882,21 @@ window.VideoWorker = VideoWorker;
 
                 _this.video = video;
 
-                if (video.type !== 'local') {
-                    video.getImageURL(function (url) {
-                        _this.image.src = url;
-                        _this.init();
-                    });
+                // set image if not exists
+                if (!_this.defaultInitImgResult) {
+                    if (video.type !== 'local') {
+                        video.getImageURL(function (url) {
+                            _this.image.src = url;
+                            _this.init();
+                        });
+
+                        return false;
+                    }
+
+                    // set empty image on local video if not defined
+                    _this.image.src = 'data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7';
+                    return true;
                 }
-            }
-
-            // prevent default image loading when not local video
-            if (video.type !== 'local') {
-                return false;
-
-                // set empty image on local video if not defined
-            } else if (!defaultResult) {
-                _this.image.src = 'data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7';
-                return true;
             }
         }
 
@@ -855,6 +907,11 @@ window.VideoWorker = VideoWorker;
     var defDestroy = Jarallax.prototype.destroy;
     Jarallax.prototype.destroy = function () {
         var _this = this;
+
+        if (_this.image.$default_item) {
+            _this.image.$item = _this.image.$default_item;
+            delete _this.image.$default_item;
+        }
 
         defDestroy.apply(_this);
     };
