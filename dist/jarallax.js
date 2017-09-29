@@ -85,7 +85,7 @@ function updateParallax() {
     }
 
     var isResized = !oldPageData || oldPageData.width !== wndW || oldPageData.height !== wndH;
-    var isScrolled = !oldPageData || oldPageData.y !== wndY;
+    var isScrolled = isResized || !oldPageData || oldPageData.y !== wndY;
 
     if (isResized || isScrolled) {
         jarallaxList.forEach(function (item) {
@@ -129,6 +129,7 @@ var Jarallax = function () {
             imgSize: 'cover',
             imgPosition: '50% 50%',
             imgRepeat: 'no-repeat', // supported only for background, not for <img> tag
+            keepImg: false, // keep <img> tag in it's default place
             elementInViewport: null,
             zIndex: -100,
             noAndroid: false,
@@ -274,8 +275,12 @@ var Jarallax = function () {
             }
 
             if ($imgElement) {
-                _this.image.$item = $imgElement;
-                _this.image.$itemParent = _this.image.$item.parentNode;
+                if (_this.options.keepImg) {
+                    _this.image.$item = $imgElement.cloneNode(true);
+                } else {
+                    _this.image.$item = $imgElement;
+                    _this.image.$itemParent = $imgElement.parentNode;
+                }
                 _this.image.useImgTag = true;
                 _this.image.useCustomImgTag = true;
             }
@@ -311,15 +316,17 @@ var Jarallax = function () {
             };
             var imageStyles = {};
 
-            // save default user styles
-            var curStyle = _this.$item.getAttribute('style');
-            if (curStyle) {
-                _this.$item.setAttribute('data-jarallax-original-styles', curStyle);
-            }
-            if (_this.image.$item && _this.image.useCustomImgTag) {
-                var curImgStyle = _this.image.$item.getAttribute('style');
-                if (curImgStyle) {
-                    _this.image.$item.setAttribute('data-jarallax-original-styles', curImgStyle);
+            if (!_this.options.keepImg) {
+                // save default user styles
+                var curStyle = _this.$item.getAttribute('style');
+                if (curStyle) {
+                    _this.$item.setAttribute('data-jarallax-original-styles', curStyle);
+                }
+                if (_this.image.$item && _this.image.useCustomImgTag) {
+                    var curImgStyle = _this.image.$item.getAttribute('style');
+                    if (curImgStyle) {
+                        _this.image.$item.setAttribute('data-jarallax-original-styles', curImgStyle);
+                    }
                 }
             }
 
