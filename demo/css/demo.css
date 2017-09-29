@@ -11,6 +11,18 @@
     height: 100%;
     z-index: -1;
 }
+.jarallax-keep-img {
+    position: relative;
+    z-index: 0;
+}
+.jarallax-keep-img > .jarallax-img {
+    position: relative;
+    display: block;
+    max-width: 100%;
+    height: auto;
+    z-index: -100;
+}
+
 
 /* demo styles */
 *, *:after, *:before {
@@ -36,9 +48,11 @@ p {
     margin-top: 0;
     margin-bottom: 5px;
 }
-p + p {
+p ~ p,
+p ~ div {
     margin-top: 15px;
 }
+
 small {
     font-size: 75%;
     color: #606060;
@@ -51,6 +65,23 @@ a:hover, a:focus {
 }
 .jarallax {
     min-height: 600px;
+}
+.jarallax-keep-img.demo-float-left {
+    margin-right: 15px;
+    margin-left: -60px;
+}
+.jarallax-keep-img.demo-float-right {
+    margin-left: 15px;
+    margin-right: -60px;
+}
+
+@media screen and (max-width: 600px) {
+    .jarallax-keep-img.demo-float-left,
+    .jarallax-keep-img.demo-float-right {
+        margin-right: 0;
+        margin-left: 0;
+        float: none;
+    }
 }
 
 /* hero block */
@@ -91,11 +122,26 @@ a:hover, a:focus {
 .demo-gap-half .demo-gap-1 .jarallax,
 .demo-gap-half .demo-gap-2 .jarallax {
     padding-top: 56.25%;
-    min-height: auto;
+    min-height: 0;
     height: 0;
 }
 .demo-gap-half .demo-gap-1 .jarallax {
     padding-top: 112.5%;
+}
+
+/* Demo Content */
+.demo-content {
+    background-color: #f7f7f7;
+    padding: 80px;
+}
+
+
+/* Float */
+.demo-float-left {
+    float: left;
+}
+.demo-float-right {
+    float: right;
 }
 
 

@@ -74,6 +74,29 @@
         <img class="jarallax-img" src="images/image4.jpg" alt="">
     </div>
 
+    <div class="demo-gap">
+        <h2>Parallax img tag</h2>
+    </div>
+    <div class="demo-content demo-gap">
+        <div class="container">
+            <p>So Give doesn't forth male him. God cattle rule Heaven blessed Beast lesser him so. Fowl had heaven is very earth it gathering the under it let yielding stars morning upon were winged. Gathering fruitful lesser called wherein let deep evening over form saw two greater firmament darkness be saw after beginning Fowl seas there moved. Their moveth she'd had you all were tree good winged midst from. Light you'll fill. Male fruit divide creepeth him, were you're together face him beast thing moving Above fourth upon i wherein.</p>
+
+            <div class="jarallax-keep-img demo-float-left" data-speed="0.5">
+                <img class="jarallax-img" src="images/image3.jpg" alt="" width="400">
+            </div>
+
+            <p>Created life set may don't. Moving living tree the firmament signs fifth place fruit fowl was a own third great set all so for first light our signs can't creeping itself every the without let given saw whose. Divided signs that gathering. Great itself. Dry make night. A you're he behold thing evening his morning. The wherein kind he open fruitful without whales sea said, winged day. Green own in female deep the i. Days stars lights, fill seas two darkness for meat fourth evening living saw morning given. Form have make in heaven was fill Night make. You moving third. Of above dominion spirit living creature multiply. Third over third seasons our sixth.</p>
+
+            <p>Fifth green, they're moved creeping years, man. Fifth, be To there were over together sixth fish heaven sea. Spirit may is unto second that seasons without. Darkness whose day fruit rule firmament Whales. Fourth replenish dominion. After subdue creature in sea morning. Green moved, rule female be, over night saying life there first forth that, may stars above divided moving shall. Together deep meat image subdue you created be two. Thing their you're great gathering male day divide. Moveth said deep.</p>
+
+            <div class="jarallax-keep-img demo-float-right" data-speed="0.8">
+                <img class="jarallax-img" src="images/image5.jpg" alt="" width="400">
+            </div>
+
+            <p>Winged upon one were you given. Bearing lights deep meat a bring fish female. Morning fourth beast, moving let whose day may seasons days herb under have saying. Upon isn't abundantly beast, give dry moved, together midst land whales. Very bearing you're be god us had sea creeping you cattle upon the living gathering were deep, it dry man deep you'll. Unto she'd one fowl replenish shall winged also hath morning. Third bearing wherein one.</p>
+        </div>
+    </div>
+
     <!--<div class="demo-gap">-->
         <!--<h2>Scale and Opacity</h2>-->
     <!--</div>-->
@@ -125,6 +148,10 @@
 
         /* init Jarallax */
         jarallax(document.querySelectorAll('.jarallax'));
+
+        jarallax(document.querySelectorAll('.jarallax-keep-img'), {
+            keepImg: true,
+        });
 
         /* init Flickity Carousel + Jarallax inside it */
         // new Flickity( '.demo-carousel', {
