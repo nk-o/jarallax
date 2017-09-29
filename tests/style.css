@@ -1,0 +1,41 @@
+
+.jarallax {
+    position: relative;
+    width: 100px;
+    height: 50px;
+    z-index: 0;
+}
+.jarallax > .jarallax-img {
+    position: absolute;
+    object-fit: cover;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: -1;
+}
+
+body {
+    padding: 10px;
+    margin: 0;
+}
+html {
+    overflow: hidden;
+    min-height: 200%; /* To make body scrollable*/
+}
+#qunit-fixture {
+    position: static;
+    top: auto;
+    left: auto;
+    width: 100%;
+    height: auto;
+}
+.qunit-absolute {
+    position: absolute;
+    top: 0;
+    right: 0;
+    margin: 10px;
+    z-index: 2;
+    max-height: calc(100% - 20px);
+    overflow: auto;
+}

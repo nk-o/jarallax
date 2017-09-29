@@ -1,0 +1,48 @@
+<!doctype html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width">
+
+    <title>Jarallax Tests</title>
+
+    <!-- qunit -->
+    <link rel="stylesheet" href="../node_modules/qunitjs/qunit/qunit.css" media="screen">
+    <link rel="stylesheet" href="style.css" media="screen">
+    <script src="../node_modules/qunitjs/qunit/qunit.js"></script>
+
+    <!-- dependencies -->
+    <script src="../node_modules/jquery/dist/jquery.slim.min.js"></script>
+    <script src="../node_modules/object-fit-images/dist/ofi.min.js"></script>
+
+    <!-- Jarallax -->
+    <script src="../dist/jarallax.js"></script>
+    <script src="../dist/jarallax-video.js"></script>
+</head>
+<body>
+
+<div class="qunit-absolute">
+    <h1 id="qunit-header">Jarallax Tests</h1>
+    <div id="qunit-banner"></div>
+    <h2 id="qunit-userAgent"></h2>
+    <div id="qunit-testrunner-toolbar"></div>
+    <ol id="qunit-tests"></ol>
+</div>
+
+<div id="qunit-fixture">
+    <div class="jarallax"></div>
+</div>
+
+<!-- unit tests -->
+<script src="test-utils.js"></script>
+<script src="unit/init.js"></script>
+<script src="unit/options.js"></script>
+<script src="unit/events.js"></script>
+<script src="unit/methods.js"></script>
+<script src="unit/img-tag.js"></script>
+<script src="unit/background.js"></script>
+<script src="unit/video.js"></script>
+<script src="unit/jquery.js"></script>
+
+</body>
+</html>

@@ -8,7 +8,8 @@
     "main": "dist/jarallax.min.js",
     "scripts": {
         "build": "gulp",
-        "watch": "gulp watch"
+        "watch": "gulp watch",
+        "test": "gulp test"
     },
     "repository": {
         "type": "git",
@@ -42,6 +43,10 @@
         "gulp-babel": "^6.1.2",
         "gulp-rename": "^1.2.2",
         "gulp-uglify": "^2.0.0",
-        "json-file": "^0.1.0"
+        "node-qunit-phantomjs": "^1.5.0",
+        "qunitjs": "^2.4.0",
+        "json-file": "^0.1.0",
+        "jquery": "^3.2.1",
+        "object-fit-images": "^3.2.3"
     }
 }

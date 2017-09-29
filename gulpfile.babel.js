@@ -1,6 +1,7 @@
 const gulp = require('gulp');
 const $ = require('gulp-load-plugins')();
 const del = require('del');
+const qunit = require('node-qunit-phantomjs');
 const data = require('json-file').read('./package.json').data;
 
 function getMainHeader() {
@@ -51,6 +52,17 @@ gulp.task('build', ['clean'], () => {
 
 gulp.task('watch', ['build'], () => {
     gulp.watch('src/*.js', ['build']);
+});
+
+gulp.task('test', ['build'], () => {
+    qunit('./tests/tests.html', {
+        page: {
+            viewportSize: { width: 1280, height: 800 },
+        },
+        'phantomjs-options': ['--local-to-remote-url-access=true'],
+        // verbose: true,
+        timeout: 15,
+    });
 });
 
 gulp.task('default', ['build']);
