@@ -57,6 +57,7 @@ function addEventListener(el, eventName, handler) {
 // Window data
 var wndW = void 0;
 var wndH = void 0;
+var wndY = void 0;
 function updateWndVars() {
     wndW = window.innerWidth || document.documentElement.clientWidth;
     wndH = window.innerHeight || document.documentElement.clientHeight;
@@ -77,7 +78,6 @@ function updateParallax() {
         return;
     }
 
-    var wndY = void 0;
     if (window.pageYOffset !== undefined) {
         wndY = window.pageYOffset;
     } else {
@@ -167,6 +167,7 @@ var Jarallax = function () {
         });
 
         _this.options = _this.extend({}, _this.defaults, oldDataOptions, pureDataOptions, userOptions);
+        _this.pureOptions = _this.extend({}, _this.options);
 
         // prepare 'true' and 'false' strings to boolean
         Object.keys(_this.options).forEach(function (key) {
@@ -255,6 +256,18 @@ var Jarallax = function () {
                 });
             });
             return out;
+        }
+
+        // get window size and scroll position. Useful for extensions
+
+    }, {
+        key: 'getWindowData',
+        value: function getWindowData() {
+            return {
+                width: wndW,
+                height: wndH,
+                y: wndY
+            };
         }
 
         // Jarallax functions
@@ -422,23 +435,40 @@ var Jarallax = function () {
                 });
             }
 
-            jarallaxList.push(_this);
+            _this.addToParallaxList();
+        }
+
+        // add to parallax instances list
+
+    }, {
+        key: 'addToParallaxList',
+        value: function addToParallaxList() {
+            jarallaxList.push(this);
 
             if (jarallaxList.length === 1) {
                 updateParallax();
             }
+        }
+
+        // remove from parallax instances list
+
+    }, {
+        key: 'removeFromParallaxList',
+        value: function removeFromParallaxList() {
+            var _this = this;
+
+            jarallaxList.forEach(function (item, key) {
+                if (item.instanceID === _this.instanceID) {
+                    jarallaxList.splice(key, 1);
+                }
+            });
         }
     }, {
         key: 'destroy',
         value: function destroy() {
             var _this = this;
 
-            // remove from instances list
-            jarallaxList.forEach(function (item, key) {
-                if (item.instanceID === _this.instanceID) {
-                    jarallaxList.splice(key, 1);
-                }
-            });
+            _this.removeFromParallaxList();
 
             // return styles on container as before jarallax init
             var originalStylesTag = _this.$item.getAttribute('data-jarallax-original-styles');
@@ -492,6 +522,11 @@ var Jarallax = function () {
         value: function clipContainer() {
             // clip is not working properly on real IE9 and less
             if (isIElt10) {
+                return;
+            }
+
+            // needed only when background in fixed position
+            if (this.image.position !== 'fixed') {
                 return;
             }
 
@@ -751,6 +786,6 @@ if (typeof jQuery !== 'undefined') {
 
 // data-jarallax initialization
 addEventListener(window, 'DOMContentLoaded', function () {
-    plugin(document.querySelectorAll('[data-jarallax], [data-jarallax-video]'));
+    plugin(document.querySelectorAll('[data-jarallax]'));
 });
 }());

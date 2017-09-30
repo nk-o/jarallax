@@ -13,22 +13,6 @@ var _createClass = function () { function defineProperties(target, props) { for 
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
-// Extend like jQuery.extend
-function extend(out) {
-    var _arguments = arguments;
-
-    out = out || {};
-    Object.keys(arguments).forEach(function (i) {
-        if (!_arguments[i]) {
-            return;
-        }
-        Object.keys(_arguments[i]).forEach(function (key) {
-            out[key] = _arguments[i][key];
-        });
-    });
-    return out;
-}
-
 // Deferred
 // thanks http://stackoverflow.com/questions/18096715/implement-deferred-object-without-using-jquery
 function Deferred() {
@@ -96,7 +80,7 @@ var VideoWorker = function () {
             endTime: 0
         };
 
-        _this.options = extend({}, _this.options_default, options);
+        _this.options = _this.extend({}, _this.options_default, options);
 
         // check URL
         _this.videoID = _this.parseURL(url);
@@ -109,7 +93,26 @@ var VideoWorker = function () {
         }
     }
 
+    // Extend like jQuery.extend
+
+
     _createClass(VideoWorker, [{
+        key: 'extend',
+        value: function extend(out) {
+            var _arguments = arguments;
+
+            out = out || {};
+            Object.keys(arguments).forEach(function (i) {
+                if (!_arguments[i]) {
+                    return;
+                }
+                Object.keys(_arguments[i]).forEach(function (key) {
+                    out[key] = _arguments[i][key];
+                });
+            });
+            return out;
+        }
+    }, {
         key: 'parseURL',
         value: function parseURL(url) {
             // parse youtube ID
@@ -915,5 +918,10 @@ window.VideoWorker = VideoWorker;
 
         defDestroy.apply(_this);
     };
+
+    // data-jarallax-video initialization
+    addEventListener(window, 'DOMContentLoaded', function () {
+        jarallax(document.querySelectorAll('[data-jarallax-video]'));
+    });
 })();
 }());
