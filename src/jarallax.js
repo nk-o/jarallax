@@ -45,6 +45,7 @@ function addEventListener(el, eventName, handler) {
 // Window data
 let wndW;
 let wndH;
+let wndY;
 function updateWndVars() {
     wndW = window.innerWidth || document.documentElement.clientWidth;
     wndH = window.innerHeight || document.documentElement.clientHeight;
@@ -65,7 +66,6 @@ function updateParallax() {
         return;
     }
 
-    let wndY;
     if (window.pageYOffset !== undefined) {
         wndY = window.pageYOffset;
     } else {
@@ -153,6 +153,7 @@ class Jarallax {
         });
 
         _this.options = _this.extend({}, _this.defaults, oldDataOptions, pureDataOptions, userOptions);
+        _this.pureOptions = _this.extend({}, _this.options);
 
         // prepare 'true' and 'false' strings to boolean
         Object.keys(_this.options).forEach((key) => {
@@ -232,6 +233,15 @@ class Jarallax {
             });
         });
         return out;
+    }
+
+    // get window size and scroll position. Useful for extensions
+    getWindowData() {
+        return {
+            width: wndW,
+            height: wndH,
+            y: wndY,
+        };
     }
 
     // Jarallax functions
@@ -396,22 +406,33 @@ class Jarallax {
             });
         }
 
-        jarallaxList.push(_this);
+        _this.addToParallaxList();
+    }
+
+    // add to parallax instances list
+    addToParallaxList() {
+        jarallaxList.push(this);
 
         if (jarallaxList.length === 1) {
             updateParallax();
         }
     }
 
-    destroy() {
+    // remove from parallax instances list
+    removeFromParallaxList() {
         const _this = this;
 
-        // remove from instances list
         jarallaxList.forEach((item, key) => {
             if (item.instanceID === _this.instanceID) {
                 jarallaxList.splice(key, 1);
             }
         });
+    }
+
+    destroy() {
+        const _this = this;
+
+        _this.removeFromParallaxList();
 
         // return styles on container as before jarallax init
         const originalStylesTag = _this.$item.getAttribute('data-jarallax-original-styles');
