@@ -135,7 +135,7 @@ $('.jarallax').jarallax({
 ```
 Note: for local videos required only 1 video type, not necessary use all mp4, webm and ogv. This need only for maximum compatibility with all browsers.
 
-## Any Element Prallax Usage Examples
+## Any Element Parallax Usage Examples
 ```html
 <!-- Element will be parallaxed on inverted 140 pixels from the screen center -->
 <div data-jarallax-element="-140">
