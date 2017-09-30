@@ -1,18 +1,4 @@
 
-// Extend like jQuery.extend
-function extend(out) {
-    out = out || {};
-    Object.keys(arguments).forEach((i) => {
-        if (!arguments[i]) {
-            return;
-        }
-        Object.keys(arguments[i]).forEach((key) => {
-            out[key] = arguments[i][key];
-        });
-    });
-    return out;
-}
-
 // Deferred
 // thanks http://stackoverflow.com/questions/18096715/implement-deferred-object-without-using-jquery
 function Deferred() {
@@ -78,7 +64,7 @@ class VideoWorker {
             endTime: 0,
         };
 
-        _this.options = extend({}, _this.options_default, options);
+        _this.options = _this.extend({}, _this.options_default, options);
 
         // check URL
         _this.videoID = _this.parseURL(url);
@@ -89,6 +75,20 @@ class VideoWorker {
             _this.loadAPI();
             _this.init();
         }
+    }
+
+    // Extend like jQuery.extend
+    extend(out) {
+        out = out || {};
+        Object.keys(arguments).forEach((i) => {
+            if (!arguments[i]) {
+                return;
+            }
+            Object.keys(arguments[i]).forEach((key) => {
+                out[key] = arguments[i][key];
+            });
+        });
+        return out;
     }
 
     parseURL(url) {
