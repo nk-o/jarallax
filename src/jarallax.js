@@ -722,5 +722,5 @@ if (typeof jQuery !== 'undefined') {
 
 // data-jarallax initialization
 addEventListener(window, 'DOMContentLoaded', () => {
-    plugin(document.querySelectorAll('[data-jarallax], [data-jarallax-video]'));
+    plugin(document.querySelectorAll('[data-jarallax]'));
 });

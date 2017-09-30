@@ -879,4 +879,9 @@ window.VideoWorker = VideoWorker;
 
         defDestroy.apply(_this);
     };
+
+    // data-jarallax-video initialization
+    addEventListener(window, 'DOMContentLoaded', () => {
+        jarallax(document.querySelectorAll('[data-jarallax-video]'));
+    });
 }());
