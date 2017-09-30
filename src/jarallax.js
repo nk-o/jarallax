@@ -465,6 +465,11 @@ class Jarallax {
             return;
         }
 
+        // needed only when background in fixed position
+        if (this.image.position !== 'fixed') {
+            return;
+        }
+
         const _this = this;
         const rect = _this.image.$container.getBoundingClientRect();
         const width = rect.width;
