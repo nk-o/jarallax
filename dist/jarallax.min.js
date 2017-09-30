@@ -1,6 +1,6 @@
 /*!
  * Name    : Just Another Parallax [Jarallax]
- * Version : 1.8.0
+ * Version : 1.9.0
  * Author  : nK <https://nkdev.info>
  * GitHub  : https://github.com/nk-o/jarallax
  */
