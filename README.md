@@ -84,6 +84,8 @@ These styles need to correct background image position before Jarallax initializ
 .jarallax > .jarallax-img {
     position: absolute;
     object-fit: cover;
+    /* support for plugin https://github.com/bfred-it/object-fit-images */
+    font-family: 'object-fit: cover;';
     top: 0;
     left: 0;
     width: 100%;
@@ -91,6 +93,7 @@ These styles need to correct background image position before Jarallax initializ
     z-index: -1;
 }
 ```
+You can include it from `dist/jarallax.css`.
 
 ## Call the plugin
 
