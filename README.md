@@ -155,195 +155,49 @@ Note: this is more like experimental feature, so the behavior could be changed i
 # Options
 Options can be passed in data attributes or in object when you initialize jarallax from script.
 
-<table class='table table-bordered table-striped'>
-    <thead>
-        <tr>
-            <th>name</th>
-            <th>type</th>
-            <th>default</th>
-            <th style='width: 60%;'>description</th>
-        </tr>
-    </thead>
-    <tbody>
-        <tr>
-            <td>type</td>
-            <td>string</td>
-            <td>scroll</td>
-            <td>scroll, scale, opacity, scroll-opacity, scale-opacity.</td>
-        </tr>
-        <tr>
-            <td>speed</td>
-            <td>float</td>
-            <td>0.5</td>
-            <td>Parallax effect speed. Provide numbers from -1.0 to 2.0.</td>
-        </tr>
-        <tr>
-            <td>imgSrc</td>
-            <td>path</td>
-            <td>null</td>
-            <td>Image url. By default used image from background.</td>
-        </tr>
-        <tr>
-            <td>imgElement</td>
-            <td>dom / selector</td>
-            <td>.jarallax-img</td>
-            <td>Image tag that will be used as background.</td>
-        </tr>
-        <tr>
-            <td>imgSize</td>
-            <td>string</td>
-            <td>cover</td>
-            <td>Image size. If you use <code>&lt;img></code> tag for background, you should add <code>object-fit</code> values, else use <code>background-size</code> values.</td>
-        </tr>
-        <tr>
-            <td>imgPosition</td>
-            <td>string</td>
-            <td>50% 50%</td>
-            <td>Image position. If you use <code>&lt;img></code> tag for background, you should add <code>object-position</code> values, else use <code>background-position</code> values.</td>
-        </tr>
-        <tr>
-            <td>imgRepeat</td>
-            <td>string</td>
-            <td>no-repeat</td>
-            <td>Image repeat. Supported only <code>background-position</code> values.</td>
-        </tr>
-        <tr>
-            <td>keepImg</td>
-            <td>boolean</td>
-            <td>false</td>
-            <td>Kepp <code>&lt;img></code> tag in it's default place after Jarallax inited.</td>
-        </tr>
-        <tr>
-            <td>elementInViewport</td>
-            <td>dom</td>
-            <td>null</td>
-            <td>Use custom DOM / jQuery element to check if parallax block in viewport. More info here - <a href="https://github.com/nk-o/jarallax/issues/13">Issue 13</a>.</td>
-        </tr>
-        <tr>
-            <td>zIndex</td>
-            <td>number</td>
-            <td>-100</td>
-            <td>z-index of parallax container.</td>
-        </tr>
-        <tr>
-            <td>noAndroid</td>
-            <td>boolean</td>
-            <td>false</td>
-            <td>Disable parallax on Android devices.</td>
-        </tr>
-        <tr>
-            <td>noIos</td>
-            <td>boolean</td>
-            <td>false</td>
-            <td>Disable parallax on iOs devices.</td>
-        </tr>
-    </tbody>
-</table>
+Name | Type | Default | Description
+:--- | :--- | :------ | :----------
+type | string | `scroll` | scroll, scale, opacity, scroll-opacity, scale-opacity.
+speed | float | `0.5` | Parallax effect speed. Provide numbers from -1.0 to 2.0.
+imgSrc | path | `null` | Image url. By default used image from background.
+imgElement | dom / selector | `.jarallax-img` | Image tag that will be used as background.
+imgSize | string | `cover` | Image size. If you use `<img>` tag for background, you should add `object-fit` values, else use `background-size` values.
+imgPosition | string | `50% 50%` | Image position. If you use `<img>` tag for background, you should add `object-position` values, else use `background-position` values.
+imgRepeat | string | `no-repeat` | Image repeat. Supported only `background-position` values.
+keepImg | boolean | `false` | Keep `<img>` tag in it's default place after Jarallax inited.
+elementInViewport | dom | `null` | Use custom DOM / jQuery element to check if parallax block in viewport. More info here - [Issue 13](https://github.com/nk-o/jarallax/issues/13).
+zIndex | number | `-100` | z-index of parallax container.
+noAndroid | boolean | `false` | Disable parallax on Android devices.
+noIos | boolean | `false` | Disable parallax on iOs devices.
 
 ### Options For Video (+ supported all default options)
 Required `jarallax/jarallax-video.js` file.
 
-<table class='table table-bordered table-striped'>
-    <thead>
-        <tr>
-            <th>name</th>
-            <th>type</th>
-            <th>default</th>
-            <th style='width: 60%;'>description</th>
-        </tr>
-    </thead>
-    <tbody>
-        <tr>
-            <td>videoSrc</td>
-            <td>string</td>
-            <td>null</td>
-            <td>You can use Youtube, Vimeo or local videos. Also you can use data attribute <code>data-jarallax-video</code>.</td>
-        </tr>
-        <tr>
-            <td>videoStartTime</td>
-            <td>float</td>
-            <td>0</td>
-            <td>Start time in seconds when video will be started (this value will be applied also after loop).</td>
-        </tr>
-        <tr>
-            <td>videoEndTime</td>
-            <td>float</td>
-            <td>0</td>
-            <td>End time in seconds when video will be ended.</td>
-        </tr>
-        <tr>
-            <td>videoVolume</td>
-            <td>float</td>
-            <td>0</td>
-            <td>Video volume from 0 to 100.</td>
-        </tr>
-        <tr>
-            <td>videoPlayOnlyVisible</td>
-            <td>boolean</td>
-            <td>true</td>
-            <td>Play video only when it is visible on the screen.</td>
-        </tr>
-    </tbody>
-</table>
+Name | Type | Default | Description
+:--- | :--- | :------ | :----------
+videoSrc | string | `null` | You can use Youtube, Vimeo or local videos. Also you can use data attribute `data-jarallax-video`.
+videoStartTime | float | `0` | Start time in seconds when video will be started (this value will be applied also after loop).
+videoEndTime | float | `0` | End time in seconds when video will be ended.
+videoVolume | float | `0` | Video volume from 0 to 100.
+videoPlayOnlyVisible | boolean | `true` | Play video only when it is visible on the screen.
 
 ### Options For Element Parallax
 Required `jarallax/jarallax-element.js` file.
 
-<table class='table table-bordered table-striped'>
-    <thead>
-        <tr>
-            <th>name</th>
-            <th>type</th>
-            <th>default</th>
-            <th style='width: 60%;'>description</th>
-        </tr>
-    </thead>
-    <tbody>
-        <tr>
-            <td>type</td>
-            <td>string</td>
-            <td>element</td>
-            <td>Will only work with <code>element</code> value.</td>
-        </tr>
-        <tr>
-            <td>speed</td>
-            <td>float</td>
-            <td>0</td>
-            <td>Parallax distance in pixels. Supported any value. Also you can use data attribute <code>data-jarallax-element</code>.</td>
-        </tr>
-    </tbody>
-</table>
+Name | Type | Default | Description
+:--- | :--- | :------ | :----------
+type | string | `element` | Will only work with `element` value.
+speed | float | `0` | Parallax distance in pixels. Supported any value. Also you can use data attribute `data-jarallax-element`.
 
 # Events
 Evenets used the same way as Options.
 
-<table class='table table-bordered table-striped'>
-    <thead>
-        <tr>
-            <th>name</th>
-            <th style='width: 60%;'>description</th>
-        </tr>
-    </thead>
-    <tbody>
-        <tr>
-            <td>onScroll</td>
-            <td>Called when parallax working. Use first argument with calculations. More info <a href="#onscroll-event">see below</a>.
-            </td>
-        </tr>
-        <tr>
-            <td>onInit</td>
-            <td>Called after init end.</td>
-        </tr>
-        <tr>
-            <td>onDestroy</td>
-            <td>Called after destroy.</td>
-        </tr>
-        <tr>
-            <td>onCoverImage</td>
-            <td>Called after cover image.</td>
-        </tr>
-    </tbody>
-</table>
+Name | Description
+:--- | :----------
+onScroll | Called when parallax working. Use first argument with calculations. More info [see below](#onscroll-event).
+onInit | Called after init end.
+onDestroy | Called after destroy.
+onCoverImage | Called after cover image.
 
 ## onScroll event
 ```javascript
@@ -381,37 +235,12 @@ Calculations example:
 
 
 # Methods
-<table class='table table-bordered table-striped'>
-    <thead>
-        <tr>
-            <th>name</th>
-            <th>result</th>
-            <th style='width: 60%;'>description</th>
-        </tr>
-    </thead>
-    <tbody>
-        <tr>
-            <td>destroy</td>
-            <td>-</td>
-            <td>Destroy Jarallax and set block as it was before plugin init.</td>
-        </tr>
-        <tr>
-            <td>isVisible</td>
-            <td>boolean</td>
-            <td>Check if parallax block is in viewport.</td>
-        </tr>
-        <tr>
-            <td>onResize</td>
-            <td>-</td>
-            <td>Fit image and clip parallax container. Called on window resize and load.</td>
-        </tr>
-        <tr>
-            <td>onScroll</td>
-            <td>-</td>
-            <td>Calculate parallax image position. Called on window scroll.</td>
-        </tr>
-    </tbody>
-</table>
+Name | Result | Description
+:--- | :----- | :----------
+destroy | - | Destroy Jarallax and set block as it was before plugin init.
+isVisible | boolean | Check if parallax block is in viewport.
+onResize | - | Fit image and clip parallax container. Called on window resize and load.
+onScroll | - | Calculate parallax image position. Called on window scroll.
 
 ## Call methods example
 ### A. JavaScript way
