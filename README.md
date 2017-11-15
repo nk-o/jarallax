@@ -104,6 +104,7 @@ You can include it from `dist/jarallax.css`.
     Your content here...
 </div>
 ```
+Note: You can use all available options as data attributes. For example: `data-speed`, `data-img-src`, `data-img-size`, etc...
 
 ### B. JavaScript way
 ```javascript
