@@ -48,6 +48,8 @@ gulp.task('build', ['clean'], () => {
             preserveComments: 'license',
         }))
         .pipe(gulp.dest('dist'));
+    gulp.src('src/*.css')
+        .pipe(gulp.dest('dist'));
 });
 
 gulp.task('watch', ['build'], () => {
