@@ -499,12 +499,10 @@ class Jarallax {
             head.appendChild(_this.$clipStyles);
         }
 
-        const styles = [
-            `#jarallax-container-${_this.instanceID} {`,
-            `   clip: rect(0 ${width}px ${height}px 0);`,
-            `   clip: rect(0, ${width}px, ${height}px, 0);`,
-            '}',
-        ].join('\n');
+        const styles = `#jarallax-container-${_this.instanceID} {
+           clip: rect(0 ${width}px ${height}px 0);
+           clip: rect(0, ${width}px, ${height}px, 0);
+        }`;
 
         // add clip styles inline (this method need for support IE8 and less browsers)
         if (_this.$clipStyles.styleSheet) {
