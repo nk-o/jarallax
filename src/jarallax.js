@@ -353,6 +353,7 @@ class Jarallax {
 
             imageStyles = _this.extend({
                 'object-fit': _this.options.imgSize,
+                'object-position': _this.options.imgPosition,
                 // support for plugin https://github.com/bfred-it/object-fit-images
                 'font-family': `object-fit: ${_this.options.imgSize}; object-position: ${_this.options.imgPosition};`,
                 'max-width': 'none',
