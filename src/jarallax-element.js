@@ -64,7 +64,7 @@
                 const wnd = self.getWindowData();
                 const centerPercent = (wnd.y + wnd.height / 2 - self.itemData.y) / (wnd.height / 2);
                 const move = centerPercent * self.options.speed;
-                self.css(self.$item, { transform: `translateY(${move}px)` });
+                self.css(self.$item, { transform: `translate3d(0,${move}px,0)` });
                 break;
             case 'initImg':
             case 'isVisible':

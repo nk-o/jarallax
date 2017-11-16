@@ -1,21 +1,14 @@
-// test if css property supported by browser
-// like "transform"
-const tempDiv = document.createElement('div');
-function isPropertySupported(property) {
-    const prefixes = ['O', 'Moz', 'ms', 'Ms', 'Webkit'];
-    let i = prefixes.length;
-    if (tempDiv.style[property] !== undefined) {
-        return true;
+
+const supportTransform = (() => {
+    const prefixes = 'transform WebkitTransform MozTransform'.split(' ');
+    const div = document.createElement('div');
+    for (let i = 0; i < prefixes.length; i++) {
+        if (div && div.style[prefixes[i]] !== undefined) {
+            return prefixes[i];
+        }
     }
-    property = property.charAt(0).toUpperCase() + property.substr(1);
-    // eslint-disable-next-line no-empty
-    while (--i > -1 && tempDiv.style[prefixes[i] + property] === undefined) {}
-    return i >= 0;
-}
-
-const supportTransform = isPropertySupported('transform');
-const supportTransform3D = isPropertySupported('perspective');
-
+    return false;
+})();
 const ua = navigator.userAgent;
 const isAndroid = ua.toLowerCase().indexOf('android') > -1;
 const isIOs = /iPad|iPhone|iPod/.test(ua) && !window.MSStream;
@@ -200,14 +193,9 @@ class Jarallax {
             return window.getComputedStyle(el).getPropertyValue(styles);
         }
 
-        // add transform property with vendor prefixes
-        if (styles.transform) {
-            if (supportTransform3D) {
-                styles.transform += ' translateZ(0)';
-            }
-            styles.WebkitTransform = styles.transform;
-            styles.MozTransform = styles.transform;
-            styles.msTransform = styles.transform;
+        // add transform property with vendor prefix
+        if (styles.transform && supportTransform) {
+            styles[supportTransform] = styles.transform;
         }
 
         Object.keys(styles).forEach((key) => {
@@ -354,7 +342,7 @@ class Jarallax {
             self.image.position = 'absolute';
         }
 
-        // check if one of parents have transform style (without this check, scroll transform will be inverted)
+        // check if one of parents have transform style (without this check, scroll transform will be inverted if used parallax with position fixed)
         // discussion - https://github.com/nk-o/jarallax/issues/9
         if (self.image.position === 'fixed') {
             let parentWithTransform = 0;
@@ -613,7 +601,7 @@ class Jarallax {
 
         // opacity
         if (self.options.type === 'opacity' || self.options.type === 'scale-opacity' || self.options.type === 'scroll-opacity') {
-            styles.transform = ''; // empty to add translateZ(0) where it is possible
+            styles.transform = 'translate3d(0,0,0)';
             styles.opacity = visiblePercent;
         }
 
@@ -625,7 +613,7 @@ class Jarallax {
             } else {
                 scale += self.options.speed * (1 - visiblePercent);
             }
-            styles.transform = `scale(${scale})`;
+            styles.transform = `scale(${scale}) translate3d(0,0,0)`;
         }
 
         // scroll
@@ -637,7 +625,7 @@ class Jarallax {
                 positionY -= contT;
             }
 
-            styles.transform = `translateY(${positionY}px)`;
+            styles.transform = `translate3d(0,${positionY}px,0)`;
         }
 
         self.css(self.image.$item, styles);
