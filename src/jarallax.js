@@ -360,26 +360,23 @@ class Jarallax {
             }, containerStyles, imageStyles);
         }
 
-        // check if one of parents have transform style (without this check, scroll transform will be inverted)
-        // discussion - https://github.com/nk-o/jarallax/issues/9
-        let parentWithTransform = 0;
-        let $itemParents = _this.$item;
-        while ($itemParents !== null && $itemParents !== document && parentWithTransform === 0) {
-            const parentTransform = _this.css($itemParents, '-webkit-transform') || _this.css($itemParents, '-moz-transform') || _this.css($itemParents, 'transform');
-            if (parentTransform && parentTransform !== 'none') {
-                parentWithTransform = 1;
-
-                // add transform on parallax container if there is parent with transform
-                _this.css(_this.image.$container, {
-                    transform: 'translateX(0) translateY(0)',
-                });
-            }
-            $itemParents = $itemParents.parentNode;
+        if (_this.options.type === 'opacity' || _this.options.type === 'scale' || _this.options.type === 'scale-opacity' || _this.options.speed === 1) {
+            _this.image.position = 'absolute';
         }
 
-        // absolute position if one of parents have transformations or parallax without scroll
-        if (parentWithTransform || _this.options.type === 'opacity' || _this.options.type === 'scale' || _this.options.type === 'scale-opacity' || _this.options.speed === 1) {
-            _this.image.position = 'absolute';
+        // check if one of parents have transform style (without this check, scroll transform will be inverted)
+        // discussion - https://github.com/nk-o/jarallax/issues/9
+        if (_this.image.position === 'fixed') {
+            let parentWithTransform = 0;
+            let $itemParents = _this.$item;
+            while ($itemParents !== null && $itemParents !== document && parentWithTransform === 0) {
+                const parentTransform = _this.css($itemParents, '-webkit-transform') || _this.css($itemParents, '-moz-transform') || _this.css($itemParents, 'transform');
+                if (parentTransform && parentTransform !== 'none') {
+                    parentWithTransform = 1;
+                    _this.image.position = 'absolute';
+                }
+                $itemParents = $itemParents.parentNode;
+            }
         }
 
         // add position to parallax block
