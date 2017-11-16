@@ -191,9 +191,7 @@ class Jarallax {
         _this.image = {
             src: _this.options.imgSrc || null,
             $container: null,
-            // fix for some devices
-            // use <img> instead of background image - more smoothly
-            useImgTag: isIOs || isAndroid || isIE,
+            useImgTag: false,
 
             // position absolute is needed on IE9 and FireFox because fixed position have glitches
             position: isIE ? 'fixed' : 'absolute',
@@ -275,7 +273,6 @@ class Jarallax {
                 _this.image.$itemParent = $imgElement.parentNode;
             }
             _this.image.useImgTag = true;
-            _this.image.useCustomImgTag = true;
         }
 
         // true if there is img tag
@@ -315,7 +312,7 @@ class Jarallax {
             if (curStyle) {
                 _this.$item.setAttribute('data-jarallax-original-styles', curStyle);
             }
-            if (_this.image.$item && _this.image.useCustomImgTag) {
+            if (_this.image.useImgTag) {
                 const curImgStyle = _this.image.$item.getAttribute('style');
                 if (curImgStyle) {
                     _this.image.$item.setAttribute('data-jarallax-original-styles', curImgStyle);
@@ -346,11 +343,6 @@ class Jarallax {
 
         // use img tag
         if (_this.image.useImgTag) {
-            if (!_this.image.$item) {
-                _this.image.$item = document.createElement('img');
-                _this.image.$item.setAttribute('src', _this.image.src);
-            }
-
             imageStyles = _this.extend({
                 'object-fit': _this.options.imgSize,
                 'object-position': _this.options.imgPosition,
@@ -454,7 +446,7 @@ class Jarallax {
             _this.$item.setAttribute('style', originalStylesTag);
         }
 
-        if (_this.image.$item && _this.image.useCustomImgTag) {
+        if (_this.image.useImgTag) {
             // return styles on img tag as before jarallax init
             const originalStylesImgTag = _this.image.$item.getAttribute('data-jarallax-original-styles');
             _this.image.$item.removeAttribute('data-jarallax-original-styles');

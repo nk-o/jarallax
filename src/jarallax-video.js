@@ -807,8 +807,6 @@ window.VideoWorker = VideoWorker;
 
                 // init video
             } else {
-                _this.image.useImgTag = true;
-
                 video.on('ready', () => {
                     if (_this.options.videoPlayOnlyVisible) {
                         const oldOnScroll = _this.onScroll;
