@@ -144,7 +144,7 @@ class Jarallax {
         }
 
         // prepare data-options
-        const dataOptions = self.$item.dataset;
+        const dataOptions = self.$item.dataset || {};
         const pureDataOptions = {};
         Object.keys(dataOptions).forEach((key) => {
             const loweCaseOption = key.substr(0, 1).toLowerCase() + key.substr(1);
