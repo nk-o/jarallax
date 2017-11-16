@@ -102,13 +102,13 @@ let instanceID = 0;
 // Jarallax class
 class Jarallax {
     constructor(item, userOptions) {
-        const _this = this;
+        const self = this;
 
-        _this.instanceID = instanceID++;
+        self.instanceID = instanceID++;
 
-        _this.$item = item;
+        self.$item = item;
 
-        _this.defaults = {
+        self.defaults = {
             type: 'scroll', // type of parallax: scroll, scale, opacity, scale-opacity, scroll-opacity
             speed: 0.5, // supported value from -1 to 2
             imgSrc: null,
@@ -137,39 +137,39 @@ class Jarallax {
         };
 
         // DEPRECATED: old data-options
-        const deprecatedDataAttribute = _this.$item.getAttribute('data-jarallax');
+        const deprecatedDataAttribute = self.$item.getAttribute('data-jarallax');
         const oldDataOptions = JSON.parse(deprecatedDataAttribute || '{}');
         if (deprecatedDataAttribute) {
             console.warn('Detected usage of deprecated data-jarallax JSON options, you should use pure data-attribute options. See info here - https://github.com/nk-o/jarallax/issues/53');
         }
 
         // prepare data-options
-        const dataOptions = _this.$item.dataset;
+        const dataOptions = self.$item.dataset;
         const pureDataOptions = {};
         Object.keys(dataOptions).forEach((key) => {
             const loweCaseOption = key.substr(0, 1).toLowerCase() + key.substr(1);
-            if (loweCaseOption && typeof _this.defaults[loweCaseOption] !== 'undefined') {
+            if (loweCaseOption && typeof self.defaults[loweCaseOption] !== 'undefined') {
                 pureDataOptions[loweCaseOption] = dataOptions[key];
             }
         });
 
-        _this.options = _this.extend({}, _this.defaults, oldDataOptions, pureDataOptions, userOptions);
-        _this.pureOptions = _this.extend({}, _this.options);
+        self.options = self.extend({}, self.defaults, oldDataOptions, pureDataOptions, userOptions);
+        self.pureOptions = self.extend({}, self.options);
 
         // prepare 'true' and 'false' strings to boolean
-        Object.keys(_this.options).forEach((key) => {
-            if (_this.options[key] === 'true') {
-                _this.options[key] = true;
-            } else if (_this.options[key] === 'false') {
-                _this.options[key] = false;
+        Object.keys(self.options).forEach((key) => {
+            if (self.options[key] === 'true') {
+                self.options[key] = true;
+            } else if (self.options[key] === 'false') {
+                self.options[key] = false;
             }
         });
 
         // fix speed option [-1.0, 2.0]
-        _this.options.speed = Math.min(2, Math.max(-1, parseFloat(_this.options.speed)));
+        self.options.speed = Math.min(2, Math.max(-1, parseFloat(self.options.speed)));
 
         // custom element to check if parallax in viewport
-        let elementInVP = _this.options.elementInViewport;
+        let elementInVP = self.options.elementInViewport;
         // get first item from array
         if (elementInVP && typeof elementInVP === 'object' && typeof elementInVP.length !== 'undefined') {
             elementInVP = elementInVP[0];
@@ -178,10 +178,10 @@ class Jarallax {
         if (!(elementInVP instanceof Element)) {
             elementInVP = null;
         }
-        _this.options.elementInViewport = elementInVP;
+        self.options.elementInViewport = elementInVP;
 
-        _this.image = {
-            src: _this.options.imgSrc || null,
+        self.image = {
+            src: self.options.imgSrc || null,
             $container: null,
             useImgTag: false,
 
@@ -189,8 +189,8 @@ class Jarallax {
             position: isIE ? 'fixed' : 'absolute',
         };
 
-        if (_this.initImg() && _this.canInitParallax()) {
-            _this.init();
+        if (self.initImg() && self.canInitParallax()) {
+            self.init();
         }
     }
 
@@ -241,12 +241,12 @@ class Jarallax {
 
     // Jarallax functions
     initImg() {
-        const _this = this;
+        const self = this;
 
         // find image element
-        let $imgElement = _this.options.imgElement;
+        let $imgElement = self.options.imgElement;
         if ($imgElement && typeof $imgElement === 'string') {
-            $imgElement = _this.$item.querySelector($imgElement);
+            $imgElement = self.$item.querySelector($imgElement);
         }
         // check if dom element
         if (!($imgElement instanceof Element)) {
@@ -254,25 +254,25 @@ class Jarallax {
         }
 
         if ($imgElement) {
-            if (_this.options.keepImg) {
-                _this.image.$item = $imgElement.cloneNode(true);
+            if (self.options.keepImg) {
+                self.image.$item = $imgElement.cloneNode(true);
             } else {
-                _this.image.$item = $imgElement;
-                _this.image.$itemParent = $imgElement.parentNode;
+                self.image.$item = $imgElement;
+                self.image.$itemParent = $imgElement.parentNode;
             }
-            _this.image.useImgTag = true;
+            self.image.useImgTag = true;
         }
 
         // true if there is img tag
-        if (_this.image.$item) {
+        if (self.image.$item) {
             return true;
         }
 
         // get image src
-        if (_this.image.src === null) {
-            _this.image.src = _this.css(_this.$item, 'background-image').replace(/^url\(['"]?/g, '').replace(/['"]?\)$/g, '');
+        if (self.image.src === null) {
+            self.image.src = self.css(self.$item, 'background-image').replace(/^url\(['"]?/g, '').replace(/['"]?\)$/g, '');
         }
-        return !(!_this.image.src || _this.image.src === 'none');
+        return !(!self.image.src || self.image.src === 'none');
     }
 
     canInitParallax() {
@@ -282,7 +282,7 @@ class Jarallax {
     }
 
     init() {
-        const _this = this;
+        const self = this;
         const containerStyles = {
             position: 'absolute',
             top: 0,
@@ -294,106 +294,106 @@ class Jarallax {
         };
         let imageStyles = {};
 
-        if (!_this.options.keepImg) {
+        if (!self.options.keepImg) {
             // save default user styles
-            const curStyle = _this.$item.getAttribute('style');
+            const curStyle = self.$item.getAttribute('style');
             if (curStyle) {
-                _this.$item.setAttribute('data-jarallax-original-styles', curStyle);
+                self.$item.setAttribute('data-jarallax-original-styles', curStyle);
             }
-            if (_this.image.useImgTag) {
-                const curImgStyle = _this.image.$item.getAttribute('style');
+            if (self.image.useImgTag) {
+                const curImgStyle = self.image.$item.getAttribute('style');
                 if (curImgStyle) {
-                    _this.image.$item.setAttribute('data-jarallax-original-styles', curImgStyle);
+                    self.image.$item.setAttribute('data-jarallax-original-styles', curImgStyle);
                 }
             }
         }
 
         // set relative position and z-index to the parent
-        if (_this.css(_this.$item, 'position') === 'static') {
-            _this.css(_this.$item, {
+        if (self.css(self.$item, 'position') === 'static') {
+            self.css(self.$item, {
                 position: 'relative',
             });
         }
-        if (_this.css(_this.$item, 'z-index') === 'auto') {
-            _this.css(_this.$item, {
+        if (self.css(self.$item, 'z-index') === 'auto') {
+            self.css(self.$item, {
                 zIndex: 0,
             });
         }
 
         // container for parallax image
-        _this.image.$container = document.createElement('div');
-        _this.css(_this.image.$container, containerStyles);
-        _this.css(_this.image.$container, {
-            'z-index': _this.options.zIndex,
+        self.image.$container = document.createElement('div');
+        self.css(self.image.$container, containerStyles);
+        self.css(self.image.$container, {
+            'z-index': self.options.zIndex,
         });
-        _this.image.$container.setAttribute('id', `jarallax-container-${_this.instanceID}`);
-        _this.$item.appendChild(_this.image.$container);
+        self.image.$container.setAttribute('id', `jarallax-container-${self.instanceID}`);
+        self.$item.appendChild(self.image.$container);
 
         // use img tag
-        if (_this.image.useImgTag) {
-            imageStyles = _this.extend({
-                'object-fit': _this.options.imgSize,
-                'object-position': _this.options.imgPosition,
+        if (self.image.useImgTag) {
+            imageStyles = self.extend({
+                'object-fit': self.options.imgSize,
+                'object-position': self.options.imgPosition,
                 // support for plugin https://github.com/bfred-it/object-fit-images
-                'font-family': `object-fit: ${_this.options.imgSize}; object-position: ${_this.options.imgPosition};`,
+                'font-family': `object-fit: ${self.options.imgSize}; object-position: ${self.options.imgPosition};`,
                 'max-width': 'none',
             }, containerStyles, imageStyles);
 
         // use div with background image
         } else {
-            _this.image.$item = document.createElement('div');
-            imageStyles = _this.extend({
-                'background-position': _this.options.imgPosition,
-                'background-size': _this.options.imgSize,
-                'background-repeat': _this.options.imgRepeat,
-                'background-image': `url("${_this.image.src}")`,
+            self.image.$item = document.createElement('div');
+            imageStyles = self.extend({
+                'background-position': self.options.imgPosition,
+                'background-size': self.options.imgSize,
+                'background-repeat': self.options.imgRepeat,
+                'background-image': `url("${self.image.src}")`,
             }, containerStyles, imageStyles);
         }
 
-        if (_this.options.type === 'opacity' || _this.options.type === 'scale' || _this.options.type === 'scale-opacity' || _this.options.speed === 1) {
-            _this.image.position = 'absolute';
+        if (self.options.type === 'opacity' || self.options.type === 'scale' || self.options.type === 'scale-opacity' || self.options.speed === 1) {
+            self.image.position = 'absolute';
         }
 
         // check if one of parents have transform style (without this check, scroll transform will be inverted)
         // discussion - https://github.com/nk-o/jarallax/issues/9
-        if (_this.image.position === 'fixed') {
+        if (self.image.position === 'fixed') {
             let parentWithTransform = 0;
-            let $itemParents = _this.$item;
+            let $itemParents = self.$item;
             while ($itemParents !== null && $itemParents !== document && parentWithTransform === 0) {
-                const parentTransform = _this.css($itemParents, '-webkit-transform') || _this.css($itemParents, '-moz-transform') || _this.css($itemParents, 'transform');
+                const parentTransform = self.css($itemParents, '-webkit-transform') || self.css($itemParents, '-moz-transform') || self.css($itemParents, 'transform');
                 if (parentTransform && parentTransform !== 'none') {
                     parentWithTransform = 1;
-                    _this.image.position = 'absolute';
+                    self.image.position = 'absolute';
                 }
                 $itemParents = $itemParents.parentNode;
             }
         }
 
         // add position to parallax block
-        imageStyles.position = _this.image.position;
+        imageStyles.position = self.image.position;
 
         // insert parallax image
-        _this.css(_this.image.$item, imageStyles);
-        _this.image.$container.appendChild(_this.image.$item);
+        self.css(self.image.$item, imageStyles);
+        self.image.$container.appendChild(self.image.$item);
 
         // set initial position and size
-        _this.coverImage();
-        _this.clipContainer();
-        _this.onScroll(true);
+        self.coverImage();
+        self.clipContainer();
+        self.onScroll(true);
 
         // call onInit event
-        if (_this.options.onInit) {
-            _this.options.onInit.call(_this);
+        if (self.options.onInit) {
+            self.options.onInit.call(self);
         }
 
         // remove default user background
-        if (_this.css(_this.$item, 'background-image') !== 'none') {
-            _this.css(_this.$item, {
+        if (self.css(self.$item, 'background-image') !== 'none') {
+            self.css(self.$item, {
                 'background-image': 'none',
             });
         }
 
-        _this.addToParallaxList();
+        self.addToParallaxList();
     }
 
     // add to parallax instances list
@@ -407,62 +407,62 @@ class Jarallax {
 
     // remove from parallax instances list
     removeFromParallaxList() {
-        const _this = this;
+        const self = this;
 
         jarallaxList.forEach((item, key) => {
-            if (item.instanceID === _this.instanceID) {
+            if (item.instanceID === self.instanceID) {
                 jarallaxList.splice(key, 1);
             }
         });
     }
 
     destroy() {
-        const _this = this;
+        const self = this;
 
-        _this.removeFromParallaxList();
+        self.removeFromParallaxList();
 
         // return styles on container as before jarallax init
-        const originalStylesTag = _this.$item.getAttribute('data-jarallax-original-styles');
-        _this.$item.removeAttribute('data-jarallax-original-styles');
+        const originalStylesTag = self.$item.getAttribute('data-jarallax-original-styles');
+        self.$item.removeAttribute('data-jarallax-original-styles');
         // null occurs if there is no style tag before jarallax init
         if (!originalStylesTag) {
-            _this.$item.removeAttribute('style');
+            self.$item.removeAttribute('style');
         } else {
-            _this.$item.setAttribute('style', originalStylesTag);
+            self.$item.setAttribute('style', originalStylesTag);
         }
 
-        if (_this.image.useImgTag) {
+        if (self.image.useImgTag) {
             // return styles on img tag as before jarallax init
-            const originalStylesImgTag = _this.image.$item.getAttribute('data-jarallax-original-styles');
-            _this.image.$item.removeAttribute('data-jarallax-original-styles');
+            const originalStylesImgTag = self.image.$item.getAttribute('data-jarallax-original-styles');
+            self.image.$item.removeAttribute('data-jarallax-original-styles');
             // null occurs if there is no style tag before jarallax init
             if (!originalStylesImgTag) {
-                _this.image.$item.removeAttribute('style');
+                self.image.$item.removeAttribute('style');
             } else {
-                _this.image.$item.setAttribute('style', originalStylesTag);
+                self.image.$item.setAttribute('style', originalStylesTag);
             }
 
             // move img tag to its default position
-            if (_this.image.$itemParent) {
-                _this.image.$itemParent.appendChild(_this.image.$item);
+            if (self.image.$itemParent) {
+                self.image.$itemParent.appendChild(self.image.$item);
             }
         }
 
         // remove additional dom elements
-        if (_this.$clipStyles) {
-            _this.$clipStyles.parentNode.removeChild(_this.$clipStyles);
+        if (self.$clipStyles) {
+            self.$clipStyles.parentNode.removeChild(self.$clipStyles);
         }
-        if (_this.image.$container) {
-            _this.image.$container.parentNode.removeChild(_this.image.$container);
+        if (self.image.$container) {
+            self.image.$container.parentNode.removeChild(self.image.$container);
         }
 
         // call onDestroy event
-        if (_this.options.onDestroy) {
-            _this.options.onDestroy.call(_this);
+        if (self.options.onDestroy) {
+            self.options.onDestroy.call(self);
         }
 
         // delete jarallax from item
-        delete _this.$item.jarallax;
+        delete self.$item.jarallax;
     }
 
     // it will remove some image overlapping
@@ -473,39 +473,39 @@ class Jarallax {
             return;
         }
 
-        const _this = this;
-        const rect = _this.image.$container.getBoundingClientRect();
+        const self = this;
+        const rect = self.image.$container.getBoundingClientRect();
         const width = rect.width;
         const height = rect.height;
 
-        if (!_this.$clipStyles) {
-            _this.$clipStyles = document.createElement('style');
-            _this.$clipStyles.setAttribute('type', 'text/css');
-            _this.$clipStyles.setAttribute('id', `jarallax-clip-${_this.instanceID}`);
+        if (!self.$clipStyles) {
+            self.$clipStyles = document.createElement('style');
+            self.$clipStyles.setAttribute('type', 'text/css');
+            self.$clipStyles.setAttribute('id', `jarallax-clip-${self.instanceID}`);
             const head = document.head || document.getElementsByTagName('head')[0];
-            head.appendChild(_this.$clipStyles);
+            head.appendChild(self.$clipStyles);
         }
 
-        const styles = `#jarallax-container-${_this.instanceID} {
+        const styles = `#jarallax-container-${self.instanceID} {
            clip: rect(0 ${width}px ${height}px 0);
            clip: rect(0, ${width}px, ${height}px, 0);
         }`;
 
         // add clip styles inline (this method need for support IE8 and less browsers)
-        if (_this.$clipStyles.styleSheet) {
-            _this.$clipStyles.styleSheet.cssText = styles;
+        if (self.$clipStyles.styleSheet) {
+            self.$clipStyles.styleSheet.cssText = styles;
         } else {
-            _this.$clipStyles.innerHTML = styles;
+            self.$clipStyles.innerHTML = styles;
         }
     }
 
     coverImage() {
-        const _this = this;
+        const self = this;
 
-        const rect = _this.image.$container.getBoundingClientRect();
+        const rect = self.image.$container.getBoundingClientRect();
         const contH = rect.height;
-        const speed = _this.options.speed;
-        const isScroll = _this.options.type === 'scroll' || _this.options.type === 'scroll-opacity';
+        const speed = self.options.speed;
+        const isScroll = self.options.type === 'scroll' || self.options.type === 'scroll-opacity';
         let scrollDist = 0;
         let resultH = contH;
         let resultMT = 0;
@@ -532,7 +532,7 @@ class Jarallax {
         }
 
         // store scroll distance
-        _this.parallaxScrollDistance = scrollDist;
+        self.parallaxScrollDistance = scrollDist;
 
         // vertical center
         if (isScroll) {
@@ -542,16 +542,16 @@ class Jarallax {
         }
 
         // apply result to item
-        _this.css(_this.image.$item, {
+        self.css(self.image.$item, {
             height: `${resultH}px`,
             marginTop: `${resultMT}px`,
-            left: _this.image.position === 'fixed' ? `${rect.left}px` : '0',
+            left: self.image.position === 'fixed' ? `${rect.left}px` : '0',
             width: `${rect.width}px`,
         });
 
         // call onCoverImage event
-        if (_this.options.onCoverImage) {
-            _this.options.onCoverImage.call(_this);
+        if (self.options.onCoverImage) {
+            self.options.onCoverImage.call(self);
         }
 
         // return some useful data. Used in the video cover function
@@ -569,26 +569,26 @@ class Jarallax {
     }
 
     onScroll(force) {
-        const _this = this;
+        const self = this;
 
-        const rect = _this.$item.getBoundingClientRect();
+        const rect = self.$item.getBoundingClientRect();
         const contT = rect.top;
         const contH = rect.height;
         const styles = {};
 
         // check if in viewport
         let viewportRect = rect;
-        if (_this.options.elementInViewport) {
-            viewportRect = _this.options.elementInViewport.getBoundingClientRect();
+        if (self.options.elementInViewport) {
+            viewportRect = self.options.elementInViewport.getBoundingClientRect();
         }
-        _this.isElementInViewport =
+        self.isElementInViewport =
             viewportRect.bottom >= 0 &&
             viewportRect.right >= 0 &&
             viewportRect.top <= wndH &&
             viewportRect.left <= wndW;
 
         // stop calculations if item is not in viewport
-        if (force ? false : !_this.isElementInViewport) {
+        if (force ? false : !self.isElementInViewport) {
             return;
         }
 
@@ -612,39 +612,39 @@ class Jarallax {
         }
 
         // opacity
-        if (_this.options.type === 'opacity' || _this.options.type === 'scale-opacity' || _this.options.type === 'scroll-opacity') {
+        if (self.options.type === 'opacity' || self.options.type === 'scale-opacity' || self.options.type === 'scroll-opacity') {
             styles.transform = ''; // empty to add translateZ(0) where it is possible
             styles.opacity = visiblePercent;
         }
 
         // scale
-        if (_this.options.type === 'scale' || _this.options.type === 'scale-opacity') {
+        if (self.options.type === 'scale' || self.options.type === 'scale-opacity') {
             let scale = 1;
-            if (_this.options.speed < 0) {
-                scale -= _this.options.speed * visiblePercent;
+            if (self.options.speed < 0) {
+                scale -= self.options.speed * visiblePercent;
             } else {
-                scale += _this.options.speed * (1 - visiblePercent);
+                scale += self.options.speed * (1 - visiblePercent);
             }
             styles.transform = `scale(${scale})`;
         }
 
         // scroll
-        if (_this.options.type === 'scroll' || _this.options.type === 'scroll-opacity') {
-            let positionY = _this.parallaxScrollDistance * fromViewportCenter;
+        if (self.options.type === 'scroll' || self.options.type === 'scroll-opacity') {
+            let positionY = self.parallaxScrollDistance * fromViewportCenter;
 
             // fix if parallax block in absolute position
-            if (_this.image.position === 'absolute') {
+            if (self.image.position === 'absolute') {
                 positionY -= contT;
             }
 
             styles.transform = `translateY(${positionY}px)`;
         }
 
-        _this.css(_this.image.$item, styles);
+        self.css(self.image.$item, styles);
 
         // call onScroll event
-        if (_this.options.onScroll) {
-            _this.options.onScroll.call(_this, {
+        if (self.options.onScroll) {
+            self.options.onScroll.call(self, {
                 section: rect,
 
                 beforeTop,

@@ -30,41 +30,41 @@
     ].forEach((key) => {
         const def = Jarallax.prototype[key];
         Jarallax.prototype[key] = function () {
-            const _this = this;
+            const self = this;
             const args = arguments || [];
 
-            if (key === 'initImg' && _this.$item.getAttribute('data-jarallax-element') !== null) {
-                _this.options.type = 'element';
-                _this.pureOptions.speed = _this.$item.getAttribute('data-jarallax-element') || _this.pureOptions.speed;
+            if (key === 'initImg' && self.$item.getAttribute('data-jarallax-element') !== null) {
+                self.options.type = 'element';
+                self.pureOptions.speed = self.$item.getAttribute('data-jarallax-element') || self.pureOptions.speed;
             }
-            if (_this.options.type !== 'element') {
-                return def.apply(_this, args);
+            if (self.options.type !== 'element') {
+                return def.apply(self, args);
             }
 
             switch (key) {
             case 'init':
-                _this.options.speed = parseFloat(_this.pureOptions.speed) || 0;
-                _this.onResize();
-                _this.onScroll();
-                _this.addToParallaxList();
+                self.options.speed = parseFloat(self.pureOptions.speed) || 0;
+                self.onResize();
+                self.onScroll();
+                self.addToParallaxList();
                 break;
             case 'onResize':
-                const defTransform = _this.css(_this.$item, 'transform');
-                _this.css(_this.$item, { transform: '' });
-                const rect = _this.$item.getBoundingClientRect();
-                _this.itemData = {
+                const defTransform = self.css(self.$item, 'transform');
+                self.css(self.$item, { transform: '' });
+                const rect = self.$item.getBoundingClientRect();
+                self.itemData = {
                     width: rect.width,
                     height: rect.height,
-                    y: rect.top + _this.getWindowData().y,
+                    y: rect.top + self.getWindowData().y,
                     x: rect.left,
                 };
-                _this.css(_this.$item, { transform: defTransform });
+                self.css(self.$item, { transform: defTransform });
                 break;
             case 'onScroll':
-                const wnd = _this.getWindowData();
-                const centerPercent = (wnd.y + wnd.height / 2 - _this.itemData.y) / (wnd.height / 2);
-                const move = centerPercent * _this.options.speed;
-                _this.css(_this.$item, { transform: `translateY(${move}px)` });
+                const wnd = self.getWindowData();
+                const centerPercent = (wnd.y + wnd.height / 2 - self.itemData.y) / (wnd.height / 2);
+                const move = centerPercent * self.options.speed;
+                self.css(self.$item, { transform: `translateY(${move}px)` });
                 break;
             case 'initImg':
             case 'isVisible':
@@ -72,7 +72,7 @@
             case 'coverImage':
                 return true;
             default:
-                return def.apply(_this, args);
+                return def.apply(self, args);
             }
         };
     });
