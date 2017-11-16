@@ -46,14 +46,19 @@ function addEventListener(el, eventName, handler) {
 let wndW;
 let wndH;
 let wndY;
-function updateWndVars() {
+let forceResizeParallax = false;
+function updateWndVars(e) {
     wndW = window.innerWidth || document.documentElement.clientWidth;
     wndH = window.innerHeight || document.documentElement.clientHeight;
+    if (typeof e === 'object' && (e.type === 'load' || e.type === 'DOMContentLoaded')) {
+        forceResizeParallax = true;
+    }
 }
 updateWndVars();
 addEventListener(window, 'resize', updateWndVars);
 addEventListener(window, 'orientationchange', updateWndVars);
 addEventListener(window, 'load', updateWndVars);
+addEventListener(document, 'DOMContentLoaded', updateWndVars);
 
 // list with all jarallax instances
 // need to render all in one scroll/resize event
@@ -72,8 +77,12 @@ function updateParallax() {
         wndY = (document.documentElement || document.body.parentNode || document.body).scrollTop;
     }
 
-    const isResized = !oldPageData || oldPageData.width !== wndW || oldPageData.height !== wndH;
+    const isResized = forceResizeParallax || !oldPageData || oldPageData.width !== wndW || oldPageData.height !== wndH;
     const isScrolled = isResized || !oldPageData || oldPageData.y !== wndY;
+
+    if (forceResizeParallax) {
+        forceResizeParallax = false;
+    }
 
     if (isResized || isScrolled) {
         jarallaxList.forEach((item) => {
