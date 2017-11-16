@@ -19,9 +19,7 @@ const supportTransform3D = isPropertySupported('perspective');
 const ua = navigator.userAgent;
 const isAndroid = ua.toLowerCase().indexOf('android') > -1;
 const isIOs = /iPad|iPhone|iPod/.test(ua) && !window.MSStream;
-const isFirefox = ua.toLowerCase().indexOf('firefox') > -1;
 const isIE = ua.indexOf('MSIE ') > -1 || ua.indexOf('Trident/') > -1 || ua.indexOf('Edge/') > -1;
-const isIElt10 = document.all && !window.atob;
 
 // requestAnimationFrame polyfill
 const rAF = window.requestAnimationFrame ||
@@ -481,13 +479,8 @@ class Jarallax {
     }
 
     // it will remove some image overlapping
-    // overlapping occur due to an image position fixed inside absolute position element (webkit based browsers works without any fix)
+    // overlapping occur due to an image position fixed inside absolute position element
     clipContainer() {
-        // clip is not working properly on real IE9 and less
-        if (isIElt10) {
-            return;
-        }
-
         // needed only when background in fixed position
         if (this.image.position !== 'fixed') {
             return;
