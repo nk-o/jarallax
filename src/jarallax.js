@@ -31,13 +31,7 @@ const rAF = window.requestAnimationFrame ||
 
 // init events
 function addEventListener(el, eventName, handler) {
-    if (el.addEventListener) {
-        el.addEventListener(eventName, handler);
-    } else {
-        el.attachEvent(`on${eventName}`, () => {
-            handler.call(el);
-        });
-    }
+    el.addEventListener(eventName, handler);
 }
 
 // Window data
@@ -203,10 +197,7 @@ class Jarallax {
     // add styles to element
     css(el, styles) {
         if (typeof styles === 'string') {
-            if (window.getComputedStyle) {
-                return window.getComputedStyle(el).getPropertyValue(styles);
-            }
-            return el.style[styles];
+            return window.getComputedStyle(el).getPropertyValue(styles);
         }
 
         // add transform property with vendor prefixes
@@ -217,7 +208,6 @@ class Jarallax {
             styles.WebkitTransform = styles.transform;
             styles.MozTransform = styles.transform;
             styles.msTransform = styles.transform;
-            styles.OTransform = styles.transform;
         }
 
         Object.keys(styles).forEach((key) => {

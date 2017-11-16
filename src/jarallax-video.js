@@ -29,13 +29,7 @@ Deferred.prototype = {
 
 // init events
 function addEventListener(el, eventName, handler) {
-    if (el.addEventListener) {
-        el.addEventListener(eventName, handler);
-    } else {
-        el.attachEvent(`on${eventName}`, () => {
-            handler.call(el);
-        });
-    }
+    el.addEventListener(eventName, handler);
 }
 
 let ID = 0;
