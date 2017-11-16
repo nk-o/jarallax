@@ -196,7 +196,7 @@ class Jarallax {
             useImgTag: isIOs || isAndroid || isIE,
 
             // position absolute is needed on IE9 and FireFox because fixed position have glitches
-            position: !supportTransform3D || isFirefox ? 'absolute' : 'fixed',
+            position: isIE ? 'fixed' : 'absolute',
         };
 
         if (_this.initImg() && _this.canInitParallax()) {
