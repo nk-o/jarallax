@@ -56,7 +56,7 @@ updateWndVars();
 addEventListener(window, 'resize', updateWndVars);
 addEventListener(window, 'orientationchange', updateWndVars);
 addEventListener(window, 'load', updateWndVars);
-addEventListener(document, 'DOMContentLoaded', updateWndVars);
+addEventListener(window, 'DOMContentLoaded', updateWndVars);
 
 // list with all jarallax instances
 // need to render all in one scroll/resize event
