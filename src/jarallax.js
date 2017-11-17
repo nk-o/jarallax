@@ -76,13 +76,13 @@ function updateParallax() {
                 item.onScroll();
             }
         });
-    }
 
-    oldPageData = {
-        width: wndW,
-        height: wndH,
-        y: wndY,
-    };
+        oldPageData = {
+            width: wndW,
+            height: wndH,
+            y: wndY,
+        };
+    }
 
     rAF(updateParallax);
 }
