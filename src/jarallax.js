@@ -11,6 +11,7 @@ const supportTransform = (() => {
 })();
 const ua = navigator.userAgent;
 const isAndroid = ua.toLowerCase().indexOf('android') > -1;
+const isFirefox = ua.toLowerCase().indexOf('firefox') > -1;
 const isIOs = /iPad|iPhone|iPod/.test(ua) && !window.MSStream;
 const isIE = ua.indexOf('MSIE ') > -1 || ua.indexOf('Trident/') > -1 || ua.indexOf('Edge/') > -1;
 
@@ -176,8 +177,8 @@ class Jarallax {
             $container: null,
             useImgTag: false,
 
-            // position absolute is needed on IE9 and FireFox because fixed position have glitches
-            position: isIE ? 'fixed' : 'absolute',
+            // position fixed is needed on IE and FireFox because absolute position have glitches
+            position: isIE || isFirefox ? 'fixed' : 'absolute',
         };
 
         if (self.initImg() && self.canInitParallax()) {
