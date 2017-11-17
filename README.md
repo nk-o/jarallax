@@ -4,10 +4,7 @@ Smooth parallax scrolling effect for background images, videos and inline elemen
 ## [Demo](https://free.nkdev.info/jarallax/)
 
 ## Tested Browsers
-* IE9+
-* Safari 5.1.7+
-* Opera 12+
-* Latest browsers on Mac and Windows (Chrome, Firefox, Safari, IE, Edge)
+* Latest browsers on Mac and Windows (Chrome, Firefox, Safari, IE11, Edge)
 * Latest Chrome on Android
 * Latest Safari on iOs
 
@@ -41,13 +38,13 @@ Download scripts directly from this repository and link it in your HTML file
 Link directly from [cdnjs](https://cdnjs.com/)
 ```html
 <!-- Jarallax -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jarallax/1.9.0/jarallax.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jarallax/1.9.1/jarallax.min.js"></script>
 
 <!-- Include it if you want to use Video parallax -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jarallax/1.9.0/jarallax-video.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jarallax/1.9.1/jarallax-video.min.js"></script>
 
 <!-- Include it if you want to parallax any element -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jarallax/1.9.0/jarallax-element.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jarallax/1.9.1/jarallax-element.min.js"></script>
 ```
 
 ### Package managers
