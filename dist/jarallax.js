@@ -25,9 +25,7 @@ var supportTransform = function () {
 }();
 var ua = navigator.userAgent;
 var isAndroid = ua.toLowerCase().indexOf('android') > -1;
-var isFirefox = ua.toLowerCase().indexOf('firefox') > -1;
 var isIOs = /iPad|iPhone|iPod/.test(ua) && !window.MSStream;
-var isIE = ua.indexOf('MSIE ') > -1 || ua.indexOf('Trident/') > -1 || ua.indexOf('Edge/') > -1;
 
 // requestAnimationFrame polyfill
 var rAF = window.requestAnimationFrame || window.webkitRequestAnimationFrame || window.mozRequestAnimationFrame || function (callback) {
@@ -190,8 +188,10 @@ var Jarallax = function () {
             $container: null,
             useImgTag: false,
 
-            // position fixed is needed on IE and FireFox because absolute position have glitches
-            position: isIE || isFirefox ? 'fixed' : 'absolute'
+            // position fixed is needed for the most of browsers because absolute position have glitches
+            // on MacOS with smooth scroll there is a huge lags with absolute position - https://github.com/nk-o/jarallax/issues/75
+            // on mobile devices better scrolled with absolute position
+            position: isAndroid || isIOs ? 'absolute' : 'fixed'
         };
 
         if (self.initImg() && self.canInitParallax()) {
