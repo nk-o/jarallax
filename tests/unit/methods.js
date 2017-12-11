@@ -12,7 +12,7 @@ QUnit.module('methods', function () {
         });
 
         assert.equal($testDiv[0].style.textAlign, 'right', 'style added');
-        assert.equal($testDiv[0].style.WebkitTransform, 'scale(1) translateZ(0px)', 'transform style with prefixes added');
+        assert.equal($testDiv[0].style.WebkitTransform, 'scale(1)', 'transform style with prefixes added');
         assert.equal($jarallax.jarallax.css($testDiv[0], 'text-align'), 'right', 'received style value');
 
         $testDiv.remove();
@@ -86,9 +86,9 @@ QUnit.module('methods', function () {
         jarallax($jarallax, 'clipContainer');
 
         assert.equal($('#jarallax-clip-' + $jarallax.jarallax.instanceID).html(), '#jarallax-container-' + $jarallax.jarallax.instanceID + ' {\n' +
-            '   clip: rect(0 122px 62px 0);\n' +
-            '   clip: rect(0, 122px, 62px, 0);\n' +
-            '}', 'added clip: rect() style');
+            '           clip: rect(0 122px 62px 0);\n' +
+            '           clip: rect(0, 122px, 62px, 0);\n' +
+            '        }', 'added clip: rect() style');
 
         $($jarallax).removeAttr('style');
         jarallax($jarallax, 'clipContainer');
