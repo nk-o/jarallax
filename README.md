@@ -138,13 +138,13 @@ Note: for local videos required only 1 video type, not necessary use all mp4, we
 
 ## Any Element Parallax Usage Examples
 ```html
-<!-- Element will be parallaxed on inverted 140 pixels from the screen center -->
+<!-- Element will be parallaxed on -140 pixels from the screen center by Y axis -->
 <div data-jarallax-element="-140">
     Your content here...
 </div>
 
-<!-- Element will be parallaxed on 250 pixels from the screen center -->
-<div data-jarallax-element="250">
+<!-- Element will be parallaxed on 250 pixels from the screen center by Y axis and on -100 pixels from the screen senter by X axis -->
+<div data-jarallax-element="250 -100">
     Your content here...
 </div>
 ```
@@ -185,7 +185,7 @@ Required `jarallax/jarallax-element.js` file.
 Name | Type | Default | Description
 :--- | :--- | :------ | :----------
 type | string | `element` | Will only work with `element` value.
-speed | float | `0` | Parallax distance in pixels. Supported any value. Also you can use data attribute `data-jarallax-element`.
+speed | mixed | `0 0` | Parallax distance in pixels. Supported Y and X axis. Example: `100 200`. Also you can use data attribute `data-jarallax-element`.
 
 # Events
 Evenets used the same way as Options.

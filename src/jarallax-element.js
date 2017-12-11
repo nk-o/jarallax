@@ -43,7 +43,10 @@
 
             switch (key) {
             case 'init':
-                self.options.speed = parseFloat(self.pureOptions.speed) || 0;
+                const speedArr = self.pureOptions.speed.split(' ');
+                self.options.speed = self.pureOptions.speed || 0;
+                self.options.speedY = speedArr[0] ? parseFloat(speedArr[0]) : 0;
+                self.options.speedX = speedArr[1] ? parseFloat(speedArr[1]) : 0;
                 self.onResize();
                 self.onScroll();
                 self.addToParallaxList();
@@ -63,8 +66,9 @@
             case 'onScroll':
                 const wnd = self.getWindowData();
                 const centerPercent = (wnd.y + wnd.height / 2 - self.itemData.y) / (wnd.height / 2);
-                const move = centerPercent * self.options.speed;
-                self.css(self.$item, { transform: `translate3d(0,${move}px,0)` });
+                const moveY = centerPercent * self.options.speedY;
+                const moveX = centerPercent * self.options.speedX;
+                self.css(self.$item, { transform: `translate3d(${moveX}px,${moveY}px,0)` });
                 break;
             case 'initImg':
             case 'isVisible':
