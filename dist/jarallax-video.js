@@ -440,6 +440,7 @@ var VideoWorker = function () {
 
                     self.playerOptions += 'player_id=' + self.playerID;
                     self.playerOptions += '&autopause=0';
+                    self.playerOptions += '&transparent=0';
 
                     // hide controls
                     if (!self.options.controls) {
