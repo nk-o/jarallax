@@ -154,3 +154,12 @@ a:hover, a:focus {
         width: 100%;
     }
 }
+
+
+/* Mobile */
+@media screen and (max-width: 500px) {
+    .demo-gap,
+    .demo-content {
+        padding: 50px 30px;
+    }
+}
