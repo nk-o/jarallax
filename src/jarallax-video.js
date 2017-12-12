@@ -316,6 +316,8 @@ class VideoWorker {
                     autohide: 1,
                     rel: 0,
                     autoplay: 0,
+                    // autoplay enable on mobile devices
+                    playsinline: 1,
                 };
 
                 // hide controls
@@ -509,6 +511,10 @@ class VideoWorker {
                     if (self.options.loop) {
                         self.$iframe.loop = true;
                     }
+
+                    // autoplay enable on mobile devices
+                    self.$iframe.setAttribute('playsinline', '');
+                    self.$iframe.setAttribute('webkit-playsinline', '');
 
                     self.$iframe.setAttribute('id', self.playerID);
                     hiddenDiv.appendChild(self.$iframe);
