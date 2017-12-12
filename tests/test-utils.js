@@ -7,13 +7,18 @@ window.UTILS = {
     insertBackground: function ($where, image) {
         return $where.css('background-image', 'url("' + image + '")');
     },
+    getBlock: function () {
+        return $(UTILS.selector);
+    },
     get: function (type) {
         type = type || 'background';
 
+        var method = 'insertImage';
+
         if (type === 'background') {
-            return UTILS.insertBackground($(UTILS.selector), UTILS.image);
-        } else {
-            return UTILS.insertImage($(UTILS.selector), UTILS.image);
+            method = 'insertBackground';
         }
+
+        return UTILS[method](UTILS.getBlock(), UTILS.image);
     },
 };
