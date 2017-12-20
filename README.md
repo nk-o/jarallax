@@ -35,16 +35,16 @@ Download scripts directly from this repository and link it in your HTML file
 ```
 
 ### CDN
-Link directly from [cdnjs](https://cdnjs.com/)
+Link directly from [unpkg](https://unpkg.com/)
 ```html
 <!-- Jarallax -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jarallax/1.9.2/jarallax.min.js"></script>
+<script src="https://unpkg.com/jarallax@1.9/dist/jarallax.min.js"></script>
 
 <!-- Include it if you want to use Video parallax -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jarallax/1.9.2/jarallax-video.min.js"></script>
+<script src="https://unpkg.com/jarallax@1.9/dist/jarallax-video.min.js"></script>
 
 <!-- Include it if you want to parallax any element -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jarallax/1.9.2/jarallax-element.min.js"></script>
+<script src="https://unpkg.com/jarallax@1.9/dist/jarallax-element.min.js"></script>
 ```
 
 ### Package managers
