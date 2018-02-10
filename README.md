@@ -48,7 +48,7 @@ Link directly from [unpkg](https://unpkg.com/)
 ```
 
 ### Package managers
-npm: `npm install jarallax -- save`
+npm: `npm install jarallax --save`
 
 Bower: `bower install jarallax --save`
 
