@@ -1,5 +1,5 @@
 # Just Another Parallax
-Smooth parallax scrolling effect for background images, videos and inline elements. Code in pure JavaScript with ***NO dependencies*** + jQuery supported. ***Youtube***, ***Vimeo*** and ***Local Videos*** parallax supported.
+Smooth parallax scrolling effect for background images, videos and inline elements. Code in pure JavaScript with ***NO dependencies*** + jQuery supported. ***YouTube***, ***Vimeo*** and ***Local Videos*** parallax supported.
 
 ## [Demo](https://free.nkdev.info/jarallax/)
 
@@ -166,7 +166,7 @@ keepImg | boolean | `false` | Keep `<img>` tag in it's default place after Jaral
 elementInViewport | dom | `null` | Use custom DOM / jQuery element to check if parallax block in viewport. More info here - [Issue 13](https://github.com/nk-o/jarallax/issues/13).
 zIndex | number | `-100` | z-index of parallax container.
 noAndroid | boolean | `false` | Disable parallax on Android devices.
-noIos | boolean | `false` | Disable parallax on iOs devices.
+noIos | boolean | `false` | Disable parallax on iOS devices.
 
 ### Options For Video (+ supported all default options)
 Required `jarallax/jarallax-video.js` file.
