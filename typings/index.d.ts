@@ -42,7 +42,7 @@ interface JarallaxOptions {
     /**
      * Image tag that will be used as background.
      */
-    imgElement?: string;
+    imgElement?: string | Element;
 
     /**
      * Image size. If you use <img> tag for background, you should add object-fit values, else use background-size
