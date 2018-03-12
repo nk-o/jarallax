@@ -186,6 +186,7 @@ Name | Type | Default | Description
 :--- | :--- | :------ | :----------
 type | string | `element` | Will only work with `element` value.
 speed | mixed | `0 0` | Parallax distance in pixels. Supported Y and X axis. Example: `100 200`. Also you can use data attribute `data-jarallax-element`.
+threshold | mixed | `null null` | Specify threshold for the parallax effect to kick in. For example, if you pass `0 0`, the element will start to move only after it has been scrolled to the middle of the viewport.
 
 # Events
 Evenets used the same way as Options.

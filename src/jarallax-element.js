@@ -36,6 +36,7 @@
             if (key === 'initImg' && self.$item.getAttribute('data-jarallax-element') !== null) {
                 self.options.type = 'element';
                 self.pureOptions.speed = self.$item.getAttribute('data-jarallax-element') || self.pureOptions.speed;
+                self.pureOptions.threshold = self.$item.getAttribute('data-threshold') || '';
             }
             if (self.options.type !== 'element') {
                 return def.apply(self, args);
@@ -47,6 +48,11 @@
                 self.options.speed = self.pureOptions.speed || 0;
                 self.options.speedY = speedArr[0] ? parseFloat(speedArr[0]) : 0;
                 self.options.speedX = speedArr[1] ? parseFloat(speedArr[1]) : 0;
+
+                const thresholdArr = self.pureOptions.threshold.split(' ');
+                self.options.thresholdY = thresholdArr[0] ? parseFloat(thresholdArr[0]) : null;
+                self.options.thresholdX = thresholdArr[1] ? parseFloat(thresholdArr[1]) : null;
+
                 self.onResize();
                 self.onScroll();
                 self.addToParallaxList();
@@ -68,7 +74,11 @@
                 const centerPercent = (wnd.y + wnd.height / 2 - self.itemData.y) / (wnd.height / 2);
                 const moveY = centerPercent * self.options.speedY;
                 const moveX = centerPercent * self.options.speedX;
-                self.css(self.$item, { transform: `translate3d(${moveX}px,${moveY}px,0)` });
+                let my = moveY;
+                let mx = moveX;
+                if (self.options.thresholdY !== null && moveY > self.options.thresholdY) my = 0;
+                if (self.options.thresholdX !== null && moveX > self.options.thresholdX) mx = 0;
+                self.css(self.$item, { transform: `translate3d(${mx}px,${my}px,0)` });
                 break;
             case 'initImg':
             case 'isVisible':
