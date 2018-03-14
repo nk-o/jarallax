@@ -50,7 +50,7 @@ Link directly from [unpkg](https://unpkg.com/)
 ### Package managers
 npm: `npm install jarallax --save`
 
-Bower: `bower install jarallax --save`
+~~Bower: `bower install jarallax --save`~~ (Deprecated)
 
 ## Supported plugins
 You can add these plugins before jarallax initialize.
