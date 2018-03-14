@@ -1,4 +1,4 @@
-# Just Another Parallax
+## Just Another Parallax
 Smooth parallax scrolling effect for background images, videos and inline elements. Code in pure JavaScript with ***NO dependencies*** + jQuery supported. ***YouTube***, ***Vimeo*** and ***Local Videos*** parallax supported.
 
 ## [Demo](https://free.nkdev.info/jarallax/)
@@ -150,7 +150,7 @@ Note: for local videos required only 1 video type, not necessary use all mp4, we
 ```
 Note: this is more like experimental feature, so the behavior could be changed in the future releases.
 
-# Options
+## Options
 Options can be passed in data attributes or in object when you initialize jarallax from script.
 
 Name | Type | Default | Description
@@ -188,7 +188,7 @@ type | string | `element` | Will only work with `element` value.
 speed | mixed | `0 0` | Parallax distance in pixels. Supported Y and X axis. Example: `100 200`. Also you can use data attribute `data-jarallax-element`.
 threshold | mixed | `null null` | Specify threshold for the parallax effect to kick in. For example, if you pass `0 0`, the element will start to move only after it has been scrolled to the middle of the viewport.
 
-# Events
+## Events
 Evenets used the same way as Options.
 
 Name | Description
@@ -198,7 +198,7 @@ onInit | Called after init end.
 onDestroy | Called after destroy.
 onCoverImage | Called after cover image.
 
-## onScroll event
+### onScroll event
 ```javascript
 jarallax(document.querySelectorAll('.jarallax'), {
     onScroll: function(calculations) {
@@ -233,7 +233,7 @@ Calculations example:
 [![On Scroll Calculations](https://a.nkdev.info/jarallax/jarallax-calculations.jpg)](https://a.nkdev.info/jarallax/jarallax-calculations.jpg)
 
 
-# Methods
+## Methods
 Name | Result | Description
 :--- | :----- | :----------
 destroy | - | Destroy Jarallax and set block as it was before plugin init.
@@ -241,19 +241,19 @@ isVisible | boolean | Check if parallax block is in viewport.
 onResize | - | Fit image and clip parallax container. Called on window resize and load.
 onScroll | - | Calculate parallax image position. Called on window scroll.
 
-## Call methods example
-### A. JavaScript way
+### Call methods example
+#### A. JavaScript way
 ```javascript
 jarallax(document.querySelectorAll('.jarallax'), 'destroy');
 ```
 
-### B. jQuery way
+#### B. jQuery way
 ```javascript
 $('.jarallax').jarallax('destroy');
 ```
 
 
-# No conflict
+## No conflict
 If you already have global ***jarallax*** variable or ***jQuery.fn.jarallax***, you can rename plugin.
 ### A. JavaScript way
 ```javascript
@@ -266,11 +266,11 @@ jQuery.fn.newJarallax = jQuery.fn.jarallax.noConflict();
 ```
 
 
-# Real Usage Examples
+## Real Usage Examples
 * [Khaki](https://demo.nkdev.info/#khaki)
 * [Godlike](https://demo.nkdev.info/#godlike)
 * [Youplay](https://demo.nkdev.info/#youplay)
 
-# Credits
+## Credits
 Images https://unsplash.com/
 Local Video https://videos.pexels.com/
