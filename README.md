@@ -274,6 +274,3 @@ jQuery.fn.newJarallax = jQuery.fn.jarallax.noConflict();
 # Credits
 Images https://unsplash.com/
 Local Video https://videos.pexels.com/
-
-# License
-Copyright (c) 2017 nK Licensed under the WTFPL license.

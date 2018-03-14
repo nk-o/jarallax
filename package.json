@@ -2,7 +2,7 @@
     "name": "jarallax",
     "version": "1.9.3",
     "description": "Smooth parallax scrolling effect for background images, videos and inline elements. Code in pure JavaScript with NO dependencies + jQuery supported. Youtube, Vimeo and Local Videos parallax supported.",
-    "license": "WTFPL",
+    "license": "MIT",
     "homepage": "https://github.com/nk-o/jarallax",
     "author": "nK <https://nkdev.info>",
     "main": "dist/jarallax.min.js",

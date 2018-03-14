@@ -14,7 +14,7 @@
         "vimeo",
         "video"
     ],
-    "license": "WTFPL",
+    "license": "MIT",
     "ignore": [
         "**/.*",
         "node_modules",
