@@ -143,7 +143,7 @@ Note: for local videos required only 1 video type, not necessary use all mp4, we
     Your content here...
 </div>
 
-<!-- Element will be parallaxed on 250 pixels from the screen center by Y axis and on -100 pixels from the screen senter by X axis -->
+<!-- Element will be parallaxed on 250 pixels from the screen center by Y axis and on -100 pixels from the screen center by X axis -->
 <div data-jarallax-element="250 -100">
     Your content here...
 </div>
