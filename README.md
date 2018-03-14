@@ -189,7 +189,7 @@ speed | mixed | `0 0` | Parallax distance in pixels. Supported Y and X axis. Exa
 threshold | mixed | `null null` | Specify threshold for the parallax effect to kick in. For example, if you pass `0 0`, the element will start to move only after it has been scrolled to the middle of the viewport.
 
 ## Events
-Evenets used the same way as Options.
+Events used the same way as Options.
 
 Name | Description
 :--- | :----------
