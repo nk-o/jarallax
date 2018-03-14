@@ -1,9 +1,4 @@
-/*!
- * Name    : Elements Extension for Jarallax
- * Version : 1.0.0
- * Author  : nK http://nkdev.info
- * GitHub  : https://github.com/nk-o/jarallax
- */
+/* eslint no-case-declarations: "off" */
 (function () {
     if (typeof jarallax === 'undefined') {
         return;
@@ -85,9 +80,9 @@
             case 'clipContainer':
             case 'coverImage':
                 return true;
-            default:
-                return def.apply(self, args);
+            // no default
             }
+            return def.apply(self, args);
         };
     });
 

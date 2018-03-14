@@ -11,9 +11,13 @@
         "dist"
     ],
     "scripts": {
-        "build": "gulp",
-        "watch": "gulp watch",
-        "test": "gulp test"
+        "dev": "gulp dev",
+        "build": "gulp build",
+        "test": "gulp test",
+        "js-lint": "eslint src/",
+        "js-lint-fix": "eslint --fix src/",
+        "precommit": "npm run js-lint",
+        "prepush": "npm run js-lint"
     },
     "repository": {
         "type": "git",
@@ -31,27 +35,35 @@
         "video"
     ],
     "devDependencies": {
-        "@types/jquery": "^3.3.0",
+        "@types/jquery": "^3.3.1",
         "babel": "^6.23.0",
-        "babel-preset-env": "^1.6.0",
-        "del": "^2.2.2",
-        "eslint": "^4.6.0",
-        "eslint-config-airbnb": "^15.1.0",
-        "eslint-plugin-import": "^2.7.0",
-        "eslint-plugin-jsx-a11y": "^5.1.1",
-        "eslint-plugin-react": "^7.4.0",
+        "babel-core": "^6.26.0",
+        "babel-loader": "^7.1.4",
+        "babel-preset-env": "^1.6.1",
+        "browser-sync": "^2.23.6",
+        "del": "^3.0.0",
+        "eslint": "^4.18.2",
+        "eslint-config-airbnb": "^16.1.0",
+        "eslint-plugin-import": "^2.9.0",
+        "eslint-plugin-jsx-a11y": "^6.0.3",
+        "eslint-plugin-react": "^7.7.0",
         "gulp": "^3.9.1",
-        "gulp-babel": "^6.1.2",
-        "gulp-header": "^1.8.9",
+        "gulp-header": "^2.0.5",
         "gulp-if": "^2.0.2",
-        "gulp-iife": "^0.3.0",
         "gulp-load-plugins": "^1.5.0",
+        "gulp-plumber": "^1.2.0",
         "gulp-rename": "^1.2.2",
-        "gulp-uglify": "^2.0.0",
-        "jquery": "^3.2.1",
+        "gulp-sequence": "^1.0.0",
+        "gulp-sourcemaps": "^2.6.4",
+        "gulp-uglify": "^3.0.0",
+        "gulp-watch": "^5.0.0",
+        "husky": "^0.14.3",
+        "jquery": "^3.3.1",
         "json-file": "^0.1.0",
-        "node-qunit-phantomjs": "^1.5.0",
+        "node-qunit-phantomjs": "^2.0.0",
         "object-fit-images": "^3.2.3",
-        "qunitjs": "^2.4.0"
+        "qunitjs": "^2.4.1",
+        "vinyl-named": "^1.1.0",
+        "webpack-stream": "^4.0.2"
     }
 }

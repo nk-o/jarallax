@@ -265,6 +265,22 @@ var newJarallax = jarallax.noConflict();
 jQuery.fn.newJarallax = jQuery.fn.jarallax.noConflict();
 ```
 
+## For Developers
+
+### Installation
+* Run `npm install` in the command line. Or if you need to update some dependencies, run `npm update`
+
+### Building
+* `npm run dev` to run build and start local server with files watcher
+* `npm run build` to run build and prepare zip files for production
+
+### Linting
+* `npm run js-lint` to show eslint errors
+* `npm run js-lint-fix` to automatically fix some of the eslint errors
+
+### Test
+* `npm run test` to run unit tests
+
 
 ## Real Usage Examples
 * [Khaki](https://demo.nkdev.info/#khaki)

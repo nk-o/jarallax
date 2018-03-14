@@ -130,6 +130,7 @@ class Jarallax {
         const deprecatedDataAttribute = self.$item.getAttribute('data-jarallax');
         const oldDataOptions = JSON.parse(deprecatedDataAttribute || '{}');
         if (deprecatedDataAttribute) {
+            // eslint-disable-next-line no-console
             console.warn('Detected usage of deprecated data-jarallax JSON options, you should use pure data-attribute options. See info here - https://github.com/nk-o/jarallax/issues/53');
         }
 
@@ -162,7 +163,7 @@ class Jarallax {
         let elementInVP = self.options.elementInViewport;
         // get first item from array
         if (elementInVP && typeof elementInVP === 'object' && typeof elementInVP.length !== 'undefined') {
-            elementInVP = elementInVP[0];
+            [elementInVP] = elementInVP;
         }
         // check if dom element
         if (!(elementInVP instanceof Element)) {
@@ -462,8 +463,7 @@ class Jarallax {
 
         const self = this;
         const rect = self.image.$container.getBoundingClientRect();
-        const width = rect.width;
-        const height = rect.height;
+        const { width, height } = rect;
 
         if (!self.$clipStyles) {
             self.$clipStyles = document.createElement('style');
@@ -491,7 +491,7 @@ class Jarallax {
 
         const rect = self.image.$container.getBoundingClientRect();
         const contH = rect.height;
-        const speed = self.options.speed;
+        const { speed } = self.options;
         const isScroll = self.options.type === 'scroll' || self.options.type === 'scroll-opacity';
         let scrollDist = 0;
         let resultH = contH;

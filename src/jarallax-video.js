@@ -112,6 +112,7 @@ class VideoWorker {
                 // eslint-disable-next-line no-useless-escape
                 const match = val.match(/^(mp4|webm|ogv|ogg)\:(.*)/);
                 if (match && match[1] && match[2]) {
+                    // eslint-disable-next-line prefer-destructuring
                     result[match[1] === 'ogv' ? 'ogg' : match[1]] = match[2];
                     ready = 1;
                 }
