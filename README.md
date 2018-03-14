@@ -272,7 +272,7 @@ jQuery.fn.newJarallax = jQuery.fn.jarallax.noConflict();
 
 ### Building
 * `npm run dev` to run build and start local server with files watcher
-* `npm run build` to run build and prepare zip files for production
+* `npm run build` to run build
 
 ### Linting
 * `npm run js-lint` to show eslint errors
