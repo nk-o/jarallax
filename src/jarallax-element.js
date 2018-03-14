@@ -31,11 +31,12 @@
             if (key === 'initImg' && self.$item.getAttribute('data-jarallax-element') !== null) {
                 self.options.type = 'element';
                 self.pureOptions.speed = self.$item.getAttribute('data-jarallax-element') || self.pureOptions.speed;
-                self.pureOptions.threshold = self.$item.getAttribute('data-threshold') || '';
             }
             if (self.options.type !== 'element') {
                 return def.apply(self, args);
             }
+
+            self.pureOptions.threshold = self.$item.getAttribute('data-threshold') || '';
 
             switch (key) {
             case 'init':
