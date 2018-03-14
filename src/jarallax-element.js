@@ -67,7 +67,7 @@
                 break;
             case 'onScroll':
                 const wnd = self.getWindowData();
-                const centerPercent = (wnd.y + wnd.height / 2 - self.itemData.y) / (wnd.height / 2);
+                const centerPercent = (wnd.y + wnd.height / 2 - self.itemData.y - self.itemData.height / 2) / (wnd.height / 2);
                 const moveY = centerPercent * self.options.speedY;
                 const moveX = centerPercent * self.options.speedX;
                 let my = moveY;
