@@ -25,13 +25,13 @@ Include Jarallax plugin. Also include jQuery before jarallax if you want to use 
 Download scripts directly from this repository and link it in your HTML file
 ```html
 <!-- Jarallax -->
-<script src="jarallax/jarallax.js"></script>
+<script src="jarallax/dist/jarallax.min.js"></script>
 
 <!-- Include it if you want to use Video parallax -->
-<script src="jarallax/jarallax-video.js"></script>
+<script src="jarallax/dist/jarallax.min.js"></script>
 
 <!-- Include it if you want to parallax any element -->
-<script src="jarallax/jarallax-element.js"></script>
+<script src="jarallax/dist/jarallax.min.js"></script>
 ```
 
 ### CDN
