@@ -106,11 +106,12 @@ module.exports = __webpack_require__(1);
             if (key === 'initImg' && self.$item.getAttribute('data-jarallax-element') !== null) {
                 self.options.type = 'element';
                 self.pureOptions.speed = self.$item.getAttribute('data-jarallax-element') || self.pureOptions.speed;
-                self.pureOptions.threshold = self.$item.getAttribute('data-threshold') || '';
             }
             if (self.options.type !== 'element') {
                 return def.apply(self, args);
             }
+
+            self.pureOptions.threshold = self.$item.getAttribute('data-threshold') || '';
 
             switch (key) {
                 case 'init':
@@ -141,7 +142,7 @@ module.exports = __webpack_require__(1);
                     break;
                 case 'onScroll':
                     var wnd = self.getWindowData();
-                    var centerPercent = (wnd.y + wnd.height / 2 - self.itemData.y) / (wnd.height / 2);
+                    var centerPercent = (wnd.y + wnd.height / 2 - self.itemData.y - self.itemData.height / 2) / (wnd.height / 2);
                     var moveY = centerPercent * self.options.speedY;
                     var moveX = centerPercent * self.options.speedX;
                     var my = moveY;
