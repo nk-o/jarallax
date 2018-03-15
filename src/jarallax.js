@@ -330,12 +330,14 @@ class Jarallax {
         // use div with background image
         } else {
             self.image.$item = document.createElement('div');
-            imageStyles = self.extend({
-                'background-position': self.options.imgPosition,
-                'background-size': self.options.imgSize,
-                'background-repeat': self.options.imgRepeat,
-                'background-image': `url("${self.image.src}")`,
-            }, containerStyles, imageStyles);
+            if (self.image.src) {
+                imageStyles = self.extend({
+                    'background-position': self.options.imgPosition,
+                    'background-size': self.options.imgSize,
+                    'background-repeat': self.options.imgRepeat,
+                    'background-image': `url("${self.image.src}")`,
+                }, containerStyles, imageStyles);
+            }
         }
 
         if (self.options.type === 'opacity' || self.options.type === 'scale' || self.options.type === 'scale-opacity' || self.options.speed === 1) {

@@ -38,5 +38,18 @@ QUnit.module('elements', function () {
 
         $testDiv.remove();
     });
+
+    QUnit.test('no background image', function (assert) {
+        assert.expect(1);
+
+        var $jarallax = UTILS.getBlock();
+
+        $jarallax.jarallax({
+            type: 'element',
+            speed: '120 -50',
+        });
+
+        assert.equal('none', $jarallax.find('> div > div').css('background-image'));
+    });
 });
 
