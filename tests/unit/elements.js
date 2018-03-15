@@ -22,9 +22,10 @@ QUnit.module('elements', function () {
         $jarallax.attr('style', '');
         var rect = $jarallax[0].getBoundingClientRect();
         var itemY = rect.top + wndY;
+        var itemH = rect.height;
         $jarallax.attr('style', saveStyle);
 
-        var centerPercent = (wndY + wndH / 2 - itemY) / (wndH / 2);
+        var centerPercent = (wndY + wndH / 2 - itemY - itemH / 2) / (wndH / 2);
         var moveY = centerPercent * 120;
         var moveX = centerPercent * (-50);
 
