@@ -16,9 +16,9 @@ export default function jarallaxVideo(jarallax = global.jarallax) {
         defInit.apply(self);
 
         if (self.video && !self.options.disableVideo()) {
-            self.video.getIframe((iframe) => {
-                const $parent = iframe.parentNode;
-                self.css(iframe, {
+            self.video.getVideo((video) => {
+                const $parent = video.parentNode;
+                self.css(video, {
                     position: self.image.position,
                     top: '0px',
                     left: '0px',
@@ -31,10 +31,10 @@ export default function jarallaxVideo(jarallax = global.jarallax) {
                     margin: 0,
                     zIndex: -1,
                 });
-                self.$video = iframe;
-                self.image.$container.appendChild(iframe);
+                self.$video = video;
+                self.image.$container.appendChild(video);
 
-                // remove parent iframe element (created by VideoWorker)
+                // remove parent video element (created by VideoWorker)
                 $parent.parentNode.removeChild($parent);
             });
         }
