@@ -1,6 +1,6 @@
 /*!
  * Name    : Just Another Parallax [Jarallax]
- * Version : 1.9.3
+ * Version : 1.10.0
  * Author  : nK <https://nkdev.info>
  * GitHub  : https://github.com/nk-o/jarallax
  */
@@ -66,30 +66,178 @@
 /******/ 	__webpack_require__.p = "";
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 6);
+/******/ 	return __webpack_require__(__webpack_require__.s = 11);
 /******/ })
 /************************************************************************/
-/******/ ({
-
-/***/ 6:
+/******/ ([
+/* 0 */
 /***/ (function(module, exports, __webpack_require__) {
 
-module.exports = __webpack_require__(7);
+"use strict";
+/* WEBPACK VAR INJECTION */(function(global) {
 
+var win;
+
+if (typeof window !== "undefined") {
+    win = window;
+} else if (typeof global !== "undefined") {
+    win = global;
+} else if (typeof self !== "undefined") {
+    win = self;
+} else {
+    win = {};
+}
+
+module.exports = win;
+/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(2)))
 
 /***/ }),
-
-/***/ 7:
+/* 1 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
+
+module.exports = new Promise(function (resolve) {
+	if (document.readyState === 'interactive' || document.readyState === 'complete') {
+		resolve();
+	} else {
+		document.addEventListener('DOMContentLoaded', function () {
+			resolve();
+		}, {
+			capture: true,
+			once: true,
+			passive: true
+		});
+	}
+});
+
+/***/ }),
+/* 2 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
+
+var g;
+
+// This works in non-strict mode
+g = function () {
+	return this;
+}();
+
+try {
+	// This works if eval is allowed (see CSP)
+	g = g || Function("return this")() || (1, eval)("this");
+} catch (e) {
+	// This works if the window reference is available
+	if ((typeof window === "undefined" ? "undefined" : _typeof(window)) === "object") g = window;
+}
+
+// g can still be undefined, but nothing to do about it...
+// We return undefined, instead of nothing here, so it's
+// easier to handle this case. if(!global) { ...}
+
+module.exports = g;
+
+/***/ }),
+/* 3 */,
+/* 4 */,
+/* 5 */,
+/* 6 */,
+/* 7 */,
+/* 8 */,
+/* 9 */,
+/* 10 */,
+/* 11 */
+/***/ (function(module, exports, __webpack_require__) {
+
+module.exports = __webpack_require__(12);
+
+
+/***/ }),
+/* 12 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
+
+var _domLoaded = __webpack_require__(1);
+
+var _domLoaded2 = _interopRequireDefault(_domLoaded);
+
+var _global = __webpack_require__(0);
+
+var _jarallax = __webpack_require__(13);
+
+var _jarallax2 = _interopRequireDefault(_jarallax);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+// no conflict
+var oldPlugin = _global.window.jarallax;
+_global.window.jarallax = _jarallax2.default;
+_global.window.jarallax.noConflict = function () {
+    _global.window.jarallax = oldPlugin;
+    return this;
+};
+
+// jQuery support
+if (typeof _global.jQuery !== 'undefined') {
+    var jQueryPlugin = function jQueryPlugin() {
+        var args = arguments || [];
+        Array.prototype.unshift.call(args, this);
+        var res = _jarallax2.default.apply(_global.window, args);
+        return (typeof res === 'undefined' ? 'undefined' : _typeof(res)) !== 'object' ? res : this;
+    };
+    jQueryPlugin.constructor = _jarallax2.default.constructor;
+
+    // no conflict
+    var oldJqPlugin = _global.jQuery.fn.jarallax;
+    _global.jQuery.fn.jarallax = jQueryPlugin;
+    _global.jQuery.fn.jarallax.noConflict = function () {
+        _global.jQuery.fn.jarallax = oldJqPlugin;
+        return this;
+    };
+}
+
+// data-jarallax initialization
+_domLoaded2.default.then(function () {
+    (0, _jarallax2.default)(document.querySelectorAll('[data-jarallax]'));
+});
+
+/***/ }),
+/* 13 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+/* WEBPACK VAR INJECTION */(function(global) {
+
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
 
 var _slicedToArray = function () { function sliceIterator(arr, i) { var _arr = []; var _n = true; var _d = false; var _e = undefined; try { for (var _i = arr[Symbol.iterator](), _s; !(_n = (_s = _i.next()).done); _n = true) { _arr.push(_s.value); if (i && _arr.length === i) break; } } catch (err) { _d = true; _e = err; } finally { try { if (!_n && _i["return"]) _i["return"](); } finally { if (_d) throw _e; } } return _arr; } return function (arr, i) { if (Array.isArray(arr)) { return arr; } else if (Symbol.iterator in Object(arr)) { return sliceIterator(arr, i); } else { throw new TypeError("Invalid attempt to destructure non-iterable instance"); } }; }();
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
 var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
+
+var _domLoaded = __webpack_require__(1);
+
+var _domLoaded2 = _interopRequireDefault(_domLoaded);
+
+var _rafl = __webpack_require__(14);
+
+var _rafl2 = _interopRequireDefault(_rafl);
+
+var _global = __webpack_require__(0);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
@@ -103,37 +251,29 @@ var supportTransform = function () {
     }
     return false;
 }();
-var ua = navigator.userAgent;
-var isAndroid = ua.toLowerCase().indexOf('android') > -1;
-var isIOs = /iPad|iPhone|iPod/.test(ua) && !window.MSStream;
-
-// requestAnimationFrame polyfill
-var rAF = window.requestAnimationFrame || window.webkitRequestAnimationFrame || window.mozRequestAnimationFrame || function (callback) {
-    setTimeout(callback, 1000 / 60);
-};
-
-// init events
-function addEventListener(el, eventName, handler) {
-    el.addEventListener(eventName, handler);
-}
 
 // Window data
 var wndW = void 0;
 var wndH = void 0;
 var wndY = void 0;
 var forceResizeParallax = false;
+var forceScrollParallax = false;
 function updateWndVars(e) {
-    wndW = window.innerWidth || document.documentElement.clientWidth;
-    wndH = window.innerHeight || document.documentElement.clientHeight;
-    if ((typeof e === 'undefined' ? 'undefined' : _typeof(e)) === 'object' && (e.type === 'load' || e.type === 'DOMContentLoaded')) {
+    wndW = _global.window.innerWidth || document.documentElement.clientWidth;
+    wndH = _global.window.innerHeight || document.documentElement.clientHeight;
+    if ((typeof e === 'undefined' ? 'undefined' : _typeof(e)) === 'object' && (e.type === 'load' || e.type === 'dom-loaded')) {
         forceResizeParallax = true;
     }
 }
 updateWndVars();
-addEventListener(window, 'resize', updateWndVars);
-addEventListener(window, 'orientationchange', updateWndVars);
-addEventListener(window, 'load', updateWndVars);
-addEventListener(window, 'DOMContentLoaded', updateWndVars);
+_global.window.addEventListener('resize', updateWndVars);
+_global.window.addEventListener('orientationchange', updateWndVars);
+_global.window.addEventListener('load', updateWndVars);
+_domLoaded2.default.then(function () {
+    updateWndVars({
+        type: 'dom-loaded'
+    });
+});
 
 // list with all jarallax instances
 // need to render all in one scroll/resize event
@@ -146,16 +286,17 @@ function updateParallax() {
         return;
     }
 
-    if (window.pageYOffset !== undefined) {
-        wndY = window.pageYOffset;
+    if (_global.window.pageYOffset !== undefined) {
+        wndY = _global.window.pageYOffset;
     } else {
         wndY = (document.documentElement || document.body.parentNode || document.body).scrollTop;
     }
 
     var isResized = forceResizeParallax || !oldPageData || oldPageData.width !== wndW || oldPageData.height !== wndH;
-    var isScrolled = isResized || !oldPageData || oldPageData.y !== wndY;
+    var isScrolled = forceScrollParallax || isResized || !oldPageData || oldPageData.y !== wndY;
 
     forceResizeParallax = false;
+    forceScrollParallax = false;
 
     if (isResized || isScrolled) {
         jarallaxList.forEach(function (item) {
@@ -174,8 +315,24 @@ function updateParallax() {
         };
     }
 
-    rAF(updateParallax);
+    (0, _rafl2.default)(updateParallax);
 }
+
+// ResizeObserver
+var resizeObserver = global.ResizeObserver ? new global.ResizeObserver(function (entry) {
+    if (entry && entry.length) {
+        (0, _rafl2.default)(function () {
+            entry.forEach(function (item) {
+                if (item.target && item.target.jarallax) {
+                    if (!forceResizeParallax) {
+                        item.target.jarallax.onResize();
+                    }
+                    forceScrollParallax = true;
+                }
+            });
+        });
+    }
+}) : false;
 
 var instanceID = 0;
 
@@ -202,8 +359,9 @@ var Jarallax = function () {
             keepImg: false, // keep <img> tag in it's default place
             elementInViewport: null,
             zIndex: -100,
-            noAndroid: false,
-            noIos: false,
+            disableParallax: false,
+            disableVideo: false,
+            automaticResize: true, // use ResizeObserver to recalculate position and size of parallax image
 
             // video
             videoSrc: null,
@@ -252,6 +410,55 @@ var Jarallax = function () {
         // fix speed option [-1.0, 2.0]
         self.options.speed = Math.min(2, Math.max(-1, parseFloat(self.options.speed)));
 
+        // deprecated noAndroid and noIos options
+        if (self.options.noAndroid || self.options.noIos) {
+            // eslint-disable-next-line no-console
+            console.warn('Detected usage of deprecated noAndroid or noIos options, you should use disableParallax option. See info here - https://github.com/nk-o/jarallax/#disable-on-mobile-devices');
+
+            // prepare fallback if disableParallax option is not used
+            if (!self.options.disableParallax) {
+                if (self.options.noIos && self.options.noAndroid) {
+                    self.options.disableParallax = /iPad|iPhone|iPod|Android/;
+                } else if (self.options.noIos) {
+                    self.options.disableParallax = /iPad|iPhone|iPod/;
+                } else if (self.options.noAndroid) {
+                    self.options.disableParallax = /Android/;
+                }
+            }
+        }
+
+        // prepare disableParallax callback
+        if (typeof self.options.disableParallax === 'string') {
+            self.options.disableParallax = new RegExp(self.options.disableParallax);
+        }
+        if (self.options.disableParallax instanceof RegExp) {
+            var disableParallaxRegexp = self.options.disableParallax;
+            self.options.disableParallax = function () {
+                return disableParallaxRegexp.test(navigator.userAgent);
+            };
+        }
+        if (typeof self.options.disableParallax !== 'function') {
+            self.options.disableParallax = function () {
+                return false;
+            };
+        }
+
+        // prepare disableVideo callback
+        if (typeof self.options.disableVideo === 'string') {
+            self.options.disableVideo = new RegExp(self.options.disableVideo);
+        }
+        if (self.options.disableVideo instanceof RegExp) {
+            var disableVideoRegexp = self.options.disableVideo;
+            self.options.disableVideo = function () {
+                return disableVideoRegexp.test(navigator.userAgent);
+            };
+        }
+        if (typeof self.options.disableVideo !== 'function') {
+            self.options.disableVideo = function () {
+                return false;
+            };
+        }
+
         // custom element to check if parallax in viewport
         var elementInVP = self.options.elementInViewport;
         // get first item from array
@@ -276,7 +483,7 @@ var Jarallax = function () {
             // position fixed is needed for the most of browsers because absolute position have glitches
             // on MacOS with smooth scroll there is a huge lags with absolute position - https://github.com/nk-o/jarallax/issues/75
             // on mobile devices better scrolled with absolute position
-            position: isAndroid || isIOs ? 'absolute' : 'fixed'
+            position: /iPad|iPhone|iPod|Android/.test(navigator.userAgent) ? 'absolute' : 'fixed'
         };
 
         if (self.initImg() && self.canInitParallax()) {
@@ -291,7 +498,7 @@ var Jarallax = function () {
         key: 'css',
         value: function css(el, styles) {
             if (typeof styles === 'string') {
-                return window.getComputedStyle(el).getPropertyValue(styles);
+                return _global.window.getComputedStyle(el).getPropertyValue(styles);
             }
 
             // add transform property with vendor prefix
@@ -377,7 +584,7 @@ var Jarallax = function () {
     }, {
         key: 'canInitParallax',
         value: function canInitParallax() {
-            return supportTransform && !(isAndroid && this.options.noAndroid) && !(isIOs && this.options.noIos);
+            return supportTransform && !this.options.disableParallax();
         }
     }, {
         key: 'init',
@@ -442,12 +649,14 @@ var Jarallax = function () {
                 // use div with background image
             } else {
                 self.image.$item = document.createElement('div');
-                imageStyles = self.extend({
-                    'background-position': self.options.imgPosition,
-                    'background-size': self.options.imgSize,
-                    'background-repeat': self.options.imgRepeat,
-                    'background-image': 'url("' + self.image.src + '")'
-                }, containerStyles, imageStyles);
+                if (self.image.src) {
+                    imageStyles = self.extend({
+                        'background-position': self.options.imgPosition,
+                        'background-size': self.options.imgSize,
+                        'background-repeat': self.options.imgRepeat,
+                        'background-image': 'url("' + self.image.src + '")'
+                    }, containerStyles, imageStyles);
+                }
             }
 
             if (self.options.type === 'opacity' || self.options.type === 'scale' || self.options.type === 'scale-opacity' || self.options.speed === 1) {
@@ -480,6 +689,11 @@ var Jarallax = function () {
             self.coverImage();
             self.clipContainer();
             self.onScroll(true);
+
+            // ResizeObserver
+            if (self.options.automaticResize && resizeObserver) {
+                resizeObserver.observe(self.$item);
+            }
 
             // call onInit event
             if (self.options.onInit) {
@@ -812,38 +1026,45 @@ var plugin = function plugin(items) {
 };
 plugin.constructor = Jarallax;
 
-// no conflict
-var oldPlugin = window.jarallax;
-window.jarallax = plugin;
-window.jarallax.noConflict = function () {
-    window.jarallax = oldPlugin;
-    return this;
-};
+exports.default = plugin;
+/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(2)))
 
-// jQuery support
-if (typeof jQuery !== 'undefined') {
-    var jQueryPlugin = function jQueryPlugin() {
-        var args = arguments || [];
-        Array.prototype.unshift.call(args, this);
-        var res = plugin.apply(window, args);
-        return (typeof res === 'undefined' ? 'undefined' : _typeof(res)) !== 'object' ? res : this;
-    };
-    jQueryPlugin.constructor = Jarallax;
+/***/ }),
+/* 14 */
+/***/ (function(module, exports, __webpack_require__) {
 
-    // no conflict
-    var oldJqPlugin = jQuery.fn.jarallax;
-    jQuery.fn.jarallax = jQueryPlugin;
-    jQuery.fn.jarallax.noConflict = function () {
-        jQuery.fn.jarallax = oldJqPlugin;
-        return this;
-    };
+"use strict";
+
+
+var global = __webpack_require__(0);
+
+/**
+ * `requestAnimationFrame()`
+ */
+
+var request = global.requestAnimationFrame || global.webkitRequestAnimationFrame || global.mozRequestAnimationFrame || fallback;
+
+var prev = +new Date();
+function fallback(fn) {
+  var curr = +new Date();
+  var ms = Math.max(0, 16 - (curr - prev));
+  var req = setTimeout(fn, ms);
+  return prev = curr, req;
 }
 
-// data-jarallax initialization
-addEventListener(window, 'DOMContentLoaded', function () {
-    plugin(document.querySelectorAll('[data-jarallax]'));
-});
+/**
+ * `cancelAnimationFrame()`
+ */
+
+var cancel = global.cancelAnimationFrame || global.webkitCancelAnimationFrame || global.mozCancelAnimationFrame || clearTimeout;
+
+if (Function.prototype.bind) {
+  request = request.bind(global);
+  cancel = cancel.bind(global);
+}
+
+exports = module.exports = request;
+exports.cancel = cancel;
 
 /***/ })
-
-/******/ });
+/******/ ]);

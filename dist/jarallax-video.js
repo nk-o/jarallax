@@ -66,37 +66,147 @@
 /******/ 	__webpack_require__.p = "";
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 2);
+/******/ 	return __webpack_require__(__webpack_require__.s = 6);
 /******/ })
 /************************************************************************/
 /******/ ([
-/* 0 */,
-/* 1 */,
-/* 2 */
+/* 0 */
 /***/ (function(module, exports, __webpack_require__) {
 
-module.exports = __webpack_require__(3);
+"use strict";
+/* WEBPACK VAR INJECTION */(function(global) {
 
+var win;
+
+if (typeof window !== "undefined") {
+    win = window;
+} else if (typeof global !== "undefined") {
+    win = global;
+} else if (typeof self !== "undefined") {
+    win = self;
+} else {
+    win = {};
+}
+
+module.exports = win;
+/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(2)))
 
 /***/ }),
-/* 3 */
+/* 1 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 
-var _videoWorker = __webpack_require__(4);
+module.exports = new Promise(function (resolve) {
+	if (document.readyState === 'interactive' || document.readyState === 'complete') {
+		resolve();
+	} else {
+		document.addEventListener('DOMContentLoaded', function () {
+			resolve();
+		}, {
+			capture: true,
+			once: true,
+			passive: true
+		});
+	}
+});
 
-var _videoWorker2 = _interopRequireDefault(_videoWorker);
+/***/ }),
+/* 2 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
+
+var g;
+
+// This works in non-strict mode
+g = function () {
+	return this;
+}();
+
+try {
+	// This works if eval is allowed (see CSP)
+	g = g || Function("return this")() || (1, eval)("this");
+} catch (e) {
+	// This works if the window reference is available
+	if ((typeof window === "undefined" ? "undefined" : _typeof(window)) === "object") g = window;
+}
+
+// g can still be undefined, but nothing to do about it...
+// We return undefined, instead of nothing here, so it's
+// easier to handle this case. if(!global) { ...}
+
+module.exports = g;
+
+/***/ }),
+/* 3 */,
+/* 4 */,
+/* 5 */,
+/* 6 */
+/***/ (function(module, exports, __webpack_require__) {
+
+module.exports = __webpack_require__(7);
+
+
+/***/ }),
+/* 7 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+var _domLoaded = __webpack_require__(1);
+
+var _domLoaded2 = _interopRequireDefault(_domLoaded);
+
+var _jarallaxVideo = __webpack_require__(8);
+
+var _jarallaxVideo2 = _interopRequireDefault(_jarallaxVideo);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-// init events
-function addEventListener(el, eventName, handler) {
-    el.addEventListener(eventName, handler);
-}
+(0, _jarallaxVideo2.default)();
 
-if (typeof jarallax !== 'undefined') {
+// data-jarallax-video initialization
+_domLoaded2.default.then(function () {
+    if (typeof jarallax !== 'undefined') {
+        jarallax(document.querySelectorAll('[data-jarallax-video]'));
+    }
+});
+
+/***/ }),
+/* 8 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+exports.default = jarallaxVideo;
+
+var _videoWorker = __webpack_require__(9);
+
+var _videoWorker2 = _interopRequireDefault(_videoWorker);
+
+var _global = __webpack_require__(0);
+
+var _global2 = _interopRequireDefault(_global);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function jarallaxVideo() {
+    var jarallax = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : _global2.default.jarallax;
+
+    if (typeof jarallax === 'undefined') {
+        return;
+    }
+
     var Jarallax = jarallax.constructor;
 
     // append video after init Jarallax
@@ -106,7 +216,7 @@ if (typeof jarallax !== 'undefined') {
 
         defInit.apply(self);
 
-        if (self.video) {
+        if (self.video && !self.options.disableVideo()) {
             self.video.getIframe(function (iframe) {
                 var $parent = iframe.parentNode;
                 self.css(iframe, {
@@ -136,9 +246,9 @@ if (typeof jarallax !== 'undefined') {
     Jarallax.prototype.coverImage = function () {
         var self = this;
         var imageData = defCoverImage.apply(self);
-        var node = self.image.$item.nodeName;
+        var node = self.image.$item ? self.image.$item.nodeName : false;
 
-        if (imageData && self.video && (node === 'IFRAME' || node === 'VIDEO')) {
+        if (imageData && self.video && node && (node === 'IFRAME' || node === 'VIDEO')) {
             var h = imageData.image.height;
             var w = h * self.image.width / self.image.height;
             var ml = (imageData.container.width - w) / 2;
@@ -297,24 +407,19 @@ if (typeof jarallax !== 'undefined') {
 
         defDestroy.apply(self);
     };
-
-    // data-jarallax-video initialization
-    addEventListener(window, 'DOMContentLoaded', function () {
-        jarallax(document.querySelectorAll('[data-jarallax-video]'));
-    });
 }
 
 /***/ }),
-/* 4 */
+/* 9 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 
-module.exports = __webpack_require__(5);
+module.exports = __webpack_require__(10);
 
 /***/ }),
-/* 5 */
+/* 10 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -357,11 +462,6 @@ Deferred.prototype = {
         this._fail.push(callback);
     }
 };
-
-// init events
-function addEventListener(el, eventName, handler) {
-    el.addEventListener(eventName, handler);
-}
 
 var ID = 0;
 var YoutubeAPIadded = 0;
@@ -963,13 +1063,13 @@ var VideoWorker = function () {
                     self.player = self.player || self.$iframe;
 
                     var locStarted = void 0;
-                    addEventListener(self.player, 'playing', function (e) {
+                    self.player.addEventListener('playing', function (e) {
                         if (!locStarted) {
                             self.fire('started', e);
                         }
                         locStarted = 1;
                     });
-                    addEventListener(self.player, 'timeupdate', function () {
+                    self.player.addEventListener('timeupdate', function () {
                         // check for end of video and play again or stop
                         if (self.options.endTime) {
                             if (self.options.endTime && this.currentTime >= self.options.endTime) {
@@ -981,16 +1081,16 @@ var VideoWorker = function () {
                             }
                         }
                     });
-                    addEventListener(self.player, 'play', function (e) {
+                    self.player.addEventListener('play', function (e) {
                         self.fire('play', e);
                     });
-                    addEventListener(self.player, 'pause', function (e) {
+                    self.player.addEventListener('pause', function (e) {
                         self.fire('pause', e);
                     });
-                    addEventListener(self.player, 'ended', function (e) {
+                    self.player.addEventListener('ended', function (e) {
                         self.fire('end', e);
                     });
-                    addEventListener(self.player, 'loadedmetadata', function () {
+                    self.player.addEventListener('loadedmetadata', function () {
                         // get video width and height
                         self.videoWidth = this.videoWidth || 1280;
                         self.videoHeight = this.videoHeight || 720;

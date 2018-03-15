@@ -66,15 +66,30 @@
 /******/ 	__webpack_require__.p = "";
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 0);
+/******/ 	return __webpack_require__(__webpack_require__.s = 3);
 /******/ })
 /************************************************************************/
 /******/ ([
 /* 0 */
 /***/ (function(module, exports, __webpack_require__) {
 
-module.exports = __webpack_require__(1);
+"use strict";
+/* WEBPACK VAR INJECTION */(function(global) {
 
+var win;
+
+if (typeof window !== "undefined") {
+    win = window;
+} else if (typeof global !== "undefined") {
+    win = global;
+} else if (typeof self !== "undefined") {
+    win = self;
+} else {
+    win = {};
+}
+
+module.exports = win;
+/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(2)))
 
 /***/ }),
 /* 1 */
@@ -83,15 +98,106 @@ module.exports = __webpack_require__(1);
 "use strict";
 
 
-/* eslint no-case-declarations: "off" */
-(function () {
+module.exports = new Promise(function (resolve) {
+	if (document.readyState === 'interactive' || document.readyState === 'complete') {
+		resolve();
+	} else {
+		document.addEventListener('DOMContentLoaded', function () {
+			resolve();
+		}, {
+			capture: true,
+			once: true,
+			passive: true
+		});
+	}
+});
+
+/***/ }),
+/* 2 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
+
+var g;
+
+// This works in non-strict mode
+g = function () {
+	return this;
+}();
+
+try {
+	// This works if eval is allowed (see CSP)
+	g = g || Function("return this")() || (1, eval)("this");
+} catch (e) {
+	// This works if the window reference is available
+	if ((typeof window === "undefined" ? "undefined" : _typeof(window)) === "object") g = window;
+}
+
+// g can still be undefined, but nothing to do about it...
+// We return undefined, instead of nothing here, so it's
+// easier to handle this case. if(!global) { ...}
+
+module.exports = g;
+
+/***/ }),
+/* 3 */
+/***/ (function(module, exports, __webpack_require__) {
+
+module.exports = __webpack_require__(4);
+
+
+/***/ }),
+/* 4 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+var _domLoaded = __webpack_require__(1);
+
+var _domLoaded2 = _interopRequireDefault(_domLoaded);
+
+var _jarallaxElement = __webpack_require__(5);
+
+var _jarallaxElement2 = _interopRequireDefault(_jarallaxElement);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+(0, _jarallaxElement2.default)();
+
+// data-jarallax-element initialization
+_domLoaded2.default.then(function () {
+    if (typeof jarallax !== 'undefined') {
+        jarallax(document.querySelectorAll('[data-jarallax-element]'));
+    }
+});
+
+/***/ }),
+/* 5 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+exports.default = jarallaxElement;
+
+var _global = __webpack_require__(0);
+
+var _global2 = _interopRequireDefault(_global);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function jarallaxElement() {
+    var jarallax = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : _global2.default.jarallax;
+
     if (typeof jarallax === 'undefined') {
         return;
-    }
-
-    // init events
-    function addEventListener(el, eventName, handler) {
-        el.addEventListener(eventName, handler);
     }
 
     var Jarallax = jarallax.constructor;
@@ -161,12 +267,7 @@ module.exports = __webpack_require__(1);
             return def.apply(self, args);
         };
     });
-
-    // data-jarallax-element initialization
-    addEventListener(window, 'DOMContentLoaded', function () {
-        jarallax(document.querySelectorAll('[data-jarallax-element]'));
-    });
-})();
+} /* eslint no-case-declarations: "off" */
 
 /***/ })
 /******/ ]);
