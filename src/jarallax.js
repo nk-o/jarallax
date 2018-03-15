@@ -11,9 +11,6 @@ const supportTransform = (() => {
     }
     return false;
 })();
-const ua = navigator.userAgent;
-const isAndroid = ua.toLowerCase().indexOf('android') > -1;
-const isIOs = /iPad|iPhone|iPod/.test(ua) && !window.MSStream;
 
 // Window data
 let wndW;
@@ -213,7 +210,7 @@ class Jarallax {
             // position fixed is needed for the most of browsers because absolute position have glitches
             // on MacOS with smooth scroll there is a huge lags with absolute position - https://github.com/nk-o/jarallax/issues/75
             // on mobile devices better scrolled with absolute position
-            position: isAndroid || isIOs ? 'absolute' : 'fixed',
+            position: /iPad|iPhone|iPod|Android/.test(navigator.userAgent) ? 'absolute' : 'fixed',
         };
 
         if (self.initImg() && self.canInitParallax()) {
