@@ -110,6 +110,7 @@ class Jarallax {
             elementInViewport: null,
             zIndex: -100,
             disableParallax: false,
+            disableVideo: false,
 
             // video
             videoSrc: null,
@@ -185,6 +186,18 @@ class Jarallax {
         }
         if (typeof self.options.disableParallax !== 'function') {
             self.options.disableParallax = () => false;
+        }
+
+        // prepare disableVideo callback
+        if (typeof self.options.disableVideo === 'string') {
+            self.options.disableVideo = new RegExp(self.options.disableVideo);
+        }
+        if (self.options.disableVideo instanceof RegExp) {
+            const disableVideoRegexp = self.options.disableVideo;
+            self.options.disableVideo = () => disableVideoRegexp.test(navigator.userAgent);
+        }
+        if (typeof self.options.disableVideo !== 'function') {
+            self.options.disableVideo = () => false;
         }
 
         // custom element to check if parallax in viewport

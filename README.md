@@ -166,6 +166,7 @@ keepImg | boolean | `false` | Keep `<img>` tag in it's default place after Jaral
 elementInViewport | dom | `null` | Use custom DOM / jQuery element to check if parallax block in viewport. More info here - [Issue 13](https://github.com/nk-o/jarallax/issues/13).
 zIndex | number | `-100` | z-index of parallax container.
 disableParallax | RegExp / function | - | Disable parallax on specific user agents (using regular expression) or with function return value. The image will be set on the background.
+disableVideo | RegExp / function | - | Disable video load on specific user agents (using regular expression) or with function return value. The image will be set on the background.
 
 ### Disable on mobile devices
 You can disable parallax on mobile devices using regular expression or function in option `disableParallax`.
@@ -173,7 +174,8 @@ You can disable parallax on mobile devices using regular expression or function 
 Example:
 ```javascript
 jarallax(document.querySelectorAll('.jarallax'), {
-    disableParallax: /iPad|iPhone|iPod|Android/
+    disableParallax: /iPad|iPhone|iPod|Android/,
+    disableVideo: /iPad|iPhone|iPod|Android/
 });
 ```
 
@@ -181,6 +183,9 @@ Or using function. Example:
 ```javascript
 jarallax(document.querySelectorAll('.jarallax'), {
     disableParallax: function () {
+        return /iPad|iPhone|iPod|Android/.test(navigator.userAgent);
+    },
+    disableVideo: function () {
         return /iPad|iPhone|iPod|Android/.test(navigator.userAgent);
     }
 });

@@ -11,7 +11,7 @@ if (typeof jarallax !== 'undefined') {
 
         defInit.apply(self);
 
-        if (self.video) {
+        if (self.video && !self.options.disableVideo()) {
             self.video.getIframe((iframe) => {
                 const $parent = iframe.parentNode;
                 self.css(iframe, {
