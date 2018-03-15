@@ -68,6 +68,7 @@
     },
     "dependencies": {
         "dom-loaded": "^1.0.1",
+        "rafl": "^1.2.2",
         "video-worker": "^1.0.1"
     }
 }

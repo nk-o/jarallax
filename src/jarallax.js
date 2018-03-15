@@ -1,4 +1,5 @@
 import domLoaded from 'dom-loaded';
+import raf from 'rafl';
 
 const supportTransform = (() => {
     const prefixes = 'transform WebkitTransform MozTransform'.split(' ');
@@ -13,14 +14,6 @@ const supportTransform = (() => {
 const ua = navigator.userAgent;
 const isAndroid = ua.toLowerCase().indexOf('android') > -1;
 const isIOs = /iPad|iPhone|iPod/.test(ua) && !window.MSStream;
-
-// requestAnimationFrame polyfill
-const rAF = window.requestAnimationFrame ||
-    window.webkitRequestAnimationFrame ||
-    window.mozRequestAnimationFrame ||
-    function (callback) {
-        setTimeout(callback, 1000 / 60);
-    };
 
 // Window data
 let wndW;
@@ -83,7 +76,7 @@ function updateParallax() {
         };
     }
 
-    rAF(updateParallax);
+    raf(updateParallax);
 }
 
 
