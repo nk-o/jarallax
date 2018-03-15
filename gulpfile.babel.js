@@ -54,7 +54,7 @@ gulp.task('clean', () => del(['dist']));
  * JS Task
  */
 gulp.task('js', () => {
-    return gulp.src('src/*.js')
+    return gulp.src(['src/*.js', '!src/*.esm.js'])
         .pipe($.plumber({ errorHandler }))
         .pipe(named())
         .pipe(webpack({

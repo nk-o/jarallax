@@ -18,11 +18,24 @@ Demo: https://wp.nkdev.info/free-advanced-wordpress-backgrounds/
 
 Download: https://nkdev.info/downloads/advanced-wordpress-backgrounds/
 
-## Install
-Include Jarallax plugin. Also include jQuery before jarallax if you want to use it.
+## Getting Started
 
-### Download
-Download scripts directly from this repository and link it in your HTML file
+### Node.js
+`npm install jarallax --save`
+```javascript
+import {
+    jarallax,
+    jarallaxElement,
+    jarallaxVideo
+} from 'jarallax';
+
+jarallaxVideo();
+jarallaxElement();
+```
+
+Note: in this way is not available jQuery and data-attribute automatic initialization. Use javascript call instead ([Example](#b-javascript-way)).
+
+### Browser
 ```html
 <!-- Jarallax -->
 <script src="jarallax/dist/jarallax.min.js"></script>
@@ -34,7 +47,7 @@ Download scripts directly from this repository and link it in your HTML file
 <script src="jarallax/dist/jarallax.min.js"></script>
 ```
 
-### CDN
+#### CDN
 Link directly from [unpkg](https://unpkg.com/)
 ```html
 <!-- Jarallax -->
@@ -46,11 +59,6 @@ Link directly from [unpkg](https://unpkg.com/)
 <!-- Include it if you want to parallax any element -->
 <script src="https://unpkg.com/jarallax@1.9/dist/jarallax-element.min.js"></script>
 ```
-
-### Package managers
-npm: `npm install jarallax --save`
-
-~~Bower: `bower install jarallax --save`~~ (Deprecated)
 
 ## Supported plugins
 You can add these plugins before jarallax initialize.
