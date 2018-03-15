@@ -20,8 +20,8 @@ function getMainHeader() {
 }
 function getVideoHeader() {
     return `/*!
- * Name    : Video Worker (wrapper for Youtube, Vimeo and Local videos)
- * Version : ${data.version}
+ * Name    : Video Background Extension for Jarallax
+ * Version : 1.0.0
  * Author  : ${data.author}
  * GitHub  : ${data.homepage}
  */

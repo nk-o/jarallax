@@ -65,5 +65,8 @@
         "qunitjs": "^2.4.1",
         "vinyl-named": "^1.1.0",
         "webpack-stream": "^4.0.2"
+    },
+    "dependencies": {
+        "video-worker": "^1.0.0"
     }
 }
