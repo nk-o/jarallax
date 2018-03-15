@@ -78,14 +78,23 @@ interface JarallaxOptions {
     zIndex?: number;
 
     /**
-     * Disable parallax on Android devices.
+     * Disable parallax on specific user agents (using regular expression) or with function return value.
+     * The image will be set on the background.
      */
-    noAndroid?: boolean;
+    disableParallax?: RegExp;
 
     /**
-     * Disable parallax on iOS devices.
+     * Disable video load on specific user agents (using regular expression) or with function return value.
+     * The image will be set on the background.
      */
-    noIos?: boolean;
+    disableVideo?: RegExp;
+
+    /**
+     * Experimental! Automatically recalculate parallax size and position when the size of parallax block changed
+     * (dynamic content inside). Uses ResizeObserver, which has a small browsers compatible.
+     * Recommended using with polyfill https://github.com/que-etc/resize-observer-polyfill.
+     */
+    automaticResize?: boolean;
 
     /**
      * You can use Youtube, Vimeo or local videos. Also you can use data attribute data-jarallax-video.
