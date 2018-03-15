@@ -1,9 +1,7 @@
 /* eslint no-case-declarations: "off" */
-(function () {
-    if (typeof jarallax === 'undefined') {
-        return;
-    }
+import domLoaded from 'dom-loaded';
 
+if (typeof jarallax !== 'undefined') {
     const Jarallax = jarallax.constructor;
 
     // redefine default methods
@@ -83,7 +81,7 @@
     });
 
     // data-jarallax-element initialization
-    window.addEventListener('DOMContentLoaded', () => {
+    domLoaded.then(() => {
         jarallax(document.querySelectorAll('[data-jarallax-element]'));
     });
-}());
+}

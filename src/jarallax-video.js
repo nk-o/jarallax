@@ -1,4 +1,5 @@
 import VideoWorker from 'video-worker';
+import domLoaded from 'dom-loaded';
 
 if (typeof jarallax !== 'undefined') {
     const Jarallax = jarallax.constructor;
@@ -203,7 +204,7 @@ if (typeof jarallax !== 'undefined') {
     };
 
     // data-jarallax-video initialization
-    window.addEventListener('DOMContentLoaded', () => {
+    domLoaded.then(() => {
         jarallax(document.querySelectorAll('[data-jarallax-video]'));
     });
 }

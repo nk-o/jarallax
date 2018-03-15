@@ -1,3 +1,4 @@
+import domLoaded from 'dom-loaded';
 
 const supportTransform = (() => {
     const prefixes = 'transform WebkitTransform MozTransform'.split(' ');
@@ -29,7 +30,7 @@ let forceResizeParallax = false;
 function updateWndVars(e) {
     wndW = window.innerWidth || document.documentElement.clientWidth;
     wndH = window.innerHeight || document.documentElement.clientHeight;
-    if (typeof e === 'object' && (e.type === 'load' || e.type === 'DOMContentLoaded')) {
+    if (typeof e === 'object' && (e.type === 'load' || e.type === 'dom-loaded')) {
         forceResizeParallax = true;
     }
 }
@@ -37,7 +38,11 @@ updateWndVars();
 window.addEventListener('resize', updateWndVars);
 window.addEventListener('orientationchange', updateWndVars);
 window.addEventListener('load', updateWndVars);
-window.addEventListener('DOMContentLoaded', updateWndVars);
+domLoaded.then(() => {
+    updateWndVars({
+        type: 'dom-loaded',
+    });
+});
 
 // list with all jarallax instances
 // need to render all in one scroll/resize event
@@ -711,6 +716,6 @@ if (typeof jQuery !== 'undefined') {
 }
 
 // data-jarallax initialization
-window.addEventListener('DOMContentLoaded', () => {
-    plugin(document.querySelectorAll('[data-jarallax]'));
+domLoaded.then(() => {
+    jarallax(document.querySelectorAll('[data-jarallax]'));
 });
