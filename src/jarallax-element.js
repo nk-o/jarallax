@@ -4,11 +4,6 @@
         return;
     }
 
-    // init events
-    function addEventListener(el, eventName, handler) {
-        el.addEventListener(eventName, handler);
-    }
-
     const Jarallax = jarallax.constructor;
 
     // redefine default methods
@@ -88,7 +83,7 @@
     });
 
     // data-jarallax-element initialization
-    addEventListener(window, 'DOMContentLoaded', () => {
+    window.addEventListener('DOMContentLoaded', () => {
         jarallax(document.querySelectorAll('[data-jarallax-element]'));
     });
 }());

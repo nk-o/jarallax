@@ -21,11 +21,6 @@ const rAF = window.requestAnimationFrame ||
         setTimeout(callback, 1000 / 60);
     };
 
-// init events
-function addEventListener(el, eventName, handler) {
-    el.addEventListener(eventName, handler);
-}
-
 // Window data
 let wndW;
 let wndH;
@@ -39,10 +34,10 @@ function updateWndVars(e) {
     }
 }
 updateWndVars();
-addEventListener(window, 'resize', updateWndVars);
-addEventListener(window, 'orientationchange', updateWndVars);
-addEventListener(window, 'load', updateWndVars);
-addEventListener(window, 'DOMContentLoaded', updateWndVars);
+window.addEventListener('resize', updateWndVars);
+window.addEventListener('orientationchange', updateWndVars);
+window.addEventListener('load', updateWndVars);
+window.addEventListener('DOMContentLoaded', updateWndVars);
 
 // list with all jarallax instances
 // need to render all in one scroll/resize event
@@ -716,6 +711,6 @@ if (typeof jQuery !== 'undefined') {
 }
 
 // data-jarallax initialization
-addEventListener(window, 'DOMContentLoaded', () => {
+window.addEventListener('DOMContentLoaded', () => {
     plugin(document.querySelectorAll('[data-jarallax]'));
 });

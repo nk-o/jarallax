@@ -1,10 +1,5 @@
 import VideoWorker from 'video-worker';
 
-// init events
-function addEventListener(el, eventName, handler) {
-    el.addEventListener(eventName, handler);
-}
-
 if (typeof jarallax !== 'undefined') {
     const Jarallax = jarallax.constructor;
 
@@ -208,7 +203,7 @@ if (typeof jarallax !== 'undefined') {
     };
 
     // data-jarallax-video initialization
-    addEventListener(window, 'DOMContentLoaded', () => {
+    window.addEventListener('DOMContentLoaded', () => {
         jarallax(document.querySelectorAll('[data-jarallax-video]'));
     });
 }
