@@ -67,6 +67,6 @@
         "webpack-stream": "^4.0.2"
     },
     "dependencies": {
-        "video-worker": "^1.0.0"
+        "video-worker": "^1.0.1"
     }
 }
