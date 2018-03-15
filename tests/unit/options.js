@@ -17,8 +17,7 @@ QUnit.module('options', function () {
             imgRepeat: options.imgRepeat,
             elementInViewport: options.elementInViewport,
             zIndex: options.zIndex,
-            noAndroid: options.noAndroid,
-            noIos: options.noIos,
+            disableParallax: options.disableParallax.toString(),
             videoSrc: options.videoSrc,
             videoStartTime: options.videoStartTime,
             videoEndTime: options.videoEndTime,
@@ -38,8 +37,9 @@ QUnit.module('options', function () {
             imgRepeat: 'no-repeat',
             elementInViewport: null,
             zIndex: -100,
-            noAndroid: false,
-            noIos: false,
+            disableParallax: "function () {\n" +
+            "                return false;\n" +
+            "            }",
             videoSrc: null,
             videoStartTime: 0,
             videoEndTime: 0,
@@ -81,8 +81,7 @@ QUnit.module('options', function () {
             imgRepeat: 'repeat',
             elementInViewport: $jarallax,
             zIndex: -101,
-            noAndroid: true,
-            noIos: true,
+            disableParallax: /Android/,
             videoSrc: 'https://youtu.be/mru3Q5m4lkY',
             videoStartTime: 10,
             videoEndTime: 20,
@@ -98,6 +97,9 @@ QUnit.module('options', function () {
 
         var options = $jarallax.jarallax.options;
 
+        customOptions.disableParallax = "function () {\n" +
+            "                return disableParallaxRegexp.test(navigator.userAgent);\n" +
+            "            }";
         assert.deepEqual({
             type: options.type,
             speed: options.speed,
@@ -108,8 +110,7 @@ QUnit.module('options', function () {
             imgRepeat: options.imgRepeat,
             elementInViewport: options.elementInViewport,
             zIndex: options.zIndex,
-            noAndroid: options.noAndroid,
-            noIos: options.noIos,
+            disableParallax: options.disableParallax.toString(),
             videoSrc: options.videoSrc,
             videoStartTime: options.videoStartTime,
             videoEndTime: options.videoEndTime,
@@ -137,8 +138,7 @@ QUnit.module('options', function () {
             'data-img-position': 'top',
             'data-img-repeat': 'repeat',
             'data-z-index': '-102',
-            'data-no-android': 'true',
-            'data-no-ios': 'true',
+            'data-disable-parallax': '/Android/',
             'data-video-src': 'https://youtu.be/mru3Q5m4lkY',
             'data-video-start-time': '10',
             'data-video-end-time': '20',
@@ -159,8 +159,7 @@ QUnit.module('options', function () {
             imgPosition: options.imgPosition,
             imgRepeat: options.imgRepeat,
             zIndex: options.zIndex,
-            noAndroid: options.noAndroid,
-            noIos: options.noIos,
+            disableParallax: options.disableParallax.toString(),
             videoSrc: options.videoSrc,
             videoStartTime: options.videoStartTime,
             videoEndTime: options.videoEndTime,
@@ -175,8 +174,9 @@ QUnit.module('options', function () {
             imgPosition: 'top',
             imgRepeat: 'repeat',
             zIndex: '-102',
-            noAndroid: true,
-            noIos: true,
+            disableParallax: "function () {\n" +
+            "                return disableParallaxRegexp.test(navigator.userAgent);\n" +
+            "            }",
             videoSrc: 'https://youtu.be/mru3Q5m4lkY',
             videoStartTime: '10',
             videoEndTime: '20',
