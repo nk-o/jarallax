@@ -18,6 +18,7 @@ let wndW;
 let wndH;
 let wndY;
 let forceResizeParallax = false;
+let forceScrollParallax = false;
 function updateWndVars(e) {
     wndW = window.innerWidth || document.documentElement.clientWidth;
     wndH = window.innerHeight || document.documentElement.clientHeight;
@@ -53,9 +54,10 @@ function updateParallax() {
     }
 
     const isResized = forceResizeParallax || !oldPageData || oldPageData.width !== wndW || oldPageData.height !== wndH;
-    const isScrolled = isResized || !oldPageData || oldPageData.y !== wndY;
+    const isScrolled = forceScrollParallax || isResized || !oldPageData || oldPageData.y !== wndY;
 
     forceResizeParallax = false;
+    forceScrollParallax = false;
 
     if (isResized || isScrolled) {
         jarallaxList.forEach((item) => {
@@ -76,6 +78,23 @@ function updateParallax() {
 
     raf(updateParallax);
 }
+
+
+// ResizeObserver
+const resizeObserver = global.ResizeObserver ? new global.ResizeObserver((entry) => {
+    if (entry && entry.length) {
+        raf(() => {
+            entry.forEach((item) => {
+                if (item.target && item.target.jarallax) {
+                    if (!forceResizeParallax) {
+                        item.target.jarallax.onResize();
+                    }
+                    forceScrollParallax = true;
+                }
+            });
+        });
+    }
+}) : false;
 
 
 let instanceID = 0;
@@ -102,6 +121,7 @@ class Jarallax {
             zIndex: -100,
             disableParallax: false,
             disableVideo: false,
+            automaticResize: true, // use ResizeObserver to recalculate position and size of parallax image
 
             // video
             videoSrc: null,
@@ -400,6 +420,11 @@ class Jarallax {
         self.coverImage();
         self.clipContainer();
         self.onScroll(true);
+
+        // ResizeObserver
+        if (self.options.automaticResize && resizeObserver) {
+            resizeObserver.observe(self.$item);
+        }
 
         // call onInit event
         if (self.options.onInit) {

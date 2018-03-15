@@ -175,6 +175,7 @@ elementInViewport | dom | `null` | Use custom DOM / jQuery element to check if p
 zIndex | number | `-100` | z-index of parallax container.
 disableParallax | RegExp / function | - | Disable parallax on specific user agents (using regular expression) or with function return value. The image will be set on the background.
 disableVideo | RegExp / function | - | Disable video load on specific user agents (using regular expression) or with function return value. The image will be set on the background.
+automaticResize | boolean | false | **Experimental!** Automatically recalculate parallax size and position when the size of parallax block changed (dynamic content inside). Uses ResizeObserver, which has a small browsers compatible. Recommended using with polyfill [https://github.com/que-etc/resize-observer-polyfill](https://github.com/que-etc/resize-observer-polyfill).
 
 ### Disable on mobile devices
 You can disable parallax on mobile devices using regular expression or function in option `disableParallax`.
