@@ -1,6 +1,6 @@
 /*!
  * Name    : Video Background Extension for Jarallax
- * Version : 1.0.0
+ * Version : 1.0.1
  * Author  : nK <https://nkdev.info>
  * GitHub  : https://github.com/nk-o/jarallax
  */
@@ -66,7 +66,7 @@
 /******/ 	__webpack_require__.p = "";
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 6);
+/******/ 	return __webpack_require__(__webpack_require__.s = 7);
 /******/ })
 /************************************************************************/
 /******/ ([
@@ -143,31 +143,51 @@ try {
 module.exports = g;
 
 /***/ }),
-/* 3 */,
-/* 4 */,
-/* 5 */,
-/* 6 */
-/***/ (function(module, exports, __webpack_require__) {
-
-module.exports = __webpack_require__(7);
-
-
-/***/ }),
-/* 7 */
+/* 3 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 
+module.exports = __webpack_require__(9);
+
+/***/ }),
+/* 4 */,
+/* 5 */,
+/* 6 */,
+/* 7 */
+/***/ (function(module, exports, __webpack_require__) {
+
+module.exports = __webpack_require__(8);
+
+
+/***/ }),
+/* 8 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+var _videoWorker = __webpack_require__(3);
+
+var _videoWorker2 = _interopRequireDefault(_videoWorker);
+
+var _global = __webpack_require__(0);
+
+var _global2 = _interopRequireDefault(_global);
+
 var _domLoaded = __webpack_require__(1);
 
 var _domLoaded2 = _interopRequireDefault(_domLoaded);
 
-var _jarallaxVideo = __webpack_require__(8);
+var _jarallaxVideo = __webpack_require__(10);
 
 var _jarallaxVideo2 = _interopRequireDefault(_jarallaxVideo);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+// add video worker globally to fallback jarallax < 1.10 versions
+_global2.default.VideoWorker = _global2.default.VideoWorker || _videoWorker2.default;
 
 (0, _jarallaxVideo2.default)();
 
@@ -179,247 +199,7 @@ _domLoaded2.default.then(function () {
 });
 
 /***/ }),
-/* 8 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-Object.defineProperty(exports, "__esModule", {
-    value: true
-});
-exports.default = jarallaxVideo;
-
-var _videoWorker = __webpack_require__(9);
-
-var _videoWorker2 = _interopRequireDefault(_videoWorker);
-
-var _global = __webpack_require__(0);
-
-var _global2 = _interopRequireDefault(_global);
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-function jarallaxVideo() {
-    var jarallax = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : _global2.default.jarallax;
-
-    if (typeof jarallax === 'undefined') {
-        return;
-    }
-
-    var Jarallax = jarallax.constructor;
-
-    // append video after init Jarallax
-    var defInit = Jarallax.prototype.init;
-    Jarallax.prototype.init = function () {
-        var self = this;
-
-        defInit.apply(self);
-
-        if (self.video && !self.options.disableVideo()) {
-            self.video.getVideo(function (video) {
-                var $parent = video.parentNode;
-                self.css(video, {
-                    position: self.image.position,
-                    top: '0px',
-                    left: '0px',
-                    right: '0px',
-                    bottom: '0px',
-                    width: '100%',
-                    height: '100%',
-                    maxWidth: 'none',
-                    maxHeight: 'none',
-                    margin: 0,
-                    zIndex: -1
-                });
-                self.$video = video;
-                self.image.$container.appendChild(video);
-
-                // remove parent video element (created by VideoWorker)
-                $parent.parentNode.removeChild($parent);
-            });
-        }
-    };
-
-    // cover video
-    var defCoverImage = Jarallax.prototype.coverImage;
-    Jarallax.prototype.coverImage = function () {
-        var self = this;
-        var imageData = defCoverImage.apply(self);
-        var node = self.image.$item ? self.image.$item.nodeName : false;
-
-        if (imageData && self.video && node && (node === 'IFRAME' || node === 'VIDEO')) {
-            var h = imageData.image.height;
-            var w = h * self.image.width / self.image.height;
-            var ml = (imageData.container.width - w) / 2;
-            var mt = imageData.image.marginTop;
-
-            if (imageData.container.width > w) {
-                w = imageData.container.width;
-                h = w * self.image.height / self.image.width;
-                ml = 0;
-                mt += (imageData.image.height - h) / 2;
-            }
-
-            // add video height over than need to hide controls
-            if (node === 'IFRAME') {
-                h += 400;
-                mt -= 200;
-            }
-
-            self.css(self.$video, {
-                width: w + 'px',
-                marginLeft: ml + 'px',
-                height: h + 'px',
-                marginTop: mt + 'px'
-            });
-        }
-
-        return imageData;
-    };
-
-    // init video
-    var defInitImg = Jarallax.prototype.initImg;
-    Jarallax.prototype.initImg = function () {
-        var self = this;
-        var defaultResult = defInitImg.apply(self);
-
-        if (!self.options.videoSrc) {
-            self.options.videoSrc = self.$item.getAttribute('data-jarallax-video') || null;
-        }
-
-        if (self.options.videoSrc) {
-            self.defaultInitImgResult = defaultResult;
-            return true;
-        }
-
-        return defaultResult;
-    };
-
-    var defCanInitParallax = Jarallax.prototype.canInitParallax;
-    Jarallax.prototype.canInitParallax = function () {
-        var self = this;
-        var defaultResult = defCanInitParallax.apply(self);
-
-        if (!self.options.videoSrc) {
-            return defaultResult;
-        }
-
-        var video = new _videoWorker2.default(self.options.videoSrc, {
-            autoplay: true,
-            loop: true,
-            showContols: false,
-            startTime: self.options.videoStartTime || 0,
-            endTime: self.options.videoEndTime || 0,
-            mute: self.options.videoVolume ? 0 : 1,
-            volume: self.options.videoVolume || 0
-        });
-
-        if (video.isValid()) {
-            // if parallax will not be inited, we can add thumbnail on background.
-            if (!defaultResult) {
-                if (!self.defaultInitImgResult) {
-                    video.getImageURL(function (url) {
-                        // save default user styles
-                        var curStyle = self.$item.getAttribute('style');
-                        if (curStyle) {
-                            self.$item.setAttribute('data-jarallax-original-styles', curStyle);
-                        }
-
-                        // set new background
-                        self.css(self.$item, {
-                            'background-image': 'url("' + url + '")',
-                            'background-position': 'center',
-                            'background-size': 'cover'
-                        });
-                    });
-                }
-
-                // init video
-            } else {
-                video.on('ready', function () {
-                    if (self.options.videoPlayOnlyVisible) {
-                        var oldOnScroll = self.onScroll;
-                        self.onScroll = function () {
-                            oldOnScroll.apply(self);
-                            if (self.isVisible()) {
-                                video.play();
-                            } else {
-                                video.pause();
-                            }
-                        };
-                    } else {
-                        video.play();
-                    }
-                });
-
-                video.on('started', function () {
-                    self.image.$default_item = self.image.$item;
-                    self.image.$item = self.$video;
-
-                    // set video width and height
-                    self.image.width = self.video.videoWidth || 1280;
-                    self.image.height = self.video.videoHeight || 720;
-                    self.options.imgWidth = self.image.width;
-                    self.options.imgHeight = self.image.height;
-                    self.coverImage();
-                    self.clipContainer();
-                    self.onScroll();
-
-                    // hide image
-                    if (self.image.$default_item) {
-                        self.image.$default_item.style.display = 'none';
-                    }
-                });
-
-                self.video = video;
-
-                // set image if not exists
-                if (!self.defaultInitImgResult) {
-                    if (video.type !== 'local') {
-                        video.getImageURL(function (url) {
-                            self.image.src = url;
-                            self.init();
-                        });
-
-                        return false;
-                    }
-
-                    // set empty image on local video if not defined
-                    self.image.src = 'data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7';
-                    return true;
-                }
-            }
-        }
-
-        return defaultResult;
-    };
-
-    // Destroy video parallax
-    var defDestroy = Jarallax.prototype.destroy;
-    Jarallax.prototype.destroy = function () {
-        var self = this;
-
-        if (self.image.$default_item) {
-            self.image.$item = self.image.$default_item;
-            delete self.image.$default_item;
-        }
-
-        defDestroy.apply(self);
-    };
-}
-
-/***/ }),
 /* 9 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-module.exports = __webpack_require__(10);
-
-/***/ }),
-/* 10 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -849,6 +629,14 @@ var VideoWorker = function () {
                 request = null;
             }
         }
+
+        // fallback to the old version.
+
+    }, {
+        key: 'getIframe',
+        value: function getIframe(callback) {
+            this.getVideo(callback);
+        }
     }, {
         key: 'getVideo',
         value: function getVideo(callback) {
@@ -1258,6 +1046,237 @@ var VideoWorker = function () {
 }();
 
 exports.default = VideoWorker;
+
+/***/ }),
+/* 10 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+exports.default = jarallaxVideo;
+
+var _videoWorker = __webpack_require__(3);
+
+var _videoWorker2 = _interopRequireDefault(_videoWorker);
+
+var _global = __webpack_require__(0);
+
+var _global2 = _interopRequireDefault(_global);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function jarallaxVideo() {
+    var jarallax = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : _global2.default.jarallax;
+
+    if (typeof jarallax === 'undefined') {
+        return;
+    }
+
+    var Jarallax = jarallax.constructor;
+
+    // append video after init Jarallax
+    var defInit = Jarallax.prototype.init;
+    Jarallax.prototype.init = function () {
+        var self = this;
+
+        defInit.apply(self);
+
+        if (self.video && !self.options.disableVideo()) {
+            self.video.getVideo(function (video) {
+                var $parent = video.parentNode;
+                self.css(video, {
+                    position: self.image.position,
+                    top: '0px',
+                    left: '0px',
+                    right: '0px',
+                    bottom: '0px',
+                    width: '100%',
+                    height: '100%',
+                    maxWidth: 'none',
+                    maxHeight: 'none',
+                    margin: 0,
+                    zIndex: -1
+                });
+                self.$video = video;
+                self.image.$container.appendChild(video);
+
+                // remove parent video element (created by VideoWorker)
+                $parent.parentNode.removeChild($parent);
+            });
+        }
+    };
+
+    // cover video
+    var defCoverImage = Jarallax.prototype.coverImage;
+    Jarallax.prototype.coverImage = function () {
+        var self = this;
+        var imageData = defCoverImage.apply(self);
+        var node = self.image.$item ? self.image.$item.nodeName : false;
+
+        if (imageData && self.video && node && (node === 'IFRAME' || node === 'VIDEO')) {
+            var h = imageData.image.height;
+            var w = h * self.image.width / self.image.height;
+            var ml = (imageData.container.width - w) / 2;
+            var mt = imageData.image.marginTop;
+
+            if (imageData.container.width > w) {
+                w = imageData.container.width;
+                h = w * self.image.height / self.image.width;
+                ml = 0;
+                mt += (imageData.image.height - h) / 2;
+            }
+
+            // add video height over than need to hide controls
+            if (node === 'IFRAME') {
+                h += 400;
+                mt -= 200;
+            }
+
+            self.css(self.$video, {
+                width: w + 'px',
+                marginLeft: ml + 'px',
+                height: h + 'px',
+                marginTop: mt + 'px'
+            });
+        }
+
+        return imageData;
+    };
+
+    // init video
+    var defInitImg = Jarallax.prototype.initImg;
+    Jarallax.prototype.initImg = function () {
+        var self = this;
+        var defaultResult = defInitImg.apply(self);
+
+        if (!self.options.videoSrc) {
+            self.options.videoSrc = self.$item.getAttribute('data-jarallax-video') || null;
+        }
+
+        if (self.options.videoSrc) {
+            self.defaultInitImgResult = defaultResult;
+            return true;
+        }
+
+        return defaultResult;
+    };
+
+    var defCanInitParallax = Jarallax.prototype.canInitParallax;
+    Jarallax.prototype.canInitParallax = function () {
+        var self = this;
+        var defaultResult = defCanInitParallax.apply(self);
+
+        if (!self.options.videoSrc) {
+            return defaultResult;
+        }
+
+        var video = new _videoWorker2.default(self.options.videoSrc, {
+            autoplay: true,
+            loop: true,
+            showContols: false,
+            startTime: self.options.videoStartTime || 0,
+            endTime: self.options.videoEndTime || 0,
+            mute: self.options.videoVolume ? 0 : 1,
+            volume: self.options.videoVolume || 0
+        });
+
+        if (video.isValid()) {
+            // if parallax will not be inited, we can add thumbnail on background.
+            if (!defaultResult) {
+                if (!self.defaultInitImgResult) {
+                    video.getImageURL(function (url) {
+                        // save default user styles
+                        var curStyle = self.$item.getAttribute('style');
+                        if (curStyle) {
+                            self.$item.setAttribute('data-jarallax-original-styles', curStyle);
+                        }
+
+                        // set new background
+                        self.css(self.$item, {
+                            'background-image': 'url("' + url + '")',
+                            'background-position': 'center',
+                            'background-size': 'cover'
+                        });
+                    });
+                }
+
+                // init video
+            } else {
+                video.on('ready', function () {
+                    if (self.options.videoPlayOnlyVisible) {
+                        var oldOnScroll = self.onScroll;
+                        self.onScroll = function () {
+                            oldOnScroll.apply(self);
+                            if (self.isVisible()) {
+                                video.play();
+                            } else {
+                                video.pause();
+                            }
+                        };
+                    } else {
+                        video.play();
+                    }
+                });
+
+                video.on('started', function () {
+                    self.image.$default_item = self.image.$item;
+                    self.image.$item = self.$video;
+
+                    // set video width and height
+                    self.image.width = self.video.videoWidth || 1280;
+                    self.image.height = self.video.videoHeight || 720;
+                    self.options.imgWidth = self.image.width;
+                    self.options.imgHeight = self.image.height;
+                    self.coverImage();
+                    self.clipContainer();
+                    self.onScroll();
+
+                    // hide image
+                    if (self.image.$default_item) {
+                        self.image.$default_item.style.display = 'none';
+                    }
+                });
+
+                self.video = video;
+
+                // set image if not exists
+                if (!self.defaultInitImgResult) {
+                    if (video.type !== 'local') {
+                        video.getImageURL(function (url) {
+                            self.image.src = url;
+                            self.init();
+                        });
+
+                        return false;
+                    }
+
+                    // set empty image on local video if not defined
+                    self.image.src = 'data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7';
+                    return true;
+                }
+            }
+        }
+
+        return defaultResult;
+    };
+
+    // Destroy video parallax
+    var defDestroy = Jarallax.prototype.destroy;
+    Jarallax.prototype.destroy = function () {
+        var self = this;
+
+        if (self.image.$default_item) {
+            self.image.$item = self.image.$default_item;
+            delete self.image.$default_item;
+        }
+
+        defDestroy.apply(self);
+    };
+}
 
 /***/ })
 /******/ ]);

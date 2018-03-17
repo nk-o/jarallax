@@ -21,7 +21,7 @@ function getMainHeader() {
 function getVideoHeader() {
     return `/*!
  * Name    : Video Background Extension for Jarallax
- * Version : 1.0.0
+ * Version : 1.0.1
  * Author  : ${data.author}
  * GitHub  : ${data.homepage}
  */

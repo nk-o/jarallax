@@ -66,7 +66,7 @@
 /******/ 	__webpack_require__.p = "";
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 3);
+/******/ 	return __webpack_require__(__webpack_require__.s = 4);
 /******/ })
 /************************************************************************/
 /******/ ([
@@ -143,14 +143,15 @@ try {
 module.exports = g;
 
 /***/ }),
-/* 3 */
+/* 3 */,
+/* 4 */
 /***/ (function(module, exports, __webpack_require__) {
 
-module.exports = __webpack_require__(4);
+module.exports = __webpack_require__(5);
 
 
 /***/ }),
-/* 4 */
+/* 5 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -160,7 +161,7 @@ var _domLoaded = __webpack_require__(1);
 
 var _domLoaded2 = _interopRequireDefault(_domLoaded);
 
-var _jarallaxElement = __webpack_require__(5);
+var _jarallaxElement = __webpack_require__(6);
 
 var _jarallaxElement2 = _interopRequireDefault(_jarallaxElement);
 
@@ -176,7 +177,7 @@ _domLoaded2.default.then(function () {
 });
 
 /***/ }),
-/* 5 */
+/* 6 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
