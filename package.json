@@ -70,6 +70,6 @@
         "dom-loaded": "^1.0.1",
         "global": "^4.3.2",
         "rafl": "^1.2.2",
-        "video-worker": "^1.1.0"
+        "video-worker": "^1.1.1"
     }
 }
