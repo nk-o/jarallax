@@ -20,7 +20,7 @@ Download: https://nkdev.info/downloads/advanced-wordpress-backgrounds/
 
 ## Getting Started
 
-### Node.js
+### ES6
 `npm install jarallax --save`
 ```javascript
 import {
