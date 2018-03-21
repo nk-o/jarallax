@@ -41,10 +41,10 @@ Note: in this way is not available jQuery and data-attribute automatic initializ
 <script src="jarallax/dist/jarallax.min.js"></script>
 
 <!-- Include it if you want to use Video parallax -->
-<script src="jarallax/dist/jarallax.min.js"></script>
+<script src="jarallax/dist/jarallax-video.min.js"></script>
 
 <!-- Include it if you want to parallax any element -->
-<script src="jarallax/dist/jarallax.min.js"></script>
+<script src="jarallax/dist/jarallax-element.min.js"></script>
 ```
 
 #### CDN
