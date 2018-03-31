@@ -1,4 +1,4 @@
-import domLoaded from 'dom-loaded';
+import domReady from 'lite-ready';
 import { window, jQuery } from 'global';
 import jarallax from './jarallax.esm';
 
@@ -30,6 +30,6 @@ if (typeof jQuery !== 'undefined') {
 }
 
 // data-jarallax initialization
-domLoaded.then(() => {
+domReady(() => {
     jarallax(document.querySelectorAll('[data-jarallax]'));
 });

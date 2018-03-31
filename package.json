@@ -68,8 +68,8 @@
         "webpack-stream": "^4.0.2"
     },
     "dependencies": {
-        "dom-loaded": "^1.0.1",
         "global": "^4.3.2",
+        "lite-ready": "^1.0.4",
         "rafl": "^1.2.2",
         "video-worker": "^1.1.1"
     }

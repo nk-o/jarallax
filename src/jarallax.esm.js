@@ -1,4 +1,4 @@
-import domLoaded from 'dom-loaded';
+import domReady from 'lite-ready';
 import raf from 'rafl';
 import { window } from 'global';
 
@@ -30,7 +30,7 @@ updateWndVars();
 window.addEventListener('resize', updateWndVars);
 window.addEventListener('orientationchange', updateWndVars);
 window.addEventListener('load', updateWndVars);
-domLoaded.then(() => {
+domReady(() => {
     updateWndVars({
         type: 'dom-loaded',
     });
