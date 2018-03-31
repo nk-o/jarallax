@@ -1,6 +1,6 @@
 /*!
  * Name    : Just Another Parallax [Jarallax]
- * Version : 1.10.2
+ * Version : 1.10.3
  * Author  : nK <https://nkdev.info>
  * GitHub  : https://github.com/nk-o/jarallax
  */
@@ -98,19 +98,21 @@ module.exports = win;
 "use strict";
 
 
-module.exports = new Promise(function (resolve) {
-	if (document.readyState === 'interactive' || document.readyState === 'complete') {
-		resolve();
-	} else {
-		document.addEventListener('DOMContentLoaded', function () {
-			resolve();
-		}, {
-			capture: true,
-			once: true,
-			passive: true
+module.exports = function (callback) {
+
+	if (document.readyState === 'complete' || document.readyState === 'interactive') {
+		// Already ready or interactive, execute callback
+		callback.call();
+	} else if (document.attachEvent) {
+		// Old browsers
+		document.attachEvent('onreadystatechange', function () {
+			if (document.readyState === 'interactive') callback.call();
 		});
+	} else if (document.addEventListener) {
+		// Modern browsers
+		document.addEventListener('DOMContentLoaded', callback);
 	}
-});
+};
 
 /***/ }),
 /* 2 */
@@ -166,9 +168,9 @@ module.exports = __webpack_require__(12);
 
 var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
 
-var _domLoaded = __webpack_require__(1);
+var _liteReady = __webpack_require__(1);
 
-var _domLoaded2 = _interopRequireDefault(_domLoaded);
+var _liteReady2 = _interopRequireDefault(_liteReady);
 
 var _global = __webpack_require__(0);
 
@@ -206,7 +208,7 @@ if (typeof _global.jQuery !== 'undefined') {
 }
 
 // data-jarallax initialization
-_domLoaded2.default.then(function () {
+(0, _liteReady2.default)(function () {
     (0, _jarallax2.default)(document.querySelectorAll('[data-jarallax]'));
 });
 
@@ -227,9 +229,9 @@ var _createClass = function () { function defineProperties(target, props) { for 
 
 var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
 
-var _domLoaded = __webpack_require__(1);
+var _liteReady = __webpack_require__(1);
 
-var _domLoaded2 = _interopRequireDefault(_domLoaded);
+var _liteReady2 = _interopRequireDefault(_liteReady);
 
 var _rafl = __webpack_require__(14);
 
@@ -269,7 +271,7 @@ updateWndVars();
 _global.window.addEventListener('resize', updateWndVars);
 _global.window.addEventListener('orientationchange', updateWndVars);
 _global.window.addEventListener('load', updateWndVars);
-_domLoaded2.default.then(function () {
+(0, _liteReady2.default)(function () {
     updateWndVars({
         type: 'dom-loaded'
     });

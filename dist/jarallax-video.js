@@ -98,19 +98,21 @@ module.exports = win;
 "use strict";
 
 
-module.exports = new Promise(function (resolve) {
-	if (document.readyState === 'interactive' || document.readyState === 'complete') {
-		resolve();
-	} else {
-		document.addEventListener('DOMContentLoaded', function () {
-			resolve();
-		}, {
-			capture: true,
-			once: true,
-			passive: true
+module.exports = function (callback) {
+
+	if (document.readyState === 'complete' || document.readyState === 'interactive') {
+		// Already ready or interactive, execute callback
+		callback.call();
+	} else if (document.attachEvent) {
+		// Old browsers
+		document.attachEvent('onreadystatechange', function () {
+			if (document.readyState === 'interactive') callback.call();
 		});
+	} else if (document.addEventListener) {
+		// Modern browsers
+		document.addEventListener('DOMContentLoaded', callback);
 	}
-});
+};
 
 /***/ }),
 /* 2 */
@@ -176,9 +178,9 @@ var _global = __webpack_require__(0);
 
 var _global2 = _interopRequireDefault(_global);
 
-var _domLoaded = __webpack_require__(1);
+var _liteReady = __webpack_require__(1);
 
-var _domLoaded2 = _interopRequireDefault(_domLoaded);
+var _liteReady2 = _interopRequireDefault(_liteReady);
 
 var _jarallaxVideo = __webpack_require__(10);
 
@@ -192,7 +194,7 @@ _global2.default.VideoWorker = _global2.default.VideoWorker || _videoWorker2.def
 (0, _jarallaxVideo2.default)();
 
 // data-jarallax-video initialization
-_domLoaded2.default.then(function () {
+(0, _liteReady2.default)(function () {
     if (typeof jarallax !== 'undefined') {
         jarallax(document.querySelectorAll('[data-jarallax-video]'));
     }
