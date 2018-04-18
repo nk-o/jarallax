@@ -74,6 +74,15 @@ You can add these plugins before jarallax initialize.
     Your content here...
 </div>
 
+<!-- Background Image Parallax with <picture> tag -->
+<div class="jarallax">
+    <picture class="jarallax-img">
+        <source media="..." srcset="<alternative_background_image_url_here>">
+        <img src="<background_image_url_here>" alt="">
+    </picture>
+    Your content here...
+</div>
+
 <!-- Alternate: Background Image Parallax -->
 <div class="jarallax" style="background-image: url('<background_image_url_here>');">
     Your content here...
