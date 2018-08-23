@@ -417,8 +417,7 @@ class Jarallax {
         self.image.$container.appendChild(self.image.$item);
 
         // set initial position and size
-        self.coverImage();
-        self.clipContainer();
+        self.onResize();
         self.onScroll(true);
 
         // ResizeObserver

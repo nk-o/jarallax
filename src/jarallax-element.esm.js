@@ -45,10 +45,6 @@ export default function jarallaxElement(jarallax = global.jarallax) {
                 const thresholdArr = self.pureOptions.threshold.split(' ');
                 self.options.thresholdY = thresholdArr[0] ? parseFloat(thresholdArr[0]) : null;
                 self.options.thresholdX = thresholdArr[1] ? parseFloat(thresholdArr[1]) : null;
-
-                self.onResize();
-                self.onScroll();
-                self.addToParallaxList();
                 break;
             case 'onResize':
                 const defTransform = self.css(self.$item, 'transform');
