@@ -6,6 +6,7 @@ const fs = require('fs');
 const browserSync = require('browser-sync');
 const named = require('vinyl-named');
 const webpack = require('webpack-stream');
+const webpackconfig = require('./webpack.config.js');
 const qunit = require('node-qunit-phantomjs');
 const data = require('json-file').read('./package.json').data;
 
@@ -58,16 +59,7 @@ gulp.task('js', () => {
         .pipe($.plumber({ errorHandler }))
         .pipe(named())
         .pipe(webpack({
-            module: {
-                loaders: [
-                    {
-                        test: /\.js$/,
-                        use: [{
-                            loader: 'babel-loader',
-                        }],
-                    },
-                ],
-            },
+            config: webpackconfig,
         }))
         .pipe($.if(file => file.path.match(/jarallax.js$/), $.header(getMainHeader())))
         .pipe($.if(file => file.path.match(/jarallax-video.js$/), $.header(getVideoHeader())))

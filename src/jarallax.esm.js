@@ -634,11 +634,10 @@ class Jarallax {
         if (self.options.elementInViewport) {
             viewportRect = self.options.elementInViewport.getBoundingClientRect();
         }
-        self.isElementInViewport =
-            viewportRect.bottom >= 0 &&
-            viewportRect.right >= 0 &&
-            viewportRect.top <= wndH &&
-            viewportRect.left <= wndW;
+        self.isElementInViewport = viewportRect.bottom >= 0
+            && viewportRect.right >= 0
+            && viewportRect.top <= wndH
+            && viewportRect.left <= wndW;
 
         // stop calculations if item is not in viewport
         if (force ? false : !self.isElementInViewport) {
