@@ -2,6 +2,8 @@ import domReady from 'lite-ready';
 import raf from 'rafl';
 import { window } from 'global';
 
+const isIE = navigator.userAgent.indexOf('MSIE ') > -1 || navigator.userAgent.indexOf('Trident/') > -1 || navigator.userAgent.indexOf('Edge/') > -1;
+
 const supportTransform = (() => {
     const prefixes = 'transform WebkitTransform MozTransform'.split(' ');
     const div = document.createElement('div');
@@ -364,6 +366,14 @@ class Jarallax {
         self.css(self.image.$container, {
             'z-index': self.options.zIndex,
         });
+
+        // fix for IE https://github.com/nk-o/jarallax/issues/110
+        if (isIE) {
+            self.css(self.image.$container, {
+                opacity: 0.9999,
+            });
+        }
+
         self.image.$container.setAttribute('id', `jarallax-container-${self.instanceID}`);
         self.$item.appendChild(self.image.$container);
 
