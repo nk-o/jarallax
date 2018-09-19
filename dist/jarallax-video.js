@@ -786,33 +786,54 @@ var VideoWorker = function () {
 
                 // Vimeo
                 if (self.type === 'vimeo') {
-                    self.playerOptions = '';
+                    self.playerOptions = {
+                        id: self.videoID,
+                        autopause: 0,
+                        transparent: 0,
+                        autoplay: self.options.autoplay ? 1 : 0,
+                        loop: self.options.loop ? 1 : 0,
+                        muted: self.options.mute ? 1 : 0
+                    };
 
-                    self.playerOptions += 'player_id=' + self.playerID;
-                    self.playerOptions += '&autopause=0';
-                    self.playerOptions += '&transparent=0';
+                    if (self.options.volume) {
+                        self.playerOptions.volume = self.options.volume;
+                    }
 
                     // hide controls
                     if (!self.options.showContols) {
-                        self.playerOptions += '&badge=0&byline=0&portrait=0&title=0';
+                        self.playerOptions.badge = 0;
+                        self.playerOptions.byline = 0;
+                        self.playerOptions.portrait = 0;
+                        self.playerOptions.title = 0;
                     }
 
-                    // autoplay
-                    self.playerOptions += '&autoplay=' + (self.options.autoplay ? '1' : '0');
-
-                    // loop
-                    self.playerOptions += '&loop=' + (self.options.loop ? 1 : 0);
-
                     if (!self.$video) {
+                        var playerOptionsString = '';
+                        Object.keys(self.playerOptions).forEach(function (key) {
+                            if (playerOptionsString !== '') {
+                                playerOptionsString += '&';
+                            }
+                            playerOptionsString += key + '=' + encodeURIComponent(self.playerOptions[key]);
+                        });
+
+                        // we need to create iframe manually because when we create it using API
+                        // js events won't triggers after iframe moved to another place
                         self.$video = document.createElement('iframe');
                         self.$video.setAttribute('id', self.playerID);
-                        self.$video.setAttribute('src', 'https://player.vimeo.com/video/' + self.videoID + '?' + self.playerOptions);
+                        self.$video.setAttribute('src', 'https://player.vimeo.com/video/' + self.videoID + '?' + playerOptionsString);
                         self.$video.setAttribute('frameborder', '0');
+                        self.$video.setAttribute('mozallowfullscreen', '');
+                        self.$video.setAttribute('allowfullscreen', '');
+
                         hiddenDiv.appendChild(self.$video);
                         document.body.appendChild(hiddenDiv);
                     }
+                    self.player = self.player || new Vimeo.Player(self.$video, self.playerOptions);
 
-                    self.player = self.player || new Vimeo.Player(self.$video);
+                    // set current time for autoplay
+                    if (self.options.startTime && self.options.autoplay) {
+                        self.player.setCurrentTime(self.options.startTime);
+                    }
 
                     // get video width and height
                     self.player.getVideoWidth().then(function (width) {
@@ -822,18 +843,7 @@ var VideoWorker = function () {
                         self.videoHeight = height || 720;
                     });
 
-                    // set current time for autoplay
-                    if (self.options.startTime && self.options.autoplay) {
-                        self.player.setCurrentTime(self.options.startTime);
-                    }
-
-                    // mute
-                    if (self.options.mute) {
-                        self.player.setVolume(0);
-                    } else if (self.options.volume) {
-                        self.player.setVolume(self.options.volume);
-                    }
-
+                    // events
                     var vmStarted = void 0;
                     self.player.on('timeupdate', function (e) {
                         if (!vmStarted) {
@@ -968,7 +978,6 @@ var VideoWorker = function () {
                         self.fire('volumechange', e);
                     });
                 }
-
                 callback(self.$video);
             });
         }
