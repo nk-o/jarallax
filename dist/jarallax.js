@@ -1,6 +1,6 @@
 /*!
  * Name    : Just Another Parallax [Jarallax]
- * Version : 1.10.5
+ * Version : 1.10.6
  * Author  : nK <https://nkdev.info>
  * GitHub  : https://github.com/nk-o/jarallax
  */
@@ -871,6 +871,10 @@ var Jarallax = function () {
                 // scroll distance and height for image
                 if (speed < 0) {
                     scrollDist = speed * Math.max(contH, wndH);
+
+                    if (wndH < contH) {
+                        scrollDist -= speed * (contH - wndH);
+                    }
                 } else {
                     scrollDist = speed * (contH + wndH);
                 }
@@ -881,7 +885,7 @@ var Jarallax = function () {
                 } else if (speed < 0) {
                     resultH = scrollDist / speed + Math.abs(scrollDist);
                 } else {
-                    resultH += Math.abs(wndH - contH) * (1 - speed);
+                    resultH += (wndH - contH) * (1 - speed);
                 }
 
                 scrollDist /= 2;
