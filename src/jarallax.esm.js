@@ -130,6 +130,7 @@ class Jarallax {
             videoStartTime: 0,
             videoEndTime: 0,
             videoVolume: 0,
+            videoLoop: true,
             videoPlayOnlyVisible: true,
 
             // events

@@ -106,7 +106,7 @@ export default function jarallaxVideo(jarallax = global.jarallax) {
 
         const video = new VideoWorker(self.options.videoSrc, {
             autoplay: true,
-            loop: true,
+            loop: self.options.videoLoop,
             showContols: false,
             startTime: self.options.videoStartTime || 0,
             endTime: self.options.videoEndTime || 0,
@@ -141,10 +141,12 @@ export default function jarallaxVideo(jarallax = global.jarallax) {
                         const oldOnScroll = self.onScroll;
                         self.onScroll = function () {
                             oldOnScroll.apply(self);
-                            if (self.isVisible()) {
-                                video.play();
-                            } else {
-                                video.pause();
+                            if (self.options.videoLoop || (!self.options.videoLoop && !self.videoEnded)) {
+                                if (self.isVisible()) {
+                                    video.play();
+                                } else {
+                                    video.pause();
+                                }
                             }
                         };
                     } else {
@@ -159,8 +161,6 @@ export default function jarallaxVideo(jarallax = global.jarallax) {
                     // set video width and height
                     self.image.width = self.video.videoWidth || 1280;
                     self.image.height = self.video.videoHeight || 720;
-                    self.options.imgWidth = self.image.width;
-                    self.options.imgHeight = self.image.height;
                     self.coverImage();
                     self.clipContainer();
                     self.onScroll();
@@ -168,6 +168,23 @@ export default function jarallaxVideo(jarallax = global.jarallax) {
                     // hide image
                     if (self.image.$default_item) {
                         self.image.$default_item.style.display = 'none';
+                    }
+                });
+
+                video.on('ended', () => {
+                    self.videoEnded = true;
+
+                    if (!self.options.videoLoop) {
+                        // show image if Loop disabled
+                        if (self.image.$default_item) {
+                            self.image.$item = self.image.$default_item;
+                            self.image.$item.style.display = 'block';
+
+                            // set image width and height
+                            self.coverImage();
+                            self.clipContainer();
+                            self.onScroll();
+                        }
                     }
                 });
 

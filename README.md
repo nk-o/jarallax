@@ -220,6 +220,7 @@ videoSrc | string | `null` | You can use Youtube, Vimeo or local videos. Also yo
 videoStartTime | float | `0` | Start time in seconds when video will be started (this value will be applied also after loop).
 videoEndTime | float | `0` | End time in seconds when video will be ended.
 videoVolume | float | `0` | Video volume from 0 to 100.
+videoLoop | boolean | `true` | Loop video to play infinitely.
 videoPlayOnlyVisible | boolean | `true` | Play video only when it is visible on the screen.
 
 ### Options For Element Parallax
