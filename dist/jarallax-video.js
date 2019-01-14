@@ -718,6 +718,13 @@ var VideoWorker = function () {
                             }
                             self.fire('ready', e);
 
+                            // For seamless loops, set the endTime to 0.1 seconds less than the video's duration
+                            // https://github.com/nk-o/video-worker/issues/2
+                            if (self.options.loop && !self.options.endTime) {
+                                var secondsOffset = 0.1;
+                                self.options.endTime = self.player.getDuration() - secondsOffset;
+                            }
+
                             // volumechange
                             setInterval(function () {
                                 self.getVolume(function (volume) {
@@ -1213,7 +1220,7 @@ function jarallaxVideo() {
 
         var video = new _videoWorker2.default(self.options.videoSrc, {
             autoplay: true,
-            loop: true,
+            loop: self.options.videoLoop,
             showContols: false,
             startTime: self.options.videoStartTime || 0,
             endTime: self.options.videoEndTime || 0,
@@ -1248,10 +1255,12 @@ function jarallaxVideo() {
                         var oldOnScroll = self.onScroll;
                         self.onScroll = function () {
                             oldOnScroll.apply(self);
-                            if (self.isVisible()) {
-                                video.play();
-                            } else {
-                                video.pause();
+                            if (self.options.videoLoop || !self.options.videoLoop && !self.videoEnded) {
+                                if (self.isVisible()) {
+                                    video.play();
+                                } else {
+                                    video.pause();
+                                }
                             }
                         };
                     } else {
@@ -1266,8 +1275,6 @@ function jarallaxVideo() {
                     // set video width and height
                     self.image.width = self.video.videoWidth || 1280;
                     self.image.height = self.video.videoHeight || 720;
-                    self.options.imgWidth = self.image.width;
-                    self.options.imgHeight = self.image.height;
                     self.coverImage();
                     self.clipContainer();
                     self.onScroll();
@@ -1275,6 +1282,23 @@ function jarallaxVideo() {
                     // hide image
                     if (self.image.$default_item) {
                         self.image.$default_item.style.display = 'none';
+                    }
+                });
+
+                video.on('ended', function () {
+                    self.videoEnded = true;
+
+                    if (!self.options.videoLoop) {
+                        // show image if Loop disabled
+                        if (self.image.$default_item) {
+                            self.image.$item = self.image.$default_item;
+                            self.image.$item.style.display = 'block';
+
+                            // set image width and height
+                            self.coverImage();
+                            self.clipContainer();
+                            self.onScroll();
+                        }
                     }
                 });
 
