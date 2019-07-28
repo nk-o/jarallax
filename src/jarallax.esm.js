@@ -3,6 +3,7 @@ import raf from 'rafl';
 import { window } from 'global';
 
 const isIE = navigator.userAgent.indexOf('MSIE ') > -1 || navigator.userAgent.indexOf('Trident/') > -1 || navigator.userAgent.indexOf('Edge/') > -1;
+const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
 
 const supportTransform = (() => {
     const prefixes = 'transform WebkitTransform MozTransform'.split(' ');
@@ -15,6 +16,22 @@ const supportTransform = (() => {
     return false;
 })();
 
+let $deviceHelper;
+
+/**
+ * The most popular mobile browsers changes height after page scroll and this generates image jumping.
+ * We can fix it using this workaround with vh units.
+ */
+function getDeviceHeight() {
+    if (!$deviceHelper && document.body) {
+        $deviceHelper = document.createElement('div');
+        $deviceHelper.style.cssText = 'position: fixed; top: -9999px; left: 0; height: 100vh; width: 0;';
+        document.body.appendChild($deviceHelper);
+    }
+
+    return ($deviceHelper ? $deviceHelper.clientHeight : 0) || window.innerHeight || document.documentElement.clientHeight;
+}
+
 // Window data
 let wndW;
 let wndH;
@@ -23,7 +40,13 @@ let forceResizeParallax = false;
 let forceScrollParallax = false;
 function updateWndVars(e) {
     wndW = window.innerWidth || document.documentElement.clientWidth;
-    wndH = window.innerHeight || document.documentElement.clientHeight;
+
+    if (isMobile) {
+        wndH = getDeviceHeight();
+    } else {
+        wndH = window.innerHeight || document.documentElement.clientHeight;
+    }
+
     if (typeof e === 'object' && (e.type === 'load' || e.type === 'dom-loaded')) {
         forceResizeParallax = true;
     }
