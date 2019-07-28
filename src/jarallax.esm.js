@@ -164,14 +164,6 @@ class Jarallax {
             onCoverImage: null, // function() {}
         };
 
-        // DEPRECATED: old data-options
-        const deprecatedDataAttribute = self.$item.getAttribute('data-jarallax');
-        const oldDataOptions = JSON.parse(deprecatedDataAttribute || '{}');
-        if (deprecatedDataAttribute) {
-            // eslint-disable-next-line no-console
-            console.warn('Detected usage of deprecated data-jarallax JSON options, you should use pure data-attribute options. See info here - https://github.com/nk-o/jarallax/issues/53');
-        }
-
         // prepare data-options
         const dataOptions = self.$item.dataset || {};
         const pureDataOptions = {};
@@ -182,7 +174,7 @@ class Jarallax {
             }
         });
 
-        self.options = self.extend({}, self.defaults, oldDataOptions, pureDataOptions, userOptions);
+        self.options = self.extend({}, self.defaults, pureDataOptions, userOptions);
         self.pureOptions = self.extend({}, self.options);
 
         // prepare 'true' and 'false' strings to boolean
@@ -196,23 +188,6 @@ class Jarallax {
 
         // fix speed option [-1.0, 2.0]
         self.options.speed = Math.min(2, Math.max(-1, parseFloat(self.options.speed)));
-
-        // deprecated noAndroid and noIos options
-        if (self.options.noAndroid || self.options.noIos) {
-            // eslint-disable-next-line no-console
-            console.warn('Detected usage of deprecated noAndroid or noIos options, you should use disableParallax option. See info here - https://github.com/nk-o/jarallax/#disable-on-mobile-devices');
-
-            // prepare fallback if disableParallax option is not used
-            if (!self.options.disableParallax) {
-                if (self.options.noIos && self.options.noAndroid) {
-                    self.options.disableParallax = /iPad|iPhone|iPod|Android/;
-                } else if (self.options.noIos) {
-                    self.options.disableParallax = /iPad|iPhone|iPod/;
-                } else if (self.options.noAndroid) {
-                    self.options.disableParallax = /Android/;
-                }
-            }
-        }
 
         // prepare disableParallax callback
         if (typeof self.options.disableParallax === 'string') {
