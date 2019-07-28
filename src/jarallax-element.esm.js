@@ -45,7 +45,16 @@ export default function jarallaxElement(jarallax = global.jarallax) {
                 const thresholdArr = self.pureOptions.threshold.split(' ');
                 self.options.thresholdY = thresholdArr[0] ? parseFloat(thresholdArr[0]) : null;
                 self.options.thresholdX = thresholdArr[1] ? parseFloat(thresholdArr[1]) : null;
-                break;
+
+                def.apply(self, args);
+
+                // restore background image if available.
+                const originalStylesTag = self.$item.getAttribute('data-jarallax-original-styles');
+                if (originalStylesTag) {
+                    self.$item.setAttribute('style', originalStylesTag);
+                }
+
+                return true;
             case 'onResize':
                 const defTransform = self.css(self.$item, 'transform');
                 self.css(self.$item, { transform: '' });
