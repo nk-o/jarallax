@@ -336,9 +336,10 @@ class Jarallax {
 
         // get image src
         if (self.image.src === null) {
-            self.image.src = self.css(self.$item, 'background-image').replace(/^url\(['"]?/g, '').replace(/['"]?\)$/g, '');
+            self.image.src = 'data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7';
+            self.image.bgImage = self.css(self.$item, 'background-image');
         }
-        return !(!self.image.src || self.image.src === 'none');
+        return !(!self.image.bgImage || self.image.bgImage === 'none');
     }
 
     canInitParallax() {
@@ -419,7 +420,7 @@ class Jarallax {
                     'background-position': self.options.imgPosition,
                     'background-size': self.options.imgSize,
                     'background-repeat': self.options.imgRepeat,
-                    'background-image': `url("${self.image.src}")`,
+                    'background-image': self.image.bgImage || `url("${self.image.src}")`,
                 }, containerStyles, imageStyles);
             }
         }
