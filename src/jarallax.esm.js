@@ -155,6 +155,7 @@ class Jarallax {
             videoVolume: 0,
             videoLoop: true,
             videoPlayOnlyVisible: true,
+            videoLazyLoading: true,
 
             // events
             onScroll: null, // function(calculations) {}

@@ -8,14 +8,21 @@ export default function jarallaxVideo(jarallax = global.jarallax) {
 
     const Jarallax = jarallax.constructor;
 
-    // append video after init Jarallax
-    const defInit = Jarallax.prototype.init;
-    Jarallax.prototype.init = function () {
+    // append video after when block will be visible.
+    const defOnScroll = Jarallax.prototype.onScroll;
+    Jarallax.prototype.onScroll = function () {
         const self = this;
 
-        defInit.apply(self);
+        defOnScroll.apply(self);
 
-        if (self.video && !self.options.disableVideo()) {
+        const isReady = !self.isVideoInserted
+                        && self.video
+                        && (!self.options.videoLazyLoading || self.isElementInViewport)
+                        && !self.options.disableVideo();
+
+        if (isReady) {
+            self.isVideoInserted = true;
+
             self.video.getVideo((video) => {
                 const $parent = video.parentNode;
                 self.css(video, {
@@ -153,7 +160,6 @@ export default function jarallaxVideo(jarallax = global.jarallax) {
                         video.play();
                     }
                 });
-
                 video.on('started', () => {
                     self.image.$default_item = self.image.$item;
                     self.image.$item = self.$video;
@@ -192,17 +198,18 @@ export default function jarallaxVideo(jarallax = global.jarallax) {
 
                 // set image if not exists
                 if (!self.defaultInitImgResult) {
+                    // set empty image on local video if not defined
+                    self.image.src = 'data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7';
+
                     if (video.type !== 'local') {
                         video.getImageURL((url) => {
-                            self.image.src = url;
+                            self.image.bgImage = `url("${url}")`;
                             self.init();
                         });
 
                         return false;
                     }
 
-                    // set empty image on local video if not defined
-                    self.image.src = 'data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7';
                     return true;
                 }
             }
