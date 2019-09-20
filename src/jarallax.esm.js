@@ -292,7 +292,12 @@ class Jarallax {
         }
         // check if dom element
         if (!($imgElement instanceof Element)) {
-            $imgElement = null;
+            if (self.options.imgSrc) {
+                $imgElement = new Image();
+                $imgElement.src = self.options.imgSrc;
+            } else {
+                $imgElement = null;
+            }
         }
 
         if ($imgElement) {
