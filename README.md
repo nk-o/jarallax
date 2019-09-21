@@ -136,6 +136,8 @@ $('.jarallax').jarallax({
 ```
 
 ## Background Video Usage Examples
+
+### A. Data attribute way
 ```html
 <!-- Background YouTube Parallax -->
 <div class="jarallax" data-jarallax-video="https://www.youtube.com/watch?v=ab0TSkLe-E0">
@@ -153,6 +155,21 @@ $('.jarallax').jarallax({
 </div>
 ```
 Note: for local videos required only 1 video type, not necessary use all mp4, webm and ogv. This need only for maximum compatibility with all browsers.
+
+### B. JavaScript way
+```javascript
+import { jarallax, jarallaxVideo } from 'jarallax';
+jarallaxVideo();
+
+jarallax(document.querySelectorAll('.jarallax'), {
+    speed: 0.2,
+    videoSrc: 'https://www.youtube.com/watch?v=ab0TSkLe-E0'
+});
+```
+
+```html
+<div class="jarallax"></div>
+```
 
 ## Any Element Parallax Usage Examples
 ```html
