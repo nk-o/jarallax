@@ -12,9 +12,9 @@ Smooth parallax scrolling effect for background images, videos and inline elemen
 
 [![Advanced WordPress Backgrounds](https://a.nkdev.info/jarallax/awb-preview.jpg)](https://wordpress.org/plugins/advanced-backgrounds/)
 
-We made WordPress plugin to easily make backgrounds for content in your blog with all Jarallax features.
+We made WordPress plugin to easily add backgrounds for content in your blog with all Jarallax features.
 
-Demo: https://wp.nkdev.info/free-advanced-wordpress-backgrounds/
+Demo: https://wpbackgrounds.com/
 
 Download: https://nkdev.info/downloads/advanced-wordpress-backgrounds/
 
