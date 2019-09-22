@@ -16,7 +16,7 @@ We made WordPress plugin to easily add backgrounds for content in your blog with
 
 Demo: https://wpbackgrounds.com/
 
-Download: https://nkdev.info/downloads/advanced-wordpress-backgrounds/
+Download: https://wordpress.org/plugins/advanced-backgrounds/
 
 ## Getting Started
 
