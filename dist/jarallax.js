@@ -1,6 +1,6 @@
 /*!
  * Name    : Just Another Parallax [Jarallax]
- * Version : 1.11.1
+ * Version : 1.12.1
  * Author  : nK <https://nkdev.info>
  * GitHub  : https://github.com/nk-o/jarallax
  */
@@ -298,7 +298,7 @@ function getDeviceHeight() {
 var wndW = void 0;
 var wndH = void 0;
 var wndY = void 0;
-var contY = void 0;
+var containerY = void 0;
 var forceResizeParallax = false;
 var forceScrollParallax = false;
 function updateWndVars(e) {
@@ -327,14 +327,15 @@ _global.window.addEventListener('load', updateWndVars);
 // list with all jarallax instances
 // need to render all in one scroll/resize event
 var jarallaxList = [];
+// Flag to indicate if updateParallax function has been called on window level and prevent multiple requests
 var globalParallaxUpdateInit = false;
 
 // Animate if changed window size or scrolled page
 var oldPageData = false;
 
-function parents(elem, selector) {
-    var elements = [];
-    var ishaveselector = selector !== undefined;
+function getParentBySelector(elem, selector) {
+    var parent = void 0;
+    var hasSelector = selector !== undefined;
 
     while (elem.parentElement !== null) {
         elem = elem.parentElement;
@@ -342,12 +343,13 @@ function parents(elem, selector) {
             continue;
         }
 
-        if (!ishaveselector || elem.matches(selector)) {
-            elements.push(elem);
+        if (!hasSelector || [].indexOf.call(document.querySelectorAll(selector), elem) !== -1) {
+            parent = elem;
+            break;
         }
     }
 
-    return elements;
+    return parent;
 }
 
 function updateParallax() {
@@ -389,11 +391,11 @@ function updateParallax() {
 
 var oldElementData = false;
 function updateElementParallax(jarallaxInstance) {
-    if (parents(jarallaxInstance.$item, jarallaxInstance.options.scrollableContainer)) {
-        contY = jarallaxInstance.$scrollableContainer.scrollTop;
+    if (getParentBySelector(jarallaxInstance.$item, jarallaxInstance.options.scrollableContainer)) {
+        containerY = jarallaxInstance.$scrollableContainer.scrollTop;
 
         var isResized = forceResizeParallax || !oldPageData || oldPageData.width !== wndW || oldPageData.height !== wndH;
-        var isScrolled = forceScrollParallax || isResized || !oldElementData || oldElementData.y !== contY;
+        var isScrolled = forceScrollParallax || isResized || !oldElementData || oldElementData.y !== containerY;
 
         forceResizeParallax = false;
         forceScrollParallax = false;
@@ -413,7 +415,7 @@ function updateElementParallax(jarallaxInstance) {
             };
 
             oldElementData = {
-                y: contY
+                y: containerY
             };
         }
 
@@ -567,14 +569,9 @@ var Jarallax = function () {
             position: /iPad|iPhone|iPod|Android/.test(navigator.userAgent) ? 'absolute' : 'fixed'
         };
 
-        if (self.options.scrollableContainer && parents(self.$item, self.options.scrollableContainer).length) {
+        if (self.options.scrollableContainer && getParentBySelector(self.$item, self.options.scrollableContainer)) {
             self.isInScrollableContainer = true;
-
-            var _parents = parents(self.$item, self.options.scrollableContainer);
-
-            var _parents2 = _slicedToArray(_parents, 1);
-
-            self.$scrollableContainer = _parents2[0];
+            self.$scrollableContainer = getParentBySelector(self.$item, self.options.scrollableContainer);
         }
 
         if (self.initImg() && self.canInitParallax()) {
@@ -821,9 +818,11 @@ var Jarallax = function () {
         value: function addToParallaxList() {
             jarallaxList.push(this);
 
+            // Check if element is in custom scrollable element
             if (this.isInScrollableContainer) {
                 updateElementParallax(this);
             } else if (!globalParallaxUpdateInit) {
+                // Check if udpateParallax function has been called before to prevent multiple requestAnimationFrame calls
                 updateParallax();
                 globalParallaxUpdateInit = true;
             }

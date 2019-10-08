@@ -36,7 +36,7 @@ function getDeviceHeight() {
 let wndW;
 let wndH;
 let wndY;
-let contY;
+let containerY;
 let forceResizeParallax = false;
 let forceScrollParallax = false;
 function updateWndVars(e) {
@@ -65,14 +65,15 @@ domReady(() => {
 // list with all jarallax instances
 // need to render all in one scroll/resize event
 const jarallaxList = [];
+// Flag to indicate if updateParallax function has been called on window level and prevent multiple requests
 let globalParallaxUpdateInit = false;
 
 // Animate if changed window size or scrolled page
 let oldPageData = false;
 
-function parents(elem, selector) {
-    const elements = [];
-    const ishaveselector = selector !== undefined;
+function getParentBySelector(elem, selector) {
+    let parent;
+    const hasSelector = selector !== undefined;
 
     while (elem.parentElement !== null) {
         elem = elem.parentElement;
@@ -80,12 +81,13 @@ function parents(elem, selector) {
             continue;
         }
 
-        if (!ishaveselector || elem.matches(selector)) {
-            elements.push(elem);
+        if (!hasSelector || [].indexOf.call(document.querySelectorAll(selector), elem) !== -1) {
+            parent = elem;
+            break;
         }
     }
 
-    return elements;
+    return parent;
 }
 
 function updateParallax() {
@@ -127,11 +129,11 @@ function updateParallax() {
 
 let oldElementData = false;
 function updateElementParallax(jarallaxInstance) {
-    if (parents(jarallaxInstance.$item, jarallaxInstance.options.scrollableContainer)) {
-        contY = jarallaxInstance.$scrollableContainer.scrollTop;
+    if (getParentBySelector(jarallaxInstance.$item, jarallaxInstance.options.scrollableContainer)) {
+        containerY = jarallaxInstance.$scrollableContainer.scrollTop;
 
         const isResized = forceResizeParallax || !oldPageData || oldPageData.width !== wndW || oldPageData.height !== wndH;
-        const isScrolled = forceScrollParallax || isResized || !oldElementData || oldElementData.y !== contY;
+        const isScrolled = forceScrollParallax || isResized || !oldElementData || oldElementData.y !== containerY;
 
         forceResizeParallax = false;
         forceScrollParallax = false;
@@ -151,7 +153,7 @@ function updateElementParallax(jarallaxInstance) {
             };
 
             oldElementData = {
-                y: contY,
+                y: containerY,
             };
         }
 
@@ -291,9 +293,9 @@ class Jarallax {
             position: /iPad|iPhone|iPod|Android/.test(navigator.userAgent) ? 'absolute' : 'fixed',
         };
 
-        if (self.options.scrollableContainer && parents(self.$item, self.options.scrollableContainer).length) {
+        if (self.options.scrollableContainer && getParentBySelector(self.$item, self.options.scrollableContainer)) {
             self.isInScrollableContainer = true;
-            [self.$scrollableContainer] = parents(self.$item, self.options.scrollableContainer);
+            self.$scrollableContainer = getParentBySelector(self.$item, self.options.scrollableContainer);
         }
 
         if (self.initImg() && self.canInitParallax()) {
@@ -520,9 +522,11 @@ class Jarallax {
     addToParallaxList() {
         jarallaxList.push(this);
 
+        // Check if element is in custom scrollable element
         if (this.isInScrollableContainer) {
             updateElementParallax(this);
         } else if (!globalParallaxUpdateInit) {
+            // Check if udpateParallax function has been called before to prevent multiple requestAnimationFrame calls
             updateParallax();
             globalParallaxUpdateInit = true;
         }

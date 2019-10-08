@@ -199,6 +199,7 @@ imgPosition | string | `50% 50%` | Image position. If you use `<img>` tag for ba
 imgRepeat | string | `no-repeat` | Image repeat. Supported only `background-position` values.
 keepImg | boolean | `false` | Keep `<img>` tag in it's default place after Jarallax inited.
 elementInViewport | dom | `null` | Use custom DOM / jQuery element to check if parallax block in viewport. More info here - [Issue 13](https://github.com/nk-o/jarallax/issues/13).
+scrollableContainer | selector | `null` | Use custom DOM element as scrollable container. More info here - [Issue 85](https://github.com/nk-o/jarallax/issues/85).
 zIndex | number | `-100` | z-index of parallax container.
 disableParallax | RegExp / function | - | Disable parallax on specific user agents (using regular expression) or with function return value. The image will be set on the background.
 disableVideo | RegExp / function | - | Disable video load on specific user agents (using regular expression) or with function return value. The image will be set on the background.

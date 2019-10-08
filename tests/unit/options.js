@@ -16,6 +16,7 @@ QUnit.module('options', function () {
             imgPosition: options.imgPosition,
             imgRepeat: options.imgRepeat,
             elementInViewport: options.elementInViewport,
+            scrollableContainer: options.scrollableContainer,
             zIndex: options.zIndex,
             disableParallax: options.disableParallax.toString(),
             disableVideo: options.disableVideo.toString(),
@@ -37,6 +38,7 @@ QUnit.module('options', function () {
             imgPosition: '50% 50%',
             imgRepeat: 'no-repeat',
             elementInViewport: null,
+            scrollableContainer: null,
             zIndex: -100,
             disableParallax: "function () {\n" +
             "                return false;\n" +
@@ -84,6 +86,7 @@ QUnit.module('options', function () {
             imgPosition: 'center',
             imgRepeat: 'repeat',
             elementInViewport: $jarallax,
+            scrollableContainer: '.jarallax-container-test',
             zIndex: -101,
             disableParallax: /Android/,
             disableVideo: /Android/,
@@ -117,6 +120,7 @@ QUnit.module('options', function () {
             imgPosition: options.imgPosition,
             imgRepeat: options.imgRepeat,
             elementInViewport: options.elementInViewport,
+            scrollableContainer: options.scrollableContainer,
             zIndex: options.zIndex,
             disableParallax: options.disableParallax.toString(),
             disableVideo: options.disableVideo.toString(),
