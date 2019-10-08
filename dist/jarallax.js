@@ -298,6 +298,7 @@ function getDeviceHeight() {
 var wndW = void 0;
 var wndH = void 0;
 var wndY = void 0;
+var contY = void 0;
 var forceResizeParallax = false;
 var forceScrollParallax = false;
 function updateWndVars(e) {
@@ -326,9 +327,29 @@ _global.window.addEventListener('load', updateWndVars);
 // list with all jarallax instances
 // need to render all in one scroll/resize event
 var jarallaxList = [];
+var globalParallaxUpdateInit = false;
 
 // Animate if changed window size or scrolled page
 var oldPageData = false;
+
+function parents(elem, selector) {
+    var elements = [];
+    var ishaveselector = selector !== undefined;
+
+    while (elem.parentElement !== null) {
+        elem = elem.parentElement;
+        if (elem.nodeType !== Node.ELEMENT_NODE) {
+            continue;
+        }
+
+        if (!ishaveselector || elem.matches(selector)) {
+            elements.push(elem);
+        }
+    }
+
+    return elements;
+}
+
 function updateParallax() {
     if (!jarallaxList.length) {
         return;
@@ -364,6 +385,40 @@ function updateParallax() {
     }
 
     (0, _rafl2.default)(updateParallax);
+}
+
+var oldElementData = false;
+function updateElementParallax(jarallaxInstance) {
+    if (parents(jarallaxInstance.$item, jarallaxInstance.options.scrollableContainer)) {
+        contY = jarallaxInstance.$scrollableContainer.scrollTop;
+
+        var isResized = forceResizeParallax || !oldPageData || oldPageData.width !== wndW || oldPageData.height !== wndH;
+        var isScrolled = forceScrollParallax || isResized || !oldElementData || oldElementData.y !== contY;
+
+        forceResizeParallax = false;
+        forceScrollParallax = false;
+
+        if (isResized || isScrolled) {
+            if (isResized) {
+                jarallaxInstance.onResize();
+            }
+            if (isScrolled) {
+                jarallaxInstance.onScroll();
+            }
+
+            oldPageData = {
+                width: wndW,
+                height: wndH,
+                y: wndY
+            };
+
+            oldElementData = {
+                y: contY
+            };
+        }
+
+        (0, _rafl2.default)(updateElementParallax.bind(null, jarallaxInstance));
+    }
 }
 
 // ResizeObserver
@@ -406,6 +461,7 @@ var Jarallax = function () {
             imgRepeat: 'no-repeat', // supported only for background, not for <img> tag
             keepImg: false, // keep <img> tag in it's default place
             elementInViewport: null,
+            scrollableContainer: null,
             zIndex: -100,
             disableParallax: false,
             disableVideo: false,
@@ -510,6 +566,16 @@ var Jarallax = function () {
             // on mobile devices better scrolled with absolute position
             position: /iPad|iPhone|iPod|Android/.test(navigator.userAgent) ? 'absolute' : 'fixed'
         };
+
+        if (self.options.scrollableContainer && parents(self.$item, self.options.scrollableContainer).length) {
+            self.isInScrollableContainer = true;
+
+            var _parents = parents(self.$item, self.options.scrollableContainer);
+
+            var _parents2 = _slicedToArray(_parents, 1);
+
+            self.$scrollableContainer = _parents2[0];
+        }
 
         if (self.initImg() && self.canInitParallax()) {
             self.init();
@@ -755,8 +821,11 @@ var Jarallax = function () {
         value: function addToParallaxList() {
             jarallaxList.push(this);
 
-            if (jarallaxList.length === 1) {
+            if (this.isInScrollableContainer) {
+                updateElementParallax(this);
+            } else if (!globalParallaxUpdateInit) {
                 updateParallax();
+                globalParallaxUpdateInit = true;
             }
         }
 
