@@ -352,75 +352,84 @@ function getParentBySelector(elem, selector) {
     return parent;
 }
 
-function updateParallax() {
+function getParents(elem) {
+    var parents = [];
+
+    while (elem.parentElement !== null) {
+        elem = elem.parentElement;
+
+        if (elem.nodeType === 1) {
+            parents.push(elem);
+        }
+    }
+
+    return parents;
+}
+
+function scrollParent(elem, includeHidden) {
+    var _window$getComputedSt = _global.window.getComputedStyle(elem),
+        position = _window$getComputedSt.position;
+
+    var excludeStaticParent = position === 'absolute';
+    var overflowRegex = includeHidden ? /(auto|scroll|hidden)/ : /(auto|scroll)/;
+    var parents = getParents(elem).filter(function (el) {
+        var styles = _global.window.getComputedStyle(el);
+
+        if (excludeStaticParent && styles.position === 'static') {
+            return false;
+        }
+
+        return overflowRegex.test(styles.overflow + styles['overflow-y'] + styles['overflow-x']);
+    });
+
+    return position === 'fixed' || !parents.length ? elem.ownerDocument || document : parents[0];
+}
+
+var containerList = {};
+
+function updateParallax(jarallaxInstance) {
     if (!jarallaxList.length) {
         return;
     }
 
-    if (_global.window.pageYOffset !== undefined) {
-        wndY = _global.window.pageYOffset;
+    if (jarallaxInstance.scrollableContainerSelector === 'document') {
+        if (_global.window.pageYOffset !== undefined) {
+            wndY = _global.window.pageYOffset;
+        } else {
+            wndY = (document.documentElement || document.body.parentNode || document.body).scrollTop;
+        }
     } else {
-        wndY = (document.documentElement || document.body.parentNode || document.body).scrollTop;
+        wndY = jarallaxInstance.$scrollableContainer.scrollTop;
     }
 
+    var containerObject = containerList[jarallaxInstance.scrollableContainerSelector];
     var isResized = forceResizeParallax || !oldPageData || oldPageData.width !== wndW || oldPageData.height !== wndH;
-    var isScrolled = forceScrollParallax || isResized || !oldPageData || oldPageData.y !== wndY;
+    var isScrolled = forceScrollParallax || containerObject.y !== wndY;
 
     forceResizeParallax = false;
     forceScrollParallax = false;
 
-    if (isResized || isScrolled) {
-        jarallaxList.forEach(function (item) {
-            if (isResized) {
+    if (isResized) {
+        Object.keys(containerList).forEach(function (key) {
+            containerList[key].instances.forEach(function (item) {
                 item.onResize();
-            }
-            if (isScrolled) {
                 item.onScroll();
-            }
+            });
         });
-
         oldPageData = {
             width: wndW,
-            height: wndH,
-            y: wndY
+            height: wndH
         };
     }
 
-    (0, _rafl2.default)(updateParallax);
-}
-
-var oldElementData = false;
-function updateElementParallax(jarallaxInstance) {
-    if (getParentBySelector(jarallaxInstance.$item, jarallaxInstance.options.scrollableContainer)) {
-        containerY = jarallaxInstance.$scrollableContainer.scrollTop;
-
-        var isResized = forceResizeParallax || !oldPageData || oldPageData.width !== wndW || oldPageData.height !== wndH;
-        var isScrolled = forceScrollParallax || isResized || !oldElementData || oldElementData.y !== containerY;
-
-        forceResizeParallax = false;
-        forceScrollParallax = false;
-
-        if (isResized || isScrolled) {
-            if (isResized) {
-                jarallaxInstance.onResize();
-            }
-            if (isScrolled) {
-                jarallaxInstance.onScroll();
-            }
-
-            oldPageData = {
-                width: wndW,
-                height: wndH,
-                y: wndY
-            };
-
-            oldElementData = {
-                y: containerY
-            };
-        }
-
-        (0, _rafl2.default)(updateElementParallax.bind(null, jarallaxInstance));
+    if (!isResized && isScrolled) {
+        containerObject.instances.forEach(function (item) {
+            item.onScroll();
+        });
+        containerObject.y = wndY;
     }
+
+    (0, _rafl2.default)(updateParallax.bind(null, jarallaxInstance));
 }
 
 // ResizeObserver
@@ -463,7 +472,6 @@ var Jarallax = function () {
             imgRepeat: 'no-repeat', // supported only for background, not for <img> tag
             keepImg: false, // keep <img> tag in it's default place
             elementInViewport: null,
-            scrollableContainer: null,
             zIndex: -100,
             disableParallax: false,
             disableVideo: false,
@@ -569,10 +577,13 @@ var Jarallax = function () {
             position: /iPad|iPhone|iPod|Android/.test(navigator.userAgent) ? 'absolute' : 'fixed'
         };
 
-        if (self.options.scrollableContainer && getParentBySelector(self.$item, self.options.scrollableContainer)) {
-            self.isInScrollableContainer = true;
-            self.$scrollableContainer = getParentBySelector(self.$item, self.options.scrollableContainer);
+        self.$scrollableContainer = scrollParent(self.$item);
+
+        if (self.$scrollableContainer !== document && !self.$scrollableContainer.getAttribute('data-jarallax-container')) {
+            self.$scrollableContainer.setAttribute('data-jarallax-container', self.instanceID);
         }
+
+        self.scrollableContainerSelector = self.$scrollableContainer !== document ? '[data-jarallax-container="' + self.$scrollableContainer.getAttribute('data-jarallax-container') + '"]' : 'document';
 
         if (self.initImg() && self.canInitParallax()) {
             self.init();
@@ -816,16 +827,16 @@ var Jarallax = function () {
     }, {
         key: 'addToParallaxList',
         value: function addToParallaxList() {
-            jarallaxList.push(this);
-
-            // Check if element is in custom scrollable element
-            if (this.isInScrollableContainer) {
-                updateElementParallax(this);
-            } else if (!globalParallaxUpdateInit) {
-                // Check if udpateParallax function has been called before to prevent multiple requestAnimationFrame calls
-                updateParallax();
-                globalParallaxUpdateInit = true;
+            if (containerList[this.scrollableContainerSelector]) {
+                containerList[this.scrollableContainerSelector].instances.push(this);
+            } else {
+                containerList[this.scrollableContainerSelector] = {
+                    instances: [this],
+                    container: this.$scrollableContainer
+                };
             }
+            jarallaxList.push(this);
+            updateParallax(this);
         }
 
         // remove from parallax instances list
@@ -839,6 +850,14 @@ var Jarallax = function () {
                 if (item.instanceID === self.instanceID) {
                     jarallaxList.splice(key, 1);
                 }
+            });
+
+            Object.keys(containerList).forEach(function (key) {
+                containerList[key].instances.forEach(function (item, index) {
+                    if (item.instanceID === self.instanceID) {
+                        containerList[key].instances.splice(index, 1);
+                    }
+                });
             });
         }
     }, {

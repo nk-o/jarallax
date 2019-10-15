@@ -73,12 +73,6 @@ interface JarallaxOptions {
     elementInViewport?: Element | JQuery<Element>;
 
     /**
-     * Use custom DOM element as scrollable container.
-     * More info here - https://github.com/nk-o/jarallax/issues/85.
-     */
-    scrollableContainer?: string;
-
-    /**
      * z-index of parallax container.
      */
     zIndex?: number;
