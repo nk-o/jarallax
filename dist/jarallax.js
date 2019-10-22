@@ -1,6 +1,6 @@
 /*!
  * Name    : Just Another Parallax [Jarallax]
- * Version : 1.11.1
+ * Version : 1.12.1
  * Author  : nK <https://nkdev.info>
  * GitHub  : https://github.com/nk-o/jarallax
  */
@@ -298,6 +298,7 @@ function getDeviceHeight() {
 var wndW = void 0;
 var wndH = void 0;
 var wndY = void 0;
+var containerY = void 0;
 var forceResizeParallax = false;
 var forceScrollParallax = false;
 function updateWndVars(e) {
@@ -326,44 +327,109 @@ _global.window.addEventListener('load', updateWndVars);
 // list with all jarallax instances
 // need to render all in one scroll/resize event
 var jarallaxList = [];
+// Flag to indicate if updateParallax function has been called on window level and prevent multiple requests
+var globalParallaxUpdateInit = false;
 
 // Animate if changed window size or scrolled page
 var oldPageData = false;
-function updateParallax() {
+
+function getParentBySelector(elem, selector) {
+    var parent = void 0;
+    var hasSelector = selector !== undefined;
+
+    while (elem.parentElement !== null) {
+        elem = elem.parentElement;
+        if (elem.nodeType !== Node.ELEMENT_NODE) {
+            continue;
+        }
+
+        if (!hasSelector || [].indexOf.call(document.querySelectorAll(selector), elem) !== -1) {
+            parent = elem;
+            break;
+        }
+    }
+
+    return parent;
+}
+
+function getParents(elem) {
+    var parents = [];
+
+    while (elem.parentElement !== null) {
+        elem = elem.parentElement;
+
+        if (elem.nodeType === 1) {
+            parents.push(elem);
+        }
+    }
+
+    return parents;
+}
+
+function scrollParent(elem, includeHidden) {
+    var _window$getComputedSt = _global.window.getComputedStyle(elem),
+        position = _window$getComputedSt.position;
+
+    var excludeStaticParent = position === 'absolute';
+    var overflowRegex = includeHidden ? /(auto|scroll|hidden)/ : /(auto|scroll)/;
+    var parents = getParents(elem).filter(function (el) {
+        var styles = _global.window.getComputedStyle(el);
+
+        if (excludeStaticParent && styles.position === 'static') {
+            return false;
+        }
+
+        return overflowRegex.test(styles.overflow + styles['overflow-y'] + styles['overflow-x']);
+    });
+
+    return position === 'fixed' || !parents.length ? elem.ownerDocument || document : parents[0];
+}
+
+var containerList = {};
+
+function updateParallax(jarallaxInstance) {
     if (!jarallaxList.length) {
         return;
     }
 
-    if (_global.window.pageYOffset !== undefined) {
-        wndY = _global.window.pageYOffset;
+    if (jarallaxInstance.scrollableContainerSelector === 'document') {
+        if (_global.window.pageYOffset !== undefined) {
+            wndY = _global.window.pageYOffset;
+        } else {
+            wndY = (document.documentElement || document.body.parentNode || document.body).scrollTop;
+        }
     } else {
-        wndY = (document.documentElement || document.body.parentNode || document.body).scrollTop;
+        wndY = jarallaxInstance.$scrollableContainer.scrollTop;
     }
 
+    var containerObject = containerList[jarallaxInstance.scrollableContainerSelector];
     var isResized = forceResizeParallax || !oldPageData || oldPageData.width !== wndW || oldPageData.height !== wndH;
-    var isScrolled = forceScrollParallax || isResized || !oldPageData || oldPageData.y !== wndY;
+    var isScrolled = forceScrollParallax || containerObject.y !== wndY;
 
     forceResizeParallax = false;
     forceScrollParallax = false;
 
-    if (isResized || isScrolled) {
-        jarallaxList.forEach(function (item) {
-            if (isResized) {
+    if (isResized) {
+        Object.keys(containerList).forEach(function (key) {
+            containerList[key].instances.forEach(function (item) {
                 item.onResize();
-            }
-            if (isScrolled) {
                 item.onScroll();
-            }
+            });
         });
-
         oldPageData = {
             width: wndW,
-            height: wndH,
-            y: wndY
+            height: wndH
         };
     }
 
-    (0, _rafl2.default)(updateParallax);
+    if (!isResized && isScrolled) {
+        containerObject.instances.forEach(function (item) {
+            item.onScroll();
+        });
+        containerObject.y = wndY;
+    }
+
+    (0, _rafl2.default)(updateParallax.bind(null, jarallaxInstance));
 }
 
 // ResizeObserver
@@ -510,6 +576,14 @@ var Jarallax = function () {
             // on mobile devices better scrolled with absolute position
             position: /iPad|iPhone|iPod|Android/.test(navigator.userAgent) ? 'absolute' : 'fixed'
         };
+
+        self.$scrollableContainer = scrollParent(self.$item);
+
+        if (self.$scrollableContainer !== document && !self.$scrollableContainer.getAttribute('data-jarallax-container')) {
+            self.$scrollableContainer.setAttribute('data-jarallax-container', self.instanceID);
+        }
+
+        self.scrollableContainerSelector = self.$scrollableContainer !== document ? '[data-jarallax-container="' + self.$scrollableContainer.getAttribute('data-jarallax-container') + '"]' : 'document';
 
         if (self.initImg() && self.canInitParallax()) {
             self.init();
@@ -753,11 +827,16 @@ var Jarallax = function () {
     }, {
         key: 'addToParallaxList',
         value: function addToParallaxList() {
-            jarallaxList.push(this);
-
-            if (jarallaxList.length === 1) {
-                updateParallax();
+            if (containerList[this.scrollableContainerSelector]) {
+                containerList[this.scrollableContainerSelector].instances.push(this);
+            } else {
+                containerList[this.scrollableContainerSelector] = {
+                    instances: [this],
+                    container: this.$scrollableContainer
+                };
             }
+            jarallaxList.push(this);
+            updateParallax(this);
         }
 
         // remove from parallax instances list
@@ -771,6 +850,14 @@ var Jarallax = function () {
                 if (item.instanceID === self.instanceID) {
                     jarallaxList.splice(key, 1);
                 }
+            });
+
+            Object.keys(containerList).forEach(function (key) {
+                containerList[key].instances.forEach(function (item, index) {
+                    if (item.instanceID === self.instanceID) {
+                        containerList[key].instances.splice(index, 1);
+                    }
+                });
             });
         }
     }, {
