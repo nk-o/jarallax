@@ -18,6 +18,14 @@ Demo: https://wpbackgrounds.com/
 
 Download: https://wordpress.org/plugins/advanced-backgrounds/
 
+## Sizes
+
+ File                   | Gzipped Size
+:-----------------------|:------------------------------------------------------------------------------------------------|
+jarallax.min.js         | ![](https://img.badgesize.io/nk-o/jarallax/master/dist/jarallax.min.js?compression=gzip)
+jarallax-video.min.js   | ![](https://img.badgesize.io/nk-o/jarallax/master/dist/jarallax-video.min.js?compression=gzip)
+jarallax-element.min.js | ![](https://img.badgesize.io/nk-o/jarallax/master/dist/jarallax-element.min.js?compression=gzip)
+
 ## Getting Started
 
 ### ES6
