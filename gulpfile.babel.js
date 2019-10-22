@@ -1,14 +1,12 @@
 const gulp = require('gulp');
 const $ = require('gulp-load-plugins')();
 const del = require('del');
-const path = require('path');
-const fs = require('fs');
 const browserSync = require('browser-sync');
 const named = require('vinyl-named');
 const webpack = require('webpack-stream');
-const webpackconfig = require('./webpack.config.js');
 const qunit = require('node-qunit-phantomjs');
-const data = require('json-file').read('./package.json').data;
+const { data } = require('json-file').read('./package.json');
+const webpackconfig = require('./webpack.config.js');
 
 function getMainHeader() {
     return `/*!
@@ -54,16 +52,16 @@ gulp.task('clean', () => del(['dist']));
 /**
  * JS Task
  */
-gulp.task('js', () => {
-    return gulp.src(['src/*.js', '!src/*.esm.js'])
+gulp.task('js', () => (
+    gulp.src(['src/*.js', '!src/*.esm.js'])
         .pipe($.plumber({ errorHandler }))
         .pipe(named())
         .pipe(webpack({
             config: webpackconfig,
         }))
-        .pipe($.if(file => file.path.match(/jarallax.js$/), $.header(getMainHeader())))
-        .pipe($.if(file => file.path.match(/jarallax-video.js$/), $.header(getVideoHeader())))
-        .pipe($.if(file => file.path.match(/jarallax-element.js$/), $.header(getElementHeader())))
+        .pipe($.if((file) => file.path.match(/jarallax.js$/), $.header(getMainHeader())))
+        .pipe($.if((file) => file.path.match(/jarallax-video.js$/), $.header(getVideoHeader())))
+        .pipe($.if((file) => file.path.match(/jarallax-element.js$/), $.header(getElementHeader())))
         .pipe(gulp.dest('dist'))
         .pipe($.rename({ suffix: '.min' }))
         .pipe($.uglify({
@@ -73,17 +71,17 @@ gulp.task('js', () => {
         }))
         .pipe($.sourcemaps.write('.'))
         .pipe(gulp.dest('dist'))
-        .pipe(browserSync.stream());
-});
+        .pipe(browserSync.stream())
+));
 
 /**
  * CSS Task
  */
-gulp.task('css', () => {
-    return gulp.src('src/*.css')
+gulp.task('css', () => (
+    gulp.src('src/*.css')
         .pipe(gulp.dest('dist'))
-        .pipe(browserSync.stream());
-});
+        .pipe(browserSync.stream())
+));
 
 
 /**
@@ -98,28 +96,24 @@ gulp.task('browser_sync', () => {
 });
 
 /**
- * Watch Task
- */
-gulp.task('dev', () => {
-    $.sequence('browser_sync', 'build', () => {
-        gulp.watch('src/*.js', ['js']);
-        gulp.watch('src/*.css', ['css']);
-    });
-});
-
-/**
  * Build (default) Task
  */
-gulp.task('build', (cb) => {
-    $.sequence('clean', ['js', 'css'], cb);
-});
+gulp.task('build', gulp.series('clean', ['js', 'css']));
 
-gulp.task('default', ['build']);
+/**
+ * Watch Task
+ */
+gulp.task('dev', gulp.series('browser_sync', 'build', () => {
+    gulp.watch('src/*.js', ['js']);
+    gulp.watch('src/*.css', ['css']);
+}));
+
+gulp.task('default', gulp.series('build'));
 
 /**
  * Test Task
  */
-gulp.task('test', ['build'], () => {
+gulp.task('test', gulp.series('build', () => {
     qunit('./tests/index.html', {
         page: {
             viewportSize: { width: 1280, height: 800 },
@@ -128,4 +122,4 @@ gulp.task('test', ['build'], () => {
         // verbose: true,
         timeout: 15,
     });
-});
+}));
