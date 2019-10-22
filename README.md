@@ -70,13 +70,13 @@ Link directly from [unpkg](https://unpkg.com/)
 
 ```html
 <!-- Jarallax -->
-<script src="https://unpkg.com/jarallax@1.10/dist/jarallax.min.js"></script>
+<script src="https://unpkg.com/jarallax@1/dist/jarallax.min.js"></script>
 
 <!-- Include it if you want to use Video parallax -->
-<script src="https://unpkg.com/jarallax@1.10/dist/jarallax-video.min.js"></script>
+<script src="https://unpkg.com/jarallax@1/dist/jarallax-video.min.js"></script>
 
 <!-- Include it if you want to parallax any element -->
-<script src="https://unpkg.com/jarallax@1.10/dist/jarallax-element.min.js"></script>
+<script src="https://unpkg.com/jarallax@1/dist/jarallax-element.min.js"></script>
 ```
 
 ## Supported plugins
