@@ -1,6 +1,6 @@
 /*!
  * Name    : Just Another Parallax [Jarallax]
- * Version : 1.12.1
+ * Version : 1.11.1
  * Author  : nK <https://nkdev.info>
  * GitHub  : https://github.com/nk-o/jarallax
  */
@@ -238,7 +238,7 @@ if (typeof _global.jQuery !== 'undefined') {
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
-/* WEBPACK VAR INJECTION */(function(global) {
+
 
 Object.defineProperty(exports, "__esModule", {
     value: true
@@ -246,9 +246,9 @@ Object.defineProperty(exports, "__esModule", {
 
 var _slicedToArray = function () { function sliceIterator(arr, i) { var _arr = []; var _n = true; var _d = false; var _e = undefined; try { for (var _i = arr[Symbol.iterator](), _s; !(_n = (_s = _i.next()).done); _n = true) { _arr.push(_s.value); if (i && _arr.length === i) break; } } catch (err) { _d = true; _e = err; } finally { try { if (!_n && _i["return"]) _i["return"](); } finally { if (_d) throw _e; } } return _arr; } return function (arr, i) { if (Array.isArray(arr)) { return arr; } else if (Symbol.iterator in Object(arr)) { return sliceIterator(arr, i); } else { throw new TypeError("Invalid attempt to destructure non-iterable instance"); } }; }();
 
-var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
-
 var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
 var _liteReady = __webpack_require__(2);
 
@@ -294,24 +294,13 @@ function getDeviceHeight() {
     return ($deviceHelper ? $deviceHelper.clientHeight : 0) || _global.window.innerHeight || document.documentElement.clientHeight;
 }
 
-// Window data
-var wndW = void 0;
+// Window height data
 var wndH = void 0;
-var wndY = void 0;
-var containerY = void 0;
-var forceResizeParallax = false;
-var forceScrollParallax = false;
-function updateWndVars(e) {
-    wndW = _global.window.innerWidth || document.documentElement.clientWidth;
-
+function updateWndVars() {
     if (isMobile) {
         wndH = getDeviceHeight();
     } else {
         wndH = _global.window.innerHeight || document.documentElement.clientHeight;
-    }
-
-    if ((typeof e === 'undefined' ? 'undefined' : _typeof(e)) === 'object' && (e.type === 'load' || e.type === 'dom-loaded')) {
-        forceResizeParallax = true;
     }
 }
 updateWndVars();
@@ -327,31 +316,8 @@ _global.window.addEventListener('load', updateWndVars);
 // list with all jarallax instances
 // need to render all in one scroll/resize event
 var jarallaxList = [];
-// Flag to indicate if updateParallax function has been called on window level and prevent multiple requests
-var globalParallaxUpdateInit = false;
 
-// Animate if changed window size or scrolled page
-var oldPageData = false;
-
-function getParentBySelector(elem, selector) {
-    var parent = void 0;
-    var hasSelector = selector !== undefined;
-
-    while (elem.parentElement !== null) {
-        elem = elem.parentElement;
-        if (elem.nodeType !== Node.ELEMENT_NODE) {
-            continue;
-        }
-
-        if (!hasSelector || [].indexOf.call(document.querySelectorAll(selector), elem) !== -1) {
-            parent = elem;
-            break;
-        }
-    }
-
-    return parent;
-}
-
+// get all parents of the element.
 function getParents(elem) {
     var parents = [];
 
@@ -366,87 +332,42 @@ function getParents(elem) {
     return parents;
 }
 
-function scrollParent(elem, includeHidden) {
-    var _window$getComputedSt = _global.window.getComputedStyle(elem),
-        position = _window$getComputedSt.position;
-
-    var excludeStaticParent = position === 'absolute';
-    var overflowRegex = includeHidden ? /(auto|scroll|hidden)/ : /(auto|scroll)/;
-    var parents = getParents(elem).filter(function (el) {
-        var styles = _global.window.getComputedStyle(el);
-
-        if (excludeStaticParent && styles.position === 'static') {
-            return false;
-        }
-
-        return overflowRegex.test(styles.overflow + styles['overflow-y'] + styles['overflow-x']);
-    });
-
-    return position === 'fixed' || !parents.length ? elem.ownerDocument || document : parents[0];
-}
-
-var containerList = {};
-
-function updateParallax(jarallaxInstance) {
+function updateParallax() {
     if (!jarallaxList.length) {
         return;
     }
 
-    if (jarallaxInstance.scrollableContainerSelector === 'document') {
-        if (_global.window.pageYOffset !== undefined) {
-            wndY = _global.window.pageYOffset;
-        } else {
-            wndY = (document.documentElement || document.body.parentNode || document.body).scrollTop;
-        }
-    } else {
-        wndY = jarallaxInstance.$scrollableContainer.scrollTop;
-    }
+    jarallaxList.forEach(function (data, k) {
+        var instance = data.instance,
+            oldData = data.oldData;
 
-    var containerObject = containerList[jarallaxInstance.scrollableContainerSelector];
-    var isResized = forceResizeParallax || !oldPageData || oldPageData.width !== wndW || oldPageData.height !== wndH;
-    var isScrolled = forceScrollParallax || containerObject.y !== wndY;
 
-    forceResizeParallax = false;
-    forceScrollParallax = false;
+        var clientRect = instance.$item.getBoundingClientRect();
 
-    if (isResized) {
-        Object.keys(containerList).forEach(function (key) {
-            containerList[key].instances.forEach(function (item) {
-                item.onResize();
-                item.onScroll();
-            });
-        });
-        oldPageData = {
-            width: wndW,
-            height: wndH
+        var newData = {
+            width: clientRect.width,
+            height: clientRect.height,
+            top: clientRect.top,
+            bottom: clientRect.bottom,
+            wndW: _global.window.innerWidth,
+            wndH: wndH
         };
-    }
 
-    if (!isResized && isScrolled) {
-        containerObject.instances.forEach(function (item) {
-            item.onScroll();
-        });
-        containerObject.y = wndY;
-    }
+        var isResized = !oldData || oldData.wndW !== newData.wndW || oldData.wndH !== newData.wndH || oldData.width !== newData.width || oldData.height !== newData.height;
+        var isScrolled = isResized || !oldData || oldData.top !== newData.top || oldData.bottom !== newData.bottom;
 
-    (0, _rafl2.default)(updateParallax.bind(null, jarallaxInstance));
+        jarallaxList[k].oldData = newData;
+
+        if (isResized) {
+            instance.onResize();
+        }
+        if (isScrolled) {
+            instance.onScroll();
+        }
+    });
+
+    (0, _rafl2.default)(updateParallax);
 }
-
-// ResizeObserver
-var resizeObserver = global.ResizeObserver ? new global.ResizeObserver(function (entry) {
-    if (entry && entry.length) {
-        (0, _rafl2.default)(function () {
-            entry.forEach(function (item) {
-                if (item.target && item.target.jarallax) {
-                    if (!forceResizeParallax) {
-                        item.target.jarallax.onResize();
-                    }
-                    forceScrollParallax = true;
-                }
-            });
-        });
-    }
-}) : false;
 
 var instanceID = 0;
 
@@ -475,7 +396,6 @@ var Jarallax = function () {
             zIndex: -100,
             disableParallax: false,
             disableVideo: false,
-            automaticResize: true, // use ResizeObserver to recalculate position and size of parallax image
 
             // video
             videoSrc: null,
@@ -577,14 +497,6 @@ var Jarallax = function () {
             position: /iPad|iPhone|iPod|Android/.test(navigator.userAgent) ? 'absolute' : 'fixed'
         };
 
-        self.$scrollableContainer = scrollParent(self.$item);
-
-        if (self.$scrollableContainer !== document && !self.$scrollableContainer.getAttribute('data-jarallax-container')) {
-            self.$scrollableContainer.setAttribute('data-jarallax-container', self.instanceID);
-        }
-
-        self.scrollableContainerSelector = self.$scrollableContainer !== document ? '[data-jarallax-container="' + self.$scrollableContainer.getAttribute('data-jarallax-container') + '"]' : 'document';
-
         if (self.initImg() && self.canInitParallax()) {
             self.init();
         }
@@ -636,9 +548,9 @@ var Jarallax = function () {
         key: 'getWindowData',
         value: function getWindowData() {
             return {
-                width: wndW,
+                width: _global.window.innerWidth || document.documentElement.clientWidth,
                 height: wndH,
-                y: wndY
+                y: document.documentElement.scrollTop
             };
         }
 
@@ -654,6 +566,7 @@ var Jarallax = function () {
             if ($imgElement && typeof $imgElement === 'string') {
                 $imgElement = self.$item.querySelector($imgElement);
             }
+
             // check if dom element
             if (!($imgElement instanceof Element)) {
                 if (self.options.imgSrc) {
@@ -776,19 +689,19 @@ var Jarallax = function () {
                 self.image.position = 'absolute';
             }
 
-            // check if one of parents have transform style (without this check, scroll transform will be inverted if used parallax with position fixed)
-            // discussion - https://github.com/nk-o/jarallax/issues/9
+            // 1. Check if one of parents have transform style (without this check, scroll transform will be inverted if used parallax with position fixed)
+            //    discussion - https://github.com/nk-o/jarallax/issues/9
+            // 2. Check if parents have overflow scroll
             if (self.image.position === 'fixed') {
-                var parentWithTransform = 0;
-                var $itemParents = self.$item;
-                while ($itemParents !== null && $itemParents !== document && parentWithTransform === 0) {
-                    var parentTransform = self.css($itemParents, '-webkit-transform') || self.css($itemParents, '-moz-transform') || self.css($itemParents, 'transform');
-                    if (parentTransform && parentTransform !== 'none') {
-                        parentWithTransform = 1;
-                        self.image.position = 'absolute';
-                    }
-                    $itemParents = $itemParents.parentNode;
-                }
+                var $parents = getParents(self.$item).filter(function (el) {
+                    var styles = _global.window.getComputedStyle(el);
+                    var parentTransform = styles['-webkit-transform'] || styles['-moz-transform'] || styles.transform;
+                    var overflowRegex = /(auto|scroll)/;
+
+                    return parentTransform && parentTransform !== 'none' || overflowRegex.test(styles.overflow + styles['overflow-y'] + styles['overflow-x']);
+                });
+
+                self.image.position = $parents.length ? 'absolute' : 'fixed';
             }
 
             // add position to parallax block
@@ -801,11 +714,6 @@ var Jarallax = function () {
             // set initial position and size
             self.onResize();
             self.onScroll(true);
-
-            // ResizeObserver
-            if (self.options.automaticResize && resizeObserver) {
-                resizeObserver.observe(self.$item);
-            }
 
             // call onInit event
             if (self.options.onInit) {
@@ -827,16 +735,13 @@ var Jarallax = function () {
     }, {
         key: 'addToParallaxList',
         value: function addToParallaxList() {
-            if (containerList[this.scrollableContainerSelector]) {
-                containerList[this.scrollableContainerSelector].instances.push(this);
-            } else {
-                containerList[this.scrollableContainerSelector] = {
-                    instances: [this],
-                    container: this.$scrollableContainer
-                };
+            jarallaxList.push({
+                instance: this
+            });
+
+            if (jarallaxList.length === 1) {
+                updateParallax();
             }
-            jarallaxList.push(this);
-            updateParallax(this);
         }
 
         // remove from parallax instances list
@@ -846,18 +751,10 @@ var Jarallax = function () {
         value: function removeFromParallaxList() {
             var self = this;
 
-            jarallaxList.forEach(function (item, key) {
-                if (item.instanceID === self.instanceID) {
+            jarallaxList.forEach(function (data, key) {
+                if (data.instance.instanceID === self.instanceID) {
                     jarallaxList.splice(key, 1);
                 }
-            });
-
-            Object.keys(containerList).forEach(function (key) {
-                containerList[key].instances.forEach(function (item, index) {
-                    if (item.instanceID === self.instanceID) {
-                        containerList[key].instances.splice(index, 1);
-                    }
-                });
             });
         }
     }, {
@@ -1036,7 +933,7 @@ var Jarallax = function () {
             if (self.options.elementInViewport) {
                 viewportRect = self.options.elementInViewport.getBoundingClientRect();
             }
-            self.isElementInViewport = viewportRect.bottom >= 0 && viewportRect.right >= 0 && viewportRect.top <= wndH && viewportRect.left <= wndW;
+            self.isElementInViewport = viewportRect.bottom >= 0 && viewportRect.right >= 0 && viewportRect.top <= wndH && viewportRect.left <= _global.window.innerWidth;
 
             // stop calculations if item is not in viewport
             if (force ? false : !self.isElementInViewport) {
@@ -1156,7 +1053,6 @@ var plugin = function plugin(items) {
 plugin.constructor = Jarallax;
 
 exports.default = plugin;
-/* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(5)))
 
 /***/ }),
 /* 14 */

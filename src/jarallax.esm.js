@@ -32,23 +32,13 @@ function getDeviceHeight() {
     return ($deviceHelper ? $deviceHelper.clientHeight : 0) || window.innerHeight || document.documentElement.clientHeight;
 }
 
-// Window data
-let wndW;
+// Window height data
 let wndH;
-let wndY;
-let forceResizeParallax = false;
-let forceScrollParallax = false;
-function updateWndVars(e) {
-    wndW = window.innerWidth || document.documentElement.clientWidth;
-
+function updateWndVars() {
     if (isMobile) {
         wndH = getDeviceHeight();
     } else {
         wndH = window.innerHeight || document.documentElement.clientHeight;
-    }
-
-    if (typeof e === 'object' && (e.type === 'load' || e.type === 'dom-loaded')) {
-        forceResizeParallax = true;
     }
 }
 updateWndVars();
@@ -65,9 +55,7 @@ domReady(() => {
 // need to render all in one scroll/resize event
 const jarallaxList = [];
 
-// Animate if changed window size or scrolled page
-let oldPageData = false;
-
+// get all parents of the element.
 function getParents(elem) {
     const parents = [];
 
@@ -82,87 +70,50 @@ function getParents(elem) {
     return parents;
 }
 
-function scrollParent(elem, includeHidden) {
-    const { position } = window.getComputedStyle(elem);
-    const excludeStaticParent = position === 'absolute';
-    const overflowRegex = includeHidden ? /(auto|scroll|hidden)/ : /(auto|scroll)/;
-    const parents = getParents(elem).filter((el) => {
-        const styles = window.getComputedStyle(el);
-
-        if (excludeStaticParent && styles.position === 'static') {
-            return false;
-        }
-
-        return overflowRegex.test(styles.overflow + styles['overflow-y'] + styles['overflow-x']);
-    });
-
-    return position === 'fixed' || !parents.length ? elem.ownerDocument || document : parents[0];
-}
-
-// List of all scrollable containers with list of jarallax instances in each container
-const containerList = {};
-
-function updateParallax(jarallaxInstance) {
+function updateParallax() {
     if (!jarallaxList.length) {
         return;
     }
 
-    if (jarallaxInstance.scrollableContainerSelector === 'document') {
-        if (window.pageYOffset !== undefined) {
-            wndY = window.pageYOffset;
-        } else {
-            wndY = (document.documentElement || document.body.parentNode || document.body).scrollTop;
-        }
-    } else {
-        wndY = jarallaxInstance.$scrollableContainer.scrollTop;
-    }
+    jarallaxList.forEach((data, k) => {
+        const {
+            instance,
+            oldData,
+        } = data;
 
-    const containerObject = containerList[jarallaxInstance.scrollableContainerSelector];
-    const isResized = forceResizeParallax || !oldPageData || oldPageData.width !== wndW || oldPageData.height !== wndH;
-    const isScrolled = forceScrollParallax || containerObject.y !== wndY;
+        const clientRect = instance.$item.getBoundingClientRect();
 
-    forceResizeParallax = false;
-    forceScrollParallax = false;
-
-    if (isResized) {
-        Object.keys(containerList).forEach((key) => {
-            containerList[key].instances.forEach((item) => {
-                item.onResize();
-                item.onScroll();
-            });
-        });
-        oldPageData = {
-            width: wndW,
-            height: wndH,
+        const newData = {
+            width: clientRect.width,
+            height: clientRect.height,
+            top: clientRect.top,
+            bottom: clientRect.bottom,
+            wndW: window.innerWidth,
+            wndH,
         };
-    }
 
-    if (!isResized && isScrolled) {
-        containerObject.instances.forEach((item) => {
-            item.onScroll();
-        });
-        containerObject.y = wndY;
-    }
+        const isResized = !oldData
+                           || oldData.wndW !== newData.wndW
+                           || oldData.wndH !== newData.wndH
+                           || oldData.width !== newData.width
+                           || oldData.height !== newData.height;
+        const isScrolled = isResized
+                           || !oldData
+                           || oldData.top !== newData.top
+                           || oldData.bottom !== newData.bottom;
 
-    raf(updateParallax.bind(null, jarallaxInstance));
+        jarallaxList[k].oldData = newData;
+
+        if (isResized) {
+            instance.onResize();
+        }
+        if (isScrolled) {
+            instance.onScroll();
+        }
+    });
+
+    raf(updateParallax);
 }
-
-// ResizeObserver
-const resizeObserver = global.ResizeObserver ? new global.ResizeObserver((entry) => {
-    if (entry && entry.length) {
-        raf(() => {
-            entry.forEach((item) => {
-                if (item.target && item.target.jarallax) {
-                    if (!forceResizeParallax) {
-                        item.target.jarallax.onResize();
-                    }
-                    forceScrollParallax = true;
-                }
-            });
-        });
-    }
-}) : false;
-
 
 let instanceID = 0;
 
@@ -188,7 +139,6 @@ class Jarallax {
             zIndex: -100,
             disableParallax: false,
             disableVideo: false,
-            automaticResize: true, // use ResizeObserver to recalculate position and size of parallax image
 
             // video
             videoSrc: null,
@@ -278,18 +228,6 @@ class Jarallax {
             position: /iPad|iPhone|iPod|Android/.test(navigator.userAgent) ? 'absolute' : 'fixed',
         };
 
-        self.$scrollableContainer = scrollParent(self.$item);
-
-        if (self.$scrollableContainer !== document
-            && !self.$scrollableContainer.getAttribute('data-jarallax-container')
-        ) {
-            self.$scrollableContainer.setAttribute('data-jarallax-container', self.instanceID);
-        }
-
-        self.scrollableContainerSelector = self.$scrollableContainer !== document
-            ? `[data-jarallax-container="${self.$scrollableContainer.getAttribute('data-jarallax-container')}"]`
-            : 'document';
-
         if (self.initImg() && self.canInitParallax()) {
             self.init();
         }
@@ -329,9 +267,9 @@ class Jarallax {
     // get window size and scroll position. Useful for extensions
     getWindowData() {
         return {
-            width: wndW,
+            width: window.innerWidth || document.documentElement.clientWidth,
             height: wndH,
-            y: wndY,
+            y: document.documentElement.scrollTop,
         };
     }
 
@@ -344,6 +282,7 @@ class Jarallax {
         if ($imgElement && typeof $imgElement === 'string') {
             $imgElement = self.$item.querySelector($imgElement);
         }
+
         // check if dom element
         if (!($imgElement instanceof Element)) {
             if (self.options.imgSrc) {
@@ -464,19 +403,19 @@ class Jarallax {
             self.image.position = 'absolute';
         }
 
-        // check if one of parents have transform style (without this check, scroll transform will be inverted if used parallax with position fixed)
-        // discussion - https://github.com/nk-o/jarallax/issues/9
+        // 1. Check if one of parents have transform style (without this check, scroll transform will be inverted if used parallax with position fixed)
+        //    discussion - https://github.com/nk-o/jarallax/issues/9
+        // 2. Check if parents have overflow scroll
         if (self.image.position === 'fixed') {
-            let parentWithTransform = 0;
-            let $itemParents = self.$item;
-            while ($itemParents !== null && $itemParents !== document && parentWithTransform === 0) {
-                const parentTransform = self.css($itemParents, '-webkit-transform') || self.css($itemParents, '-moz-transform') || self.css($itemParents, 'transform');
-                if (parentTransform && parentTransform !== 'none') {
-                    parentWithTransform = 1;
-                    self.image.position = 'absolute';
-                }
-                $itemParents = $itemParents.parentNode;
-            }
+            const $parents = getParents(self.$item).filter((el) => {
+                const styles = window.getComputedStyle(el);
+                const parentTransform = styles['-webkit-transform'] || styles['-moz-transform'] || styles.transform;
+                const overflowRegex = /(auto|scroll)/;
+
+                return (parentTransform && parentTransform !== 'none') || overflowRegex.test(styles.overflow + styles['overflow-y'] + styles['overflow-x']);
+            });
+
+            self.image.position = $parents.length ? 'absolute' : 'fixed';
         }
 
         // add position to parallax block
@@ -489,11 +428,6 @@ class Jarallax {
         // set initial position and size
         self.onResize();
         self.onScroll(true);
-
-        // ResizeObserver
-        if (self.options.automaticResize && resizeObserver) {
-            resizeObserver.observe(self.$item);
-        }
 
         // call onInit event
         if (self.options.onInit) {
@@ -512,34 +446,23 @@ class Jarallax {
 
     // add to parallax instances list
     addToParallaxList() {
-        if (containerList[this.scrollableContainerSelector]) {
-            containerList[this.scrollableContainerSelector].instances.push(this);
-        } else {
-            containerList[this.scrollableContainerSelector] = {
-                instances: [this],
-                container: this.$scrollableContainer,
-            };
+        jarallaxList.push({
+            instance: this,
+        });
+
+        if (jarallaxList.length === 1) {
+            updateParallax();
         }
-        jarallaxList.push(this);
-        updateParallax(this);
     }
 
     // remove from parallax instances list
     removeFromParallaxList() {
         const self = this;
 
-        jarallaxList.forEach((item, key) => {
-            if (item.instanceID === self.instanceID) {
+        jarallaxList.forEach((data, key) => {
+            if (data.instance.instanceID === self.instanceID) {
                 jarallaxList.splice(key, 1);
             }
-        });
-
-        Object.keys(containerList).forEach((key) => {
-            containerList[key].instances.forEach((item, index) => {
-                if (item.instanceID === self.instanceID) {
-                    containerList[key].instances.splice(index, 1);
-                }
-            });
         });
     }
 
@@ -714,7 +637,7 @@ class Jarallax {
         self.isElementInViewport = viewportRect.bottom >= 0
             && viewportRect.right >= 0
             && viewportRect.top <= wndH
-            && viewportRect.left <= wndW;
+            && viewportRect.left <= window.innerWidth;
 
         // stop calculations if item is not in viewport
         if (force ? false : !self.isElementInViewport) {
