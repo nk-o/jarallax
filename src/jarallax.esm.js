@@ -2,6 +2,10 @@ import domReady from 'lite-ready';
 import raf from 'rafl';
 import { window } from 'global';
 
+const {
+    navigator,
+} = window;
+
 const isIE = navigator.userAgent.indexOf('MSIE ') > -1 || navigator.userAgent.indexOf('Trident/') > -1 || navigator.userAgent.indexOf('Edge/') > -1;
 const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
 
