@@ -87,12 +87,14 @@ gulp.task('css', () => (
 /**
  * BrowserSync Task
  */
-gulp.task('browser_sync', () => {
+gulp.task('browser_sync', (cb) => {
     browserSync.init({
         server: {
             baseDir: ['demo', './'],
         },
     });
+
+    cb();
 });
 
 /**
@@ -103,9 +105,9 @@ gulp.task('build', gulp.series('clean', ['js', 'css']));
 /**
  * Watch Task
  */
-gulp.task('dev', gulp.series('browser_sync', 'build', () => {
-    gulp.watch('src/*.js', ['js']);
-    gulp.watch('src/*.css', ['css']);
+gulp.task('dev', gulp.series('build', 'browser_sync', () => {
+    gulp.watch('src/*.js', gulp.series('js'));
+    gulp.watch('src/*.css', gulp.series('css'));
 }));
 
 gulp.task('default', gulp.series('build'));
