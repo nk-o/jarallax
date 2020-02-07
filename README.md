@@ -297,6 +297,7 @@ onScroll | Called when parallax working. Use first argument with calculations. M
 onInit | Called after init end.
 onDestroy | Called after destroy.
 onCoverImage | Called after cover image.
+onError | Called when an error occurs on the video.
 
 ### onScroll event
 
