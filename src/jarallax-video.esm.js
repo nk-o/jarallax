@@ -194,6 +194,10 @@ export default function jarallaxVideo(jarallax = global.jarallax) {
                     }
                 });
 
+                video.on('error', (e) => {
+                    if (self.options.onError) self.options.onError(e)
+                })
+
                 self.video = video;
 
                 // set image if not exists

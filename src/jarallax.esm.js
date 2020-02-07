@@ -158,6 +158,7 @@ class Jarallax {
             onInit: null, // function() {}
             onDestroy: null, // function() {}
             onCoverImage: null, // function() {}
+            onError: null, // function(e) {}
         };
 
         // prepare data-options
