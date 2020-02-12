@@ -77,6 +77,6 @@
         "global": "^4.4.0",
         "lite-ready": "^1.0.4",
         "rafl": "^1.2.2",
-        "video-worker": "^1.1.6"
+        "video-worker": "^1.1.7"
     }
 }
