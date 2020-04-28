@@ -116,12 +116,13 @@ export default function jarallaxVideo( jarallax = global.jarallax ) {
     const defCanInitParallax = Jarallax.prototype.canInitParallax;
     Jarallax.prototype.canInitParallax = function() {
         const self = this;
-        const defaultResult = defCanInitParallax.apply( self );
+        let defaultResult = defCanInitParallax.apply( self );
 
         if ( ! self.options.videoSrc ) {
             return defaultResult;
         }
 
+        // Init video api
         const video = new VideoWorker( self.options.videoSrc, {
             autoplay: true,
             loop: self.options.videoLoop,
@@ -145,6 +146,16 @@ export default function jarallaxVideo( jarallax = global.jarallax ) {
         }
 
         if ( video.isValid() ) {
+            // Force enable parallax.
+            // When the parallax disabled on mobile devices, we still need to display videos.
+            // https://github.com/nk-o/jarallax/issues/159
+            if ( this.options.disableParallax() ) {
+                defaultResult = true;
+                self.image.position = 'absolute';
+                self.options.type = 'scroll';
+                self.options.speed = 1;
+            }
+
             // if parallax will not be inited, we can add thumbnail on background.
             if ( ! defaultResult ) {
                 if ( ! self.defaultInitImgResult ) {
@@ -228,8 +239,6 @@ export default function jarallaxVideo( jarallax = global.jarallax ) {
 
                         return false;
                     }
-
-                    return true;
                 }
             }
         }
