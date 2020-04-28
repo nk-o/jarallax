@@ -1,6 +1,6 @@
 ## Just Another Parallax
 
-Smooth parallax scrolling effect for background images, videos and inline elements. Code in pure JavaScript with ***NO dependencies*** + jQuery supported. ***YouTube***, ***Vimeo*** and ***Local Videos*** parallax supported.
+Smooth parallax scrolling effect for background images, videos and inline elements. Code in pure JavaScript with ***NO dependencies*** + jQuery supported. ***YouTube***, ***Vimeo*** and ***Self-Hosted Videos*** parallax supported.
 
 ## [Demo](https://free.nkdev.info/jarallax/)
 
@@ -178,13 +178,13 @@ $('.jarallax').jarallax({
     Your content here...
 </div>
 
-<!-- Background Local Video Parallax -->
+<!-- Background Self-Hosted Video Parallax -->
 <div class="jarallax" data-jarallax-video="mp4:./video/local-video.mp4,webm:./video/local-video.webm,ogv:./video/local-video.ogv">
     Your content here...
 </div>
 ```
 
-Note: for local videos required only 1 video type, not necessary use all mp4, webm and ogv. This need only for maximum compatibility with all browsers.
+Note: for self-hosted videos required 1 video type only, not necessarily use all mp4, webm and ogv. This needs only for maximum compatibility with all browsers.
 
 ### B. JavaScript way
 
@@ -269,7 +269,7 @@ Required `jarallax/jarallax-video.js` file.
 
 Name | Type | Default | Description
 :--- | :--- | :------ | :----------
-videoSrc | string | `null` | You can use Youtube, Vimeo or local videos. Also you can use data attribute `data-jarallax-video`.
+videoSrc | string | `null` | You can use Youtube, Vimeo or Self-Hosted videos. Also you can use data attribute `data-jarallax-video`.
 videoStartTime | float | `0` | Start time in seconds when video will be started (this value will be applied also after loop).
 videoEndTime | float | `0` | End time in seconds when video will be ended.
 videoVolume | float | `0` | Video volume from 0 to 100.
@@ -404,4 +404,4 @@ jQuery.fn.newJarallax = jQuery.fn.jarallax.noConflict();
 ## Credits
 
 Images <https://unsplash.com/>
-Local Video <https://videos.pexels.com/>
+Videos <https://videos.pexels.com/>
