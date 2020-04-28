@@ -29,7 +29,7 @@ function getVideoHeader() {
 }
 function getElementHeader() {
     return `/*!
- * Name    : Elements Extension for Jarallax
+ * Name    : DEPRECATED Elements Extension for Jarallax. Use laxxx instead https://github.com/alexfoxy/laxxx
  * Version : 1.0.0
  * Author  : ${ data.author }
  * GitHub  : ${ data.homepage }

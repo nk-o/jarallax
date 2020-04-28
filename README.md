@@ -1,6 +1,6 @@
 ## Just Another Parallax
 
-Smooth parallax scrolling effect for background images, videos and inline elements. Code in pure JavaScript with ***NO dependencies*** + jQuery supported. ***YouTube***, ***Vimeo*** and ***Self-Hosted Videos*** parallax supported.
+Smooth parallax scrolling effect for background images, videos. Code in pure JavaScript with ***NO dependencies*** + jQuery supported. ***YouTube***, ***Vimeo*** and ***Self-Hosted Videos*** parallax supported.
 
 ## [Demo](https://free.nkdev.info/jarallax/)
 
@@ -16,7 +16,6 @@ Smooth parallax scrolling effect for background images, videos and inline elemen
 :-----------------------|:------------------------------------------------------------------------------------------------|
 jarallax.min.js         | ![jarallax.min.js](https://img.badgesize.io/nk-o/jarallax/master/dist/jarallax.min.js?compression=gzip)
 jarallax-video.min.js   | ![jarallax-video.min.js](https://img.badgesize.io/nk-o/jarallax/master/dist/jarallax-video.min.js?compression=gzip)
-jarallax-element.min.js | ![jarallax-element.min.js](https://img.badgesize.io/nk-o/jarallax/master/dist/jarallax-element.min.js?compression=gzip)
 
 ## Usage with WordPress
 
@@ -41,12 +40,10 @@ Demo: <https://codepen.io/_nK/pen/mddWddr>
 ```javascript
 import {
     jarallax,
-    jarallaxElement,
     jarallaxVideo
 } from 'jarallax';
 
 jarallaxVideo();
-jarallaxElement();
 ```
 
 Note: in this way is not available jQuery and data-attribute automatic initialization. Use javascript call instead ([Example](#b-javascript-way)).
@@ -59,9 +56,6 @@ Note: in this way is not available jQuery and data-attribute automatic initializ
 
 <!-- Include it if you want to use Video parallax -->
 <script src="jarallax/dist/jarallax-video.min.js"></script>
-
-<!-- Include it if you want to parallax any element -->
-<script src="jarallax/dist/jarallax-element.min.js"></script>
 ```
 
 #### CDN
@@ -74,9 +68,6 @@ Link directly from [unpkg](https://unpkg.com/)
 
 <!-- Include it if you want to use Video parallax -->
 <script src="https://unpkg.com/jarallax@1/dist/jarallax-video.min.js"></script>
-
-<!-- Include it if you want to parallax any element -->
-<script src="https://unpkg.com/jarallax@1/dist/jarallax-element.min.js"></script>
 ```
 
 ## Supported plugins
@@ -202,21 +193,9 @@ jarallax(document.querySelectorAll('.jarallax'), {
 <div class="jarallax"></div>
 ```
 
-## Any Element Parallax Usage Examples
+## Elements Parallax Usage Examples
 
-```html
-<!-- Element will be parallaxed on -140 pixels from the screen center by Y axis -->
-<div data-jarallax-element="-140">
-    Your content here...
-</div>
-
-<!-- Element will be parallaxed on 250 pixels from the screen center by Y axis and on -100 pixels from the screen center by X axis -->
-<div data-jarallax-element="250 -100">
-    Your content here...
-</div>
-```
-
-Note: this is more like experimental feature, so the behavior could be changed in the future releases.
+Since v1.9.0 there was an extension to allow transform specific elements. This feature is still available, but DEPRECATED. We recommend you to use `laxxx` library <https://github.com/alexfoxy/laxxx>. It is much more powerful and has a less code (in cases when you don't want to add parallax backgrounds).
 
 ## Options
 
