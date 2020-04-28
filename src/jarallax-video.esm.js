@@ -121,6 +121,18 @@ export default function jarallaxVideo( jarallax = global.jarallax ) {
             volume: self.options.videoVolume || 0,
         } );
 
+        function resetDefaultImage() {
+            if ( self.image.$default_item ) {
+                self.image.$item = self.image.$default_item;
+                self.image.$item.style.display = 'block';
+
+                // set image width and height
+                self.coverImage();
+                self.clipContainer();
+                self.onScroll();
+            }
+        }
+
         if ( video.isValid() ) {
             // if parallax will not be inited, we can add thumbnail on background.
             if ( ! defaultResult ) {
@@ -148,7 +160,7 @@ export default function jarallaxVideo( jarallax = global.jarallax ) {
                         const oldOnScroll = self.onScroll;
                         self.onScroll = function() {
                             oldOnScroll.apply( self );
-                            if ( self.options.videoLoop || ( ! self.options.videoLoop && ! self.videoEnded ) ) {
+                            if ( ! self.videoError && ( self.options.videoLoop || ( ! self.options.videoLoop && ! self.videoEnded ) ) ) {
                                 if ( self.isVisible() ) {
                                     video.play();
                                 } else {
@@ -180,18 +192,14 @@ export default function jarallaxVideo( jarallax = global.jarallax ) {
                 video.on( 'ended', () => {
                     self.videoEnded = true;
 
-                    if ( ! self.options.videoLoop ) {
-                        // show image if Loop disabled
-                        if ( self.image.$default_item ) {
-                            self.image.$item = self.image.$default_item;
-                            self.image.$item.style.display = 'block';
+                    // show default image if Loop disabled.
+                    resetDefaultImage();
+                } );
+                video.on( 'error', () => {
+                    self.videoError = true;
 
-                            // set image width and height
-                            self.coverImage();
-                            self.clipContainer();
-                            self.onScroll();
-                        }
-                    }
+                    // show default image if video loading error.
+                    resetDefaultImage();
                 } );
 
                 self.video = video;
