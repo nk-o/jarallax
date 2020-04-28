@@ -1,5 +1,4 @@
 import domReady from 'lite-ready';
-import raf from 'rafl';
 import { window } from 'global';
 
 const {
@@ -116,7 +115,7 @@ function updateParallax() {
         }
     } );
 
-    raf( updateParallax );
+    window.requestAnimationFrame( updateParallax );
 }
 
 let instanceID = 0;
@@ -461,7 +460,7 @@ class Jarallax {
         } );
 
         if ( 1 === jarallaxList.length ) {
-            updateParallax();
+            window.requestAnimationFrame( updateParallax );
         }
     }
 
