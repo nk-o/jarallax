@@ -1,32 +1,6 @@
+
 {
-    "extends": "airbnb",
-    "rules": {
-        "class-methods-use-this": 0,
-        "func-names": 0,
-        "indent": [2, 4],
-        "no-mixed-operators": 0,
-        "no-plusplus": 0,
-        "no-underscore-dangle": 0,
-        "no-param-reassign": 0,
-        "no-continue": 0,
-        "no-script-url": 0,
-        "no-control-regex": 0,
-        "linebreak-style": 0,
-        "max-len": [2, 250],
-        "prefer-rest-params": 0,
-        "import/no-mutable-exports": 0,
-        "import/prefer-default-export": 0,
-        "jsx-a11y/href-no-hash": "off",
-        "jsx-a11y/anchor-is-valid": ["warn", { "aspects": ["invalidHref"] }]
-    },
-    "env": {
-        "browser": true,
-        "node": true,
-        "jquery": true
-    },
-    "globals": {
-        "jarallax": true,
-        "YT": true,
-        "Vimeo": true
-    }
+    "extends": [
+        "eslint-config-nk"
+    ]
 }
