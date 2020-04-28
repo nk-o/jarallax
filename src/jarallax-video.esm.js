@@ -39,6 +39,17 @@ export default function jarallaxVideo( jarallax = global.jarallax ) {
                     zIndex: -1,
                 } );
                 self.$video = video;
+
+                // add Poster attribute to self-hosted video
+                if ( 'local' === self.video.type ) {
+                    if ( self.image.src ) {
+                        self.$video.setAttribute( 'poster', self.image.src );
+                    } else if ( self.image.$item && 'IMG' === self.image.$item.tagName && self.image.$item.src ) {
+                        self.$video.setAttribute( 'poster', self.image.$item.src );
+                    }
+                }
+
+                // insert video tag
                 self.image.$container.appendChild( video );
 
                 // remove parent video element (created by VideoWorker)
@@ -206,7 +217,7 @@ export default function jarallaxVideo( jarallax = global.jarallax ) {
 
                 // set image if not exists
                 if ( ! self.defaultInitImgResult ) {
-                    // set empty image on local video if not defined
+                    // set empty image on self-hosted video if not defined
                     self.image.src = 'data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7';
 
                     if ( 'local' !== video.type ) {
