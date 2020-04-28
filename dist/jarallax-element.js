@@ -1,5 +1,5 @@
 /*!
- * Name    : Elements Extension for Jarallax
+ * Name    : DEPRECATED Elements Extension for Jarallax. Use laxxx instead https://github.com/alexfoxy/laxxx
  * Version : 1.0.0
  * Author  : nK <https://nkdev.info>
  * GitHub  : https://github.com/nk-o/jarallax
@@ -105,14 +105,17 @@ module.exports = __webpack_require__(1);
 __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var lite_ready__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(2);
 /* harmony import */ var lite_ready__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(lite_ready__WEBPACK_IMPORTED_MODULE_0__);
-/* harmony import */ var _jarallax_element_esm__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(3);
+/* harmony import */ var global__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(3);
+/* harmony import */ var global__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(global__WEBPACK_IMPORTED_MODULE_1__);
+/* harmony import */ var _jarallax_element_esm__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(5);
 
 
-Object(_jarallax_element_esm__WEBPACK_IMPORTED_MODULE_1__["default"])(); // data-jarallax-element initialization
+
+Object(_jarallax_element_esm__WEBPACK_IMPORTED_MODULE_2__["default"])(); // data-jarallax-element initialization
 
 lite_ready__WEBPACK_IMPORTED_MODULE_0___default()(function () {
-  if (typeof jarallax !== 'undefined') {
-    jarallax(document.querySelectorAll('[data-jarallax-element]'));
+  if ('undefined' !== typeof global__WEBPACK_IMPORTED_MODULE_1___default.a.jarallax) {
+    global__WEBPACK_IMPORTED_MODULE_1___default.a.jarallax(document.querySelectorAll('[data-jarallax-element]'));
   }
 });
 
@@ -137,19 +140,63 @@ module.exports = function (callback) {
 
 /***/ }),
 /* 3 */
+/***/ (function(module, exports, __webpack_require__) {
+
+/* WEBPACK VAR INJECTION */(function(global) {var win;
+
+if (typeof window !== "undefined") {
+  win = window;
+} else if (typeof global !== "undefined") {
+  win = global;
+} else if (typeof self !== "undefined") {
+  win = self;
+} else {
+  win = {};
+}
+
+module.exports = win;
+/* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(4)))
+
+/***/ }),
+/* 4 */
+/***/ (function(module, exports) {
+
+function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
+
+var g; // This works in non-strict mode
+
+g = function () {
+  return this;
+}();
+
+try {
+  // This works if eval is allowed (see CSP)
+  g = g || new Function("return this")();
+} catch (e) {
+  // This works if the window reference is available
+  if ((typeof window === "undefined" ? "undefined" : _typeof(window)) === "object") g = window;
+} // g can still be undefined, but nothing to do about it...
+// We return undefined, instead of nothing here, so it's
+// easier to handle this case. if(!global) { ...}
+
+
+module.exports = g;
+
+/***/ }),
+/* 5 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "default", function() { return jarallaxElement; });
-/* harmony import */ var global__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(4);
+/* harmony import */ var global__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(3);
 /* harmony import */ var global__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(global__WEBPACK_IMPORTED_MODULE_0__);
 /* eslint no-case-declarations: "off" */
 
 function jarallaxElement() {
   var jarallax = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : global__WEBPACK_IMPORTED_MODULE_0___default.a.jarallax;
 
-  if (typeof jarallax === 'undefined') {
+  if ('undefined' === typeof jarallax) {
     return;
   }
 
@@ -160,14 +207,17 @@ function jarallaxElement() {
 
     Jarallax.prototype[key] = function () {
       var self = this;
-      var args = arguments || [];
 
-      if (key === 'initImg' && self.$item.getAttribute('data-jarallax-element') !== null) {
+      if ('initImg' === key && null !== self.$item.getAttribute('data-jarallax-element')) {
         self.options.type = 'element';
         self.pureOptions.speed = self.$item.getAttribute('data-jarallax-element') || self.pureOptions.speed;
       }
 
-      if (self.options.type !== 'element') {
+      for (var _len = arguments.length, args = new Array(_len), _key = 0; _key < _len; _key++) {
+        args[_key] = arguments[_key];
+      }
+
+      if ('element' !== self.options.type) {
         return def.apply(self, args);
       }
 
@@ -216,8 +266,8 @@ function jarallaxElement() {
           var moveX = centerPercent * self.options.speedX;
           var my = moveY;
           var mx = moveX;
-          if (self.options.thresholdY !== null && moveY > self.options.thresholdY) my = 0;
-          if (self.options.thresholdX !== null && moveX > self.options.thresholdX) mx = 0;
+          if (null !== self.options.thresholdY && moveY > self.options.thresholdY) my = 0;
+          if (null !== self.options.thresholdX && moveX > self.options.thresholdX) mx = 0;
           self.css(self.$item, {
             transform: "translate3d(".concat(mx, "px,").concat(my, "px,0)")
           });
@@ -235,50 +285,6 @@ function jarallaxElement() {
     };
   });
 }
-
-/***/ }),
-/* 4 */
-/***/ (function(module, exports, __webpack_require__) {
-
-/* WEBPACK VAR INJECTION */(function(global) {var win;
-
-if (typeof window !== "undefined") {
-  win = window;
-} else if (typeof global !== "undefined") {
-  win = global;
-} else if (typeof self !== "undefined") {
-  win = self;
-} else {
-  win = {};
-}
-
-module.exports = win;
-/* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(5)))
-
-/***/ }),
-/* 5 */
-/***/ (function(module, exports) {
-
-function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
-
-var g; // This works in non-strict mode
-
-g = function () {
-  return this;
-}();
-
-try {
-  // This works if eval is allowed (see CSP)
-  g = g || new Function("return this")();
-} catch (e) {
-  // This works if the window reference is available
-  if ((typeof window === "undefined" ? "undefined" : _typeof(window)) === "object") g = window;
-} // g can still be undefined, but nothing to do about it...
-// We return undefined, instead of nothing here, so it's
-// easier to handle this case. if(!global) { ...}
-
-
-module.exports = g;
 
 /***/ })
 /******/ ]);
