@@ -338,9 +338,13 @@ class Jarallax {
             width: '100%',
             height: '100%',
             overflow: 'hidden',
-            pointerEvents: 'none',
         };
-        let imageStyles = {};
+        let imageStyles = {
+            pointerEvents: 'none',
+            transformStyle: 'preserve-3d',
+            backfaceVisibility: 'hidden',
+            willChange: 'transform,opacity',
+        };
 
         if ( ! self.options.keepImg ) {
             // save default user styles
