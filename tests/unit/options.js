@@ -1,13 +1,13 @@
-QUnit.module('options', function () {
-    QUnit.test('default options', function (assert) {
-        assert.expect(1);
+QUnit.module( 'options', function() {
+    QUnit.test( 'default options', function( assert ) {
+        assert.expect( 1 );
 
-        var $jarallax = UTILS.get('background')[0];
-        jarallax($jarallax);
+        var $jarallax = UTILS.get( 'background' )[ 0 ];
+        jarallax( $jarallax );
 
-        var options = $jarallax.jarallax.options;
+        var { options } = $jarallax.jarallax;
 
-        assert.deepEqual({
+        assert.deepEqual( {
             type: options.type,
             speed: options.speed,
             imgSrc: options.imgSrc,
@@ -38,12 +38,12 @@ QUnit.module('options', function () {
             imgRepeat: 'no-repeat',
             elementInViewport: null,
             zIndex: -100,
-            disableParallax: "function () {\n" +
-            "                return false;\n" +
-            "            }",
-            disableVideo: "function () {\n" +
-            "                return false;\n" +
-            "            }",
+            disableParallax: 'function () {\n'
+            + '        return false;\n'
+            + '      }',
+            disableVideo: 'function () {\n'
+            + '        return false;\n'
+            + '      }',
             videoSrc: null,
             videoStartTime: 0,
             videoEndTime: 0,
@@ -53,12 +53,11 @@ QUnit.module('options', function () {
             onInit: null,
             onDestroy: null,
             onCoverImage: null,
-        });
-    });
+        } );
+    } );
 
-
-    QUnit.test('custom options', function (assert) {
-        assert.expect(1);
+    QUnit.test( 'custom options', function( assert ) {
+        assert.expect( 1 );
 
         function onScroll() {
             return 1;
@@ -73,7 +72,7 @@ QUnit.module('options', function () {
             return 4;
         }
 
-        var $jarallax = UTILS.get('background')[0];
+        var $jarallax = UTILS.get( 'background' )[ 0 ];
 
         var customOptions = {
             type: 'opacity',
@@ -98,17 +97,17 @@ QUnit.module('options', function () {
             onCoverImage: onCoverImage,
         };
 
-        jarallax($jarallax, customOptions);
+        jarallax( $jarallax, customOptions );
 
-        var options = $jarallax.jarallax.options;
+        var { options } = $jarallax.jarallax;
 
-        customOptions.disableParallax = "function () {\n" +
-            "                return disableParallaxRegexp.test(navigator.userAgent);\n" +
-            "            }";
-        customOptions.disableVideo = "function () {\n" +
-            "                return disableVideoRegexp.test(navigator.userAgent);\n" +
-            "            }";
-        assert.deepEqual({
+        customOptions.disableParallax = 'function () {\n'
+            + '        return disableParallaxRegexp.test(navigator.userAgent);\n'
+            + '      }';
+        customOptions.disableVideo = 'function () {\n'
+            + '        return disableVideoRegexp.test(navigator.userAgent);\n'
+            + '      }';
+        assert.deepEqual( {
             type: options.type,
             speed: options.speed,
             imgSrc: options.imgSrc,
@@ -129,16 +128,15 @@ QUnit.module('options', function () {
             onInit: options.onInit,
             onDestroy: options.onDestroy,
             onCoverImage: options.onCoverImage,
-        }, customOptions);
-    });
+        }, customOptions );
+    } );
 
+    QUnit.test( 'data-* options', function( assert ) {
+        assert.expect( 1 );
 
-    QUnit.test('data-* options', function (assert) {
-        assert.expect(1);
+        var $jarallax = UTILS.get( 'background' )[ 0 ];
 
-        var $jarallax = UTILS.get('background')[0];
-
-        $($jarallax).attr({
+        $( $jarallax ).attr( {
             'data-type': 'scale',
             'data-speed': '1.3',
             'data-img-src': UTILS.image,
@@ -154,13 +152,13 @@ QUnit.module('options', function () {
             'data-video-end-time': '20',
             'data-video-volume': '30',
             'data-video-play-only-visible': 'false',
-        });
+        } );
 
-        jarallax($jarallax);
+        jarallax( $jarallax );
 
-        var options = $jarallax.jarallax.options;
+        var { options } = $jarallax.jarallax;
 
-        assert.deepEqual({
+        assert.deepEqual( {
             type: options.type,
             speed: options.speed,
             imgSrc: options.imgSrc,
@@ -185,54 +183,52 @@ QUnit.module('options', function () {
             imgPosition: 'top',
             imgRepeat: 'repeat',
             zIndex: '-102',
-            disableParallax: "function () {\n" +
-            "                return disableParallaxRegexp.test(navigator.userAgent);\n" +
-            "            }",
-            disableVideo: "function () {\n" +
-            "                return disableVideoRegexp.test(navigator.userAgent);\n" +
-            "            }",
+            disableParallax: 'function () {\n'
+            + '        return disableParallaxRegexp.test(navigator.userAgent);\n'
+            + '      }',
+            disableVideo: 'function () {\n'
+            + '        return disableVideoRegexp.test(navigator.userAgent);\n'
+            + '      }',
             videoSrc: 'https://youtu.be/mru3Q5m4lkY',
             videoStartTime: '10',
             videoEndTime: '20',
             videoVolume: '30',
             videoPlayOnlyVisible: false,
-        });
-    });
+        } );
+    } );
 
+    QUnit.test( 'cascading options', function( assert ) {
+        assert.expect( 1 );
 
-    QUnit.test('cascading options', function (assert) {
-        assert.expect(1);
+        var $jarallax = UTILS.get( 'background' )[ 0 ];
 
-        var $jarallax = UTILS.get('background')[0];
-
-        $($jarallax).attr({
+        $( $jarallax ).attr( {
             'data-speed': '1.3',
-        });
+        } );
 
-        jarallax($jarallax, {
+        jarallax( $jarallax, {
             speed: 0.9,
-        });
+        } );
 
-        assert.equal($jarallax.jarallax.options.speed, 0.9);
-    });
+        assert.equal( $jarallax.jarallax.options.speed, 0.9 );
+    } );
 
+    QUnit.test( 'speed option correction', function( assert ) {
+        assert.expect( 2 );
 
-    QUnit.test('speed option correction', function (assert) {
-        assert.expect(2);
+        var $jarallax = UTILS.get( 'background' )[ 0 ];
 
-        var $jarallax = UTILS.get('background')[0];
-
-        jarallax($jarallax, {
+        jarallax( $jarallax, {
             speed: 2.1,
-        });
+        } );
 
-        assert.equal($jarallax.jarallax.options.speed, 2, 'speed option max 2');
+        assert.equal( $jarallax.jarallax.options.speed, 2, 'speed option max 2' );
 
-        jarallax($jarallax, 'destroy');
-        jarallax($jarallax, {
+        jarallax( $jarallax, 'destroy' );
+        jarallax( $jarallax, {
             speed: -1.5,
-        });
+        } );
 
-        assert.equal($jarallax.jarallax.options.speed, -1, 'speed option min -1');
-    });
-});
+        assert.equal( $jarallax.jarallax.options.speed, -1, 'speed option min -1' );
+    } );
+} );

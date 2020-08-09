@@ -727,7 +727,6 @@ class Jarallax {
     }
 }
 
-
 // global definition
 const plugin = function( items, options, ...args ) {
     // check for dom element

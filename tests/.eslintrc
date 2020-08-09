@@ -4,6 +4,7 @@
         "qunit": true
     },
     "globals": {
+        "$": true,
         "jarallax": true,
         "YT": true,
         "Vimeo": true,
