@@ -210,8 +210,8 @@ function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _d
 // thanks http://stackoverflow.com/questions/18096715/implement-deferred-object-without-using-jquery
 
 function Deferred() {
-  this.done = [];
-  this.fail = [];
+  this.doneCallbacks = [];
+  this.failCallbacks = [];
 }
 
 Deferred.prototype = {
@@ -229,20 +229,20 @@ Deferred.prototype = {
       args[_key] = arguments[_key];
     }
 
-    this.execute(this.done, args);
+    this.execute(this.doneCallbacks, args);
   },
   reject: function reject() {
     for (var _len2 = arguments.length, args = new Array(_len2), _key2 = 0; _key2 < _len2; _key2++) {
       args[_key2] = arguments[_key2];
     }
 
-    this.execute(this.fail, args);
+    this.execute(this.failCallbacks, args);
   },
   done: function done(callback) {
-    this.done.push(callback);
+    this.doneCallbacks.push(callback);
   },
   fail: function fail(callback) {
-    this.fail.push(callback);
+    this.failCallbacks.push(callback);
   }
 };
 var ID = 0;
