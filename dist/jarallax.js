@@ -1,6 +1,6 @@
 /*!
  * Name    : Just Another Parallax [Jarallax]
- * Version : 1.12.2
+ * Version : 1.12.3
  * Author  : nK <https://nkdev.info>
  * GitHub  : https://github.com/nk-o/jarallax
  */
@@ -812,9 +812,11 @@ var Jarallax = /*#__PURE__*/function () {
         self.$clipStyles.setAttribute('id', "jarallax-clip-".concat(self.instanceID));
         var head = document.head || document.getElementsByTagName('head')[0];
         head.appendChild(self.$clipStyles);
-      }
+      } // clip is used for old browsers.
+      // clip-path for modern browsers (also fixes Safari v14 bug https://github.com/nk-o/jarallax/issues/181 ).
 
-      var styles = "#jarallax-container-".concat(self.instanceID, " {\n           clip: rect(0 ").concat(width, "px ").concat(height, "px 0);\n           clip: rect(0, ").concat(width, "px, ").concat(height, "px, 0);\n        }"); // add clip styles inline (this method need for support IE8 and less browsers)
+
+      var styles = "#jarallax-container-".concat(self.instanceID, " {\n            clip: rect(0 ").concat(width, "px ").concat(height, "px 0);\n            clip: rect(0, ").concat(width, "px, ").concat(height, "px, 0);\n            -webkit-clip-path: polygon(0 0, 100% 0, 100% 100%, 0 100%);\n            clip-path: polygon(0 0, 100% 0, 100% 100%, 0 100%);\n        }"); // add clip styles inline (this method need for support IE8 and less browsers)
 
       if (self.$clipStyles.styleSheet) {
         self.$clipStyles.styleSheet.cssText = styles;
