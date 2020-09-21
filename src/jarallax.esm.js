@@ -548,9 +548,13 @@ class Jarallax {
             head.appendChild( self.$clipStyles );
         }
 
+        // clip is used for old browsers.
+        // clip-path for modern browsers (also fixes Safari v14 bug https://github.com/nk-o/jarallax/issues/181 ).
         const styles = `#jarallax-container-${ self.instanceID } {
-           clip: rect(0 ${ width }px ${ height }px 0);
-           clip: rect(0, ${ width }px, ${ height }px, 0);
+            clip: rect(0 ${ width }px ${ height }px 0);
+            clip: rect(0, ${ width }px, ${ height }px, 0);
+            -webkit-clip-path: polygon(0 0, 100% 0, 100% 100%, 0 100%);
+            clip-path: polygon(0 0, 100% 0, 100% 100%, 0 100%);
         }`;
 
         // add clip styles inline (this method need for support IE8 and less browsers)
