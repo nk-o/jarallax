@@ -218,8 +218,10 @@ export default function jarallaxVideo( jarallax = global.jarallax ) {
                 video.on( 'ended', () => {
                     self.videoEnded = true;
 
-                    // show default image if Loop disabled.
-                    resetDefaultImage();
+                    if ( ! self.options.videoLoop ) {
+                        // show default image if Loop disabled.
+                        resetDefaultImage();
+                    }
                 } );
                 video.on( 'error', () => {
                     self.videoError = true;
