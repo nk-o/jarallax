@@ -35,6 +35,10 @@ export default function jarallaxVideo( jarallax = global.jarallax ) {
                     height: '100%',
                     maxWidth: 'none',
                     maxHeight: 'none',
+                    pointerEvents: 'none',
+                    transformStyle: 'preserve-3d',
+                    backfaceVisibility: 'hidden',
+                    willChange: 'transform,opacity',
                     margin: 0,
                     zIndex: -1,
                 } );
