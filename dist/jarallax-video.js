@@ -1127,6 +1127,10 @@ function jarallaxVideo() {
           height: '100%',
           maxWidth: 'none',
           maxHeight: 'none',
+          pointerEvents: 'none',
+          transformStyle: 'preserve-3d',
+          backfaceVisibility: 'hidden',
+          willChange: 'transform,opacity',
           margin: 0,
           zIndex: -1
         });
@@ -1303,9 +1307,12 @@ function jarallaxVideo() {
           }
         });
         video.on('ended', function () {
-          self.videoEnded = true; // show default image if Loop disabled.
+          self.videoEnded = true;
 
-          resetDefaultImage();
+          if (!self.options.videoLoop) {
+            // show default image if Loop disabled.
+            resetDefaultImage();
+          }
         });
         video.on('error', function () {
           self.videoError = true; // show default image if video loading error.
