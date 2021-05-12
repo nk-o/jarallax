@@ -17,7 +17,7 @@
         "test": "gulp test",
         "js-lint": "eslint src/ tests/",
         "js-lint-fix": "eslint --fix src/ tests/",
-        "postinstall": "npx simple-git-hooks"
+        "update-git-hooks": "npx simple-git-hooks"
     },
     "repository": {
         "type": "git",
@@ -70,6 +70,6 @@
     "dependencies": {
         "global": "^4.4.0",
         "lite-ready": "^1.0.4",
-        "video-worker": "^1.1.13"
+        "video-worker": "^1.1.14"
     }
 }
