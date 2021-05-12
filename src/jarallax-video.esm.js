@@ -130,7 +130,7 @@ export default function jarallaxVideo( jarallax = global.jarallax ) {
         const video = new VideoWorker( self.options.videoSrc, {
             autoplay: true,
             loop: self.options.videoLoop,
-            showContols: false,
+            showControls: false,
             accessibilityHidden: true,
             startTime: self.options.videoStartTime || 0,
             endTime: self.options.videoEndTime || 0,
