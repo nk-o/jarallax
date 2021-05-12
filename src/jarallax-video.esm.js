@@ -131,6 +131,7 @@ export default function jarallaxVideo( jarallax = global.jarallax ) {
             autoplay: true,
             loop: self.options.videoLoop,
             showContols: false,
+            accessibilityHidden: true,
             startTime: self.options.videoStartTime || 0,
             endTime: self.options.videoEndTime || 0,
             mute: self.options.videoVolume ? 0 : 1,
