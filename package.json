@@ -17,7 +17,7 @@
         "test": "gulp test",
         "js-lint": "eslint src/ tests/",
         "js-lint-fix": "eslint --fix src/ tests/",
-        "lint-staged": "lint-staged"
+        "postinstall": "npx simple-git-hooks"
     },
     "repository": {
         "type": "git",
@@ -35,18 +35,18 @@
         "video"
     ],
     "devDependencies": {
-        "@babel/core": "^7.12.9",
-        "@babel/plugin-proposal-class-properties": "^7.12.1",
-        "@babel/plugin-proposal-object-rest-spread": "^7.12.1",
-        "@babel/plugin-transform-async-to-generator": "^7.12.1",
-        "@babel/plugin-transform-block-scoping": "^7.12.1",
-        "@babel/preset-env": "^7.12.7",
-        "@babel/register": "^7.12.1",
-        "@types/jquery": "^3.5.4",
+        "@babel/core": "^7.14.0",
+        "@babel/plugin-proposal-class-properties": "^7.13.0",
+        "@babel/plugin-proposal-object-rest-spread": "^7.13.8",
+        "@babel/plugin-transform-async-to-generator": "^7.13.0",
+        "@babel/plugin-transform-block-scoping": "^7.14.1",
+        "@babel/preset-env": "^7.14.1",
+        "@babel/register": "^7.13.16",
+        "@types/jquery": "^3.5.5",
         "babel-loader": "^8.2.2",
-        "browser-sync": "^2.26.13",
+        "browser-sync": "^2.26.14",
         "del": "^6.0.0",
-        "eslint-config-nk": "^0.0.17",
+        "eslint-config-nk": "^0.0.20",
         "gulp": "^4.0.2",
         "gulp-header": "^2.0.9",
         "gulp-if": "^3.0.0",
@@ -56,20 +56,20 @@
         "gulp-sourcemaps": "^3.0.0",
         "gulp-uglify": "^3.0.2",
         "gulp-watch": "^5.0.1",
-        "husky": "^4.3.0",
-        "jquery": "^3.5.1",
+        "jquery": "^3.6.0",
         "json-file": "^0.1.0",
-        "lint-staged": "^10.5.2",
-        "micromatch": "^4.0.2",
+        "lint-staged": "^11.0.0",
+        "micromatch": "^4.0.4",
         "node-qunit-phantomjs": "^2.1.1",
         "object-fit-images": "^3.2.4",
-        "qunit": "^2.12.0",
+        "qunit": "^2.15.0",
+        "simple-git-hooks": "^2.4.1",
         "vinyl-named": "^1.1.0",
-        "webpack-stream": "^6.1.1"
+        "webpack-stream": "^6.1.2"
     },
     "dependencies": {
         "global": "^4.4.0",
         "lite-ready": "^1.0.4",
-        "video-worker": "^1.1.10"
+        "video-worker": "^1.1.13"
     }
 }
