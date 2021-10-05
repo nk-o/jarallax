@@ -9,7 +9,8 @@
     "types": "./typings/index.d.ts",
     "files": [
         "src",
-        "dist"
+        "dist",
+        "typings"
     ],
     "scripts": {
         "dev": "gulp dev",
