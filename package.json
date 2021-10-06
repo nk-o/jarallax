@@ -72,6 +72,6 @@
     "dependencies": {
         "global": "^4.4.0",
         "lite-ready": "^1.0.4",
-        "video-worker": "^1.1.15"
+        "video-worker": "^1.1.16"
     }
 }
