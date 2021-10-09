@@ -226,10 +226,10 @@ class Jarallax {
             $container: null,
             useImgTag: false,
 
-            // position fixed is needed for the most of browsers because absolute position have glitches
-            // on MacOS with smooth scroll there is a huge lags with absolute position - https://github.com/nk-o/jarallax/issues/75
-            // on mobile devices better scrolled with absolute position
-            position: /iPad|iPhone|iPod|Android/.test( navigator.userAgent ) ? 'absolute' : 'fixed',
+            // 1. Position fixed is needed for the most of browsers because absolute position have glitches
+            // 2. On MacOS with smooth scroll there is a huge lags with absolute position - https://github.com/nk-o/jarallax/issues/75
+            // 3. Previously used 'absolute' for mobile devices. But we re-tested on iPhone 12 and 'fixed' position is working better, then 'absolute', so for now position is always 'fixed'
+            position: 'fixed',
         };
 
         if ( self.initImg() && self.canInitParallax() ) {
