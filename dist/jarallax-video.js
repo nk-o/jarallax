@@ -4,97 +4,11 @@
  * Author  : nK <https://nkdev.info>
  * GitHub  : https://github.com/nk-o/jarallax
  */
-/******/ (function(modules) { // webpackBootstrap
-/******/ 	// The module cache
-/******/ 	var installedModules = {};
-/******/
-/******/ 	// The require function
-/******/ 	function __webpack_require__(moduleId) {
-/******/
-/******/ 		// Check if module is in cache
-/******/ 		if(installedModules[moduleId]) {
-/******/ 			return installedModules[moduleId].exports;
-/******/ 		}
-/******/ 		// Create a new module (and put it into the cache)
-/******/ 		var module = installedModules[moduleId] = {
-/******/ 			i: moduleId,
-/******/ 			l: false,
-/******/ 			exports: {}
-/******/ 		};
-/******/
-/******/ 		// Execute the module function
-/******/ 		modules[moduleId].call(module.exports, module, module.exports, __webpack_require__);
-/******/
-/******/ 		// Flag the module as loaded
-/******/ 		module.l = true;
-/******/
-/******/ 		// Return the exports of the module
-/******/ 		return module.exports;
-/******/ 	}
-/******/
-/******/
-/******/ 	// expose the modules object (__webpack_modules__)
-/******/ 	__webpack_require__.m = modules;
-/******/
-/******/ 	// expose the module cache
-/******/ 	__webpack_require__.c = installedModules;
-/******/
-/******/ 	// define getter function for harmony exports
-/******/ 	__webpack_require__.d = function(exports, name, getter) {
-/******/ 		if(!__webpack_require__.o(exports, name)) {
-/******/ 			Object.defineProperty(exports, name, { enumerable: true, get: getter });
-/******/ 		}
-/******/ 	};
-/******/
-/******/ 	// define __esModule on exports
-/******/ 	__webpack_require__.r = function(exports) {
-/******/ 		if(typeof Symbol !== 'undefined' && Symbol.toStringTag) {
-/******/ 			Object.defineProperty(exports, Symbol.toStringTag, { value: 'Module' });
-/******/ 		}
-/******/ 		Object.defineProperty(exports, '__esModule', { value: true });
-/******/ 	};
-/******/
-/******/ 	// create a fake namespace object
-/******/ 	// mode & 1: value is a module id, require it
-/******/ 	// mode & 2: merge all properties of value into the ns
-/******/ 	// mode & 4: return value when already ns object
-/******/ 	// mode & 8|1: behave like require
-/******/ 	__webpack_require__.t = function(value, mode) {
-/******/ 		if(mode & 1) value = __webpack_require__(value);
-/******/ 		if(mode & 8) return value;
-/******/ 		if((mode & 4) && typeof value === 'object' && value && value.__esModule) return value;
-/******/ 		var ns = Object.create(null);
-/******/ 		__webpack_require__.r(ns);
-/******/ 		Object.defineProperty(ns, 'default', { enumerable: true, value: value });
-/******/ 		if(mode & 2 && typeof value != 'string') for(var key in value) __webpack_require__.d(ns, key, function(key) { return value[key]; }.bind(null, key));
-/******/ 		return ns;
-/******/ 	};
-/******/
-/******/ 	// getDefaultExport function for compatibility with non-harmony modules
-/******/ 	__webpack_require__.n = function(module) {
-/******/ 		var getter = module && module.__esModule ?
-/******/ 			function getDefault() { return module['default']; } :
-/******/ 			function getModuleExports() { return module; };
-/******/ 		__webpack_require__.d(getter, 'a', getter);
-/******/ 		return getter;
-/******/ 	};
-/******/
-/******/ 	// Object.prototype.hasOwnProperty.call
-/******/ 	__webpack_require__.o = function(object, property) { return Object.prototype.hasOwnProperty.call(object, property); };
-/******/
-/******/ 	// __webpack_public_path__
-/******/ 	__webpack_require__.p = "";
-/******/
-/******/
-/******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 6);
-/******/ })
-/************************************************************************/
-/******/ ([
+/******/ (function() { // webpackBootstrap
+/******/ 	var __webpack_modules__ = ([
 /* 0 */,
-/* 1 */,
-/* 2 */
-/***/ (function(module, exports) {
+/* 1 */
+/***/ (function(module) {
 
 module.exports = function (callback) {
   if (document.readyState === 'complete' || document.readyState === 'interactive') {
@@ -112,15 +26,15 @@ module.exports = function (callback) {
 };
 
 /***/ }),
-/* 3 */
-/***/ (function(module, exports, __webpack_require__) {
+/* 2 */
+/***/ (function(module, __unused_webpack_exports, __webpack_require__) {
 
-/* WEBPACK VAR INJECTION */(function(global) {var win;
+var win;
 
 if (typeof window !== "undefined") {
   win = window;
-} else if (typeof global !== "undefined") {
-  win = global;
+} else if (typeof __webpack_require__.g !== "undefined") {
+  win = __webpack_require__.g;
 } else if (typeof self !== "undefined") {
   win = self;
 } else {
@@ -128,75 +42,19 @@ if (typeof window !== "undefined") {
 }
 
 module.exports = win;
-/* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(4)))
 
 /***/ }),
-/* 4 */
-/***/ (function(module, exports) {
-
-function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
-
-var g; // This works in non-strict mode
-
-g = function () {
-  return this;
-}();
-
-try {
-  // This works if eval is allowed (see CSP)
-  g = g || new Function("return this")();
-} catch (e) {
-  // This works if the window reference is available
-  if ((typeof window === "undefined" ? "undefined" : _typeof(window)) === "object") g = window;
-} // g can still be undefined, but nothing to do about it...
-// We return undefined, instead of nothing here, so it's
-// easier to handle this case. if(!global) { ...}
-
-
-module.exports = g;
-
-/***/ }),
-/* 5 */,
-/* 6 */
-/***/ (function(module, exports, __webpack_require__) {
-
-module.exports = __webpack_require__(7);
-
-
-/***/ }),
-/* 7 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
+/* 3 */,
+/* 4 */,
+/* 5 */
+/***/ (function(__unused_webpack_module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony import */ var video_worker__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(8);
-/* harmony import */ var global__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(3);
-/* harmony import */ var global__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(global__WEBPACK_IMPORTED_MODULE_1__);
-/* harmony import */ var lite_ready__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(2);
-/* harmony import */ var lite_ready__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(lite_ready__WEBPACK_IMPORTED_MODULE_2__);
-/* harmony import */ var _jarallax_video_esm__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(9);
-
-
-
- // add video worker globally to fallback jarallax < 1.10 versions
-
-global__WEBPACK_IMPORTED_MODULE_1___default.a.VideoWorker = global__WEBPACK_IMPORTED_MODULE_1___default.a.VideoWorker || video_worker__WEBPACK_IMPORTED_MODULE_0__["default"];
-Object(_jarallax_video_esm__WEBPACK_IMPORTED_MODULE_3__["default"])(); // data-jarallax-video initialization
-
-lite_ready__WEBPACK_IMPORTED_MODULE_2___default()(function () {
-  if ('undefined' !== typeof global__WEBPACK_IMPORTED_MODULE_1___default.a.jarallax) {
-    global__WEBPACK_IMPORTED_MODULE_1___default.a.jarallax(document.querySelectorAll('[data-jarallax-video]'));
-  }
-});
-
-/***/ }),
-/* 8 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "default", function() { return VideoWorker; });
-/* harmony import */ var global__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(3);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": function() { return /* binding */ VideoWorker; }
+/* harmony export */ });
+/* harmony import */ var global__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(2);
 /* harmony import */ var global__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(global__WEBPACK_IMPORTED_MODULE_0__);
 function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
 
@@ -433,7 +291,7 @@ var VideoWorker = /*#__PURE__*/function () {
           self.player.seekTo(start || 0);
         }
 
-        if (global__WEBPACK_IMPORTED_MODULE_0___default.a.YT.PlayerState.PLAYING !== self.player.getPlayerState()) {
+        if ((global__WEBPACK_IMPORTED_MODULE_0___default().YT.PlayerState.PLAYING) !== self.player.getPlayerState()) {
           self.player.playVideo();
         }
       }
@@ -470,7 +328,7 @@ var VideoWorker = /*#__PURE__*/function () {
       }
 
       if ('youtube' === self.type && self.player.pauseVideo) {
-        if (global__WEBPACK_IMPORTED_MODULE_0___default.a.YT.PlayerState.PLAYING === self.player.getPlayerState()) {
+        if ((global__WEBPACK_IMPORTED_MODULE_0___default().YT.PlayerState.PLAYING) === self.player.getPlayerState()) {
           self.player.pauseVideo();
         }
       }
@@ -737,29 +595,29 @@ var VideoWorker = /*#__PURE__*/function () {
             },
             onStateChange: function onStateChange(e) {
               // loop
-              if (self.options.loop && e.data === global__WEBPACK_IMPORTED_MODULE_0___default.a.YT.PlayerState.ENDED) {
+              if (self.options.loop && e.data === (global__WEBPACK_IMPORTED_MODULE_0___default().YT.PlayerState.ENDED)) {
                 self.play(self.options.startTime);
               }
 
-              if (!ytStarted && e.data === global__WEBPACK_IMPORTED_MODULE_0___default.a.YT.PlayerState.PLAYING) {
+              if (!ytStarted && e.data === (global__WEBPACK_IMPORTED_MODULE_0___default().YT.PlayerState.PLAYING)) {
                 ytStarted = 1;
                 self.fire('started', e);
               }
 
-              if (e.data === global__WEBPACK_IMPORTED_MODULE_0___default.a.YT.PlayerState.PLAYING) {
+              if (e.data === (global__WEBPACK_IMPORTED_MODULE_0___default().YT.PlayerState.PLAYING)) {
                 self.fire('play', e);
               }
 
-              if (e.data === global__WEBPACK_IMPORTED_MODULE_0___default.a.YT.PlayerState.PAUSED) {
+              if (e.data === (global__WEBPACK_IMPORTED_MODULE_0___default().YT.PlayerState.PAUSED)) {
                 self.fire('pause', e);
               }
 
-              if (e.data === global__WEBPACK_IMPORTED_MODULE_0___default.a.YT.PlayerState.ENDED) {
+              if (e.data === (global__WEBPACK_IMPORTED_MODULE_0___default().YT.PlayerState.ENDED)) {
                 self.fire('ended', e);
               } // progress check
 
 
-              if (e.data === global__WEBPACK_IMPORTED_MODULE_0___default.a.YT.PlayerState.PLAYING) {
+              if (e.data === (global__WEBPACK_IMPORTED_MODULE_0___default().YT.PlayerState.PLAYING)) {
                 ytProgressInterval = setInterval(function () {
                   self.fire('timeupdate', e); // check for end of video and play again or stop
 
@@ -788,7 +646,7 @@ var VideoWorker = /*#__PURE__*/function () {
             document.body.appendChild(hiddenDiv);
           }
 
-          self.player = self.player || new global__WEBPACK_IMPORTED_MODULE_0___default.a.YT.Player(self.playerID, self.playerOptions);
+          self.player = self.player || new (global__WEBPACK_IMPORTED_MODULE_0___default().YT.Player)(self.playerID, self.playerOptions);
 
           if (firstInit) {
             self.$video = document.getElementById(self.playerID); // add accessibility attributes
@@ -858,7 +716,7 @@ var VideoWorker = /*#__PURE__*/function () {
             document.body.appendChild(hiddenDiv);
           }
 
-          self.player = self.player || new global__WEBPACK_IMPORTED_MODULE_0___default.a.Vimeo.Player(self.$video, self.playerOptions); // set current time for autoplay
+          self.player = self.player || new (global__WEBPACK_IMPORTED_MODULE_0___default().Vimeo.Player)(self.$video, self.playerOptions); // set current time for autoplay
 
           if (self.options.startTime && self.options.autoplay) {
             self.player.setCurrentTime(self.options.startTime);
@@ -1041,7 +899,7 @@ var VideoWorker = /*#__PURE__*/function () {
       if ('vimeo' === self.type && !VimeoAPIadded) {
         VimeoAPIadded = 1; // Useful when Vimeo API added using RequireJS https://github.com/nk-o/video-worker/pull/7
 
-        if ('undefined' !== typeof global__WEBPACK_IMPORTED_MODULE_0___default.a.Vimeo) {
+        if ('undefined' !== typeof (global__WEBPACK_IMPORTED_MODULE_0___default().Vimeo)) {
           return;
         }
 
@@ -1067,7 +925,7 @@ var VideoWorker = /*#__PURE__*/function () {
 
       if ('youtube' === self.type) {
         // Listen for global YT player callback
-        if (('undefined' === typeof global__WEBPACK_IMPORTED_MODULE_0___default.a.YT || 0 === global__WEBPACK_IMPORTED_MODULE_0___default.a.YT.loaded) && !loadingYoutubePlayer) {
+        if (('undefined' === typeof (global__WEBPACK_IMPORTED_MODULE_0___default().YT) || 0 === (global__WEBPACK_IMPORTED_MODULE_0___default().YT.loaded)) && !loadingYoutubePlayer) {
           // Prevents Ready event from being called twice
           loadingYoutubePlayer = 1; // Creates deferred so, other players know when to wait.
 
@@ -1076,7 +934,7 @@ var VideoWorker = /*#__PURE__*/function () {
             loadingYoutubeDefer.resolve('done');
             callback();
           };
-        } else if ('object' === _typeof(global__WEBPACK_IMPORTED_MODULE_0___default.a.YT) && 1 === global__WEBPACK_IMPORTED_MODULE_0___default.a.YT.loaded) {
+        } else if ('object' === _typeof((global__WEBPACK_IMPORTED_MODULE_0___default().YT)) && 1 === (global__WEBPACK_IMPORTED_MODULE_0___default().YT.loaded)) {
           callback();
         } else {
           loadingYoutubeDefer.done(function () {
@@ -1087,16 +945,16 @@ var VideoWorker = /*#__PURE__*/function () {
 
 
       if ('vimeo' === self.type) {
-        if ('undefined' === typeof global__WEBPACK_IMPORTED_MODULE_0___default.a.Vimeo && !loadingVimeoPlayer) {
+        if ('undefined' === typeof (global__WEBPACK_IMPORTED_MODULE_0___default().Vimeo) && !loadingVimeoPlayer) {
           loadingVimeoPlayer = 1;
           var vimeoInterval = setInterval(function () {
-            if ('undefined' !== typeof global__WEBPACK_IMPORTED_MODULE_0___default.a.Vimeo) {
+            if ('undefined' !== typeof (global__WEBPACK_IMPORTED_MODULE_0___default().Vimeo)) {
               clearInterval(vimeoInterval);
               loadingVimeoDefer.resolve('done');
               callback();
             }
           }, 20);
-        } else if ('undefined' !== typeof global__WEBPACK_IMPORTED_MODULE_0___default.a.Vimeo) {
+        } else if ('undefined' !== typeof (global__WEBPACK_IMPORTED_MODULE_0___default().Vimeo)) {
           callback();
         } else {
           loadingVimeoDefer.done(function () {
@@ -1118,19 +976,21 @@ var VideoWorker = /*#__PURE__*/function () {
 
 
 /***/ }),
-/* 9 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
+/* 6 */
+/***/ (function(__unused_webpack_module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "default", function() { return jarallaxVideo; });
-/* harmony import */ var video_worker__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(8);
-/* harmony import */ var global__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(3);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": function() { return /* binding */ jarallaxVideo; }
+/* harmony export */ });
+/* harmony import */ var video_worker__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(5);
+/* harmony import */ var global__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(2);
 /* harmony import */ var global__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(global__WEBPACK_IMPORTED_MODULE_1__);
 
 
 function jarallaxVideo() {
-  var jarallax = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : global__WEBPACK_IMPORTED_MODULE_1___default.a.jarallax;
+  var jarallax = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : (global__WEBPACK_IMPORTED_MODULE_1___default().jarallax);
 
   if ('undefined' === typeof jarallax) {
     return;
@@ -1388,4 +1248,110 @@ function jarallaxVideo() {
 }
 
 /***/ })
-/******/ ]);
+/******/ 	]);
+/************************************************************************/
+/******/ 	// The module cache
+/******/ 	var __webpack_module_cache__ = {};
+/******/ 	
+/******/ 	// The require function
+/******/ 	function __webpack_require__(moduleId) {
+/******/ 		// Check if module is in cache
+/******/ 		var cachedModule = __webpack_module_cache__[moduleId];
+/******/ 		if (cachedModule !== undefined) {
+/******/ 			return cachedModule.exports;
+/******/ 		}
+/******/ 		// Create a new module (and put it into the cache)
+/******/ 		var module = __webpack_module_cache__[moduleId] = {
+/******/ 			// no module.id needed
+/******/ 			// no module.loaded needed
+/******/ 			exports: {}
+/******/ 		};
+/******/ 	
+/******/ 		// Execute the module function
+/******/ 		__webpack_modules__[moduleId](module, module.exports, __webpack_require__);
+/******/ 	
+/******/ 		// Return the exports of the module
+/******/ 		return module.exports;
+/******/ 	}
+/******/ 	
+/************************************************************************/
+/******/ 	/* webpack/runtime/compat get default export */
+/******/ 	!function() {
+/******/ 		// getDefaultExport function for compatibility with non-harmony modules
+/******/ 		__webpack_require__.n = function(module) {
+/******/ 			var getter = module && module.__esModule ?
+/******/ 				function() { return module['default']; } :
+/******/ 				function() { return module; };
+/******/ 			__webpack_require__.d(getter, { a: getter });
+/******/ 			return getter;
+/******/ 		};
+/******/ 	}();
+/******/ 	
+/******/ 	/* webpack/runtime/define property getters */
+/******/ 	!function() {
+/******/ 		// define getter functions for harmony exports
+/******/ 		__webpack_require__.d = function(exports, definition) {
+/******/ 			for(var key in definition) {
+/******/ 				if(__webpack_require__.o(definition, key) && !__webpack_require__.o(exports, key)) {
+/******/ 					Object.defineProperty(exports, key, { enumerable: true, get: definition[key] });
+/******/ 				}
+/******/ 			}
+/******/ 		};
+/******/ 	}();
+/******/ 	
+/******/ 	/* webpack/runtime/global */
+/******/ 	!function() {
+/******/ 		__webpack_require__.g = (function() {
+/******/ 			if (typeof globalThis === 'object') return globalThis;
+/******/ 			try {
+/******/ 				return this || new Function('return this')();
+/******/ 			} catch (e) {
+/******/ 				if (typeof window === 'object') return window;
+/******/ 			}
+/******/ 		})();
+/******/ 	}();
+/******/ 	
+/******/ 	/* webpack/runtime/hasOwnProperty shorthand */
+/******/ 	!function() {
+/******/ 		__webpack_require__.o = function(obj, prop) { return Object.prototype.hasOwnProperty.call(obj, prop); }
+/******/ 	}();
+/******/ 	
+/******/ 	/* webpack/runtime/make namespace object */
+/******/ 	!function() {
+/******/ 		// define __esModule on exports
+/******/ 		__webpack_require__.r = function(exports) {
+/******/ 			if(typeof Symbol !== 'undefined' && Symbol.toStringTag) {
+/******/ 				Object.defineProperty(exports, Symbol.toStringTag, { value: 'Module' });
+/******/ 			}
+/******/ 			Object.defineProperty(exports, '__esModule', { value: true });
+/******/ 		};
+/******/ 	}();
+/******/ 	
+/************************************************************************/
+var __webpack_exports__ = {};
+// This entry need to be wrapped in an IIFE because it need to be in strict mode.
+!function() {
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var video_worker__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(5);
+/* harmony import */ var global__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(2);
+/* harmony import */ var global__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(global__WEBPACK_IMPORTED_MODULE_1__);
+/* harmony import */ var lite_ready__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(1);
+/* harmony import */ var lite_ready__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(lite_ready__WEBPACK_IMPORTED_MODULE_2__);
+/* harmony import */ var _jarallax_video_esm__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(6);
+
+
+
+ // add video worker globally to fallback jarallax < 1.10 versions
+
+(global__WEBPACK_IMPORTED_MODULE_1___default().VideoWorker) = (global__WEBPACK_IMPORTED_MODULE_1___default().VideoWorker) || video_worker__WEBPACK_IMPORTED_MODULE_0__["default"];
+(0,_jarallax_video_esm__WEBPACK_IMPORTED_MODULE_3__["default"])(); // data-jarallax-video initialization
+
+lite_ready__WEBPACK_IMPORTED_MODULE_2___default()(function () {
+  if ('undefined' !== typeof (global__WEBPACK_IMPORTED_MODULE_1___default().jarallax)) {
+    global__WEBPACK_IMPORTED_MODULE_1___default().jarallax(document.querySelectorAll('[data-jarallax-video]'));
+  }
+});
+}();
+/******/ })()
+;
