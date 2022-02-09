@@ -271,7 +271,7 @@ jarallax(document.querySelectorAll('.jarallax'), {
 });
 ```
 
-### Options For Video (+ supported all default options)
+### Additional options for video extension
 
 Required `jarallax/jarallax-video.js` file.
 
@@ -294,6 +294,15 @@ onScroll | Called when parallax working. Use first argument with calculations. M
 onInit | Called after init end.
 onDestroy | Called after destroy.
 onCoverImage | Called after cover image.
+
+### Additional events for video extension
+
+Required `jarallax/jarallax-video.js` file.
+
+Name | Description
+:--- | :----------
+onVideoInsert | Called right after video is inserted in the parallax block. Video can be accessed by `this.$video`
+onVideoWorkerInit | Called after VideoWorker script initialized. Available parameter with videoWorkerObject.
 
 ### onScroll event
 

@@ -64,6 +64,11 @@ function jarallaxVideo(jarallax = global.jarallax) {
 
         // remove parent video element (created by VideoWorker)
         $parent.parentNode.removeChild($parent);
+
+        // call onVideoInsert event
+        if (self.options.onVideoInsert) {
+          self.options.onVideoInsert.call(self);
+        }
       });
     }
   };
@@ -143,6 +148,11 @@ function jarallaxVideo(jarallax = global.jarallax) {
       mute: self.options.videoVolume ? 0 : 1,
       volume: self.options.videoVolume || 0,
     });
+
+    // call onVideoWorkerInit event
+    if (self.options.onVideoWorkerInit) {
+      self.options.onVideoWorkerInit.call(self, video);
+    }
 
     function resetDefaultImage() {
       if (self.image.$default_item) {
