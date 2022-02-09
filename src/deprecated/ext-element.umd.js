@@ -1,7 +1,7 @@
-import domReady from 'lite-ready';
-import global from 'global';
+import domReady from '../utils/ready';
+import global from '../utils/global';
 
-import jarallaxElement from './jarallax-element.esm';
+import jarallaxElement from './ext-element';
 
 jarallaxElement();
 
@@ -11,3 +11,5 @@ domReady(() => {
     global.jarallax(document.querySelectorAll('[data-jarallax-element]'));
   }
 });
+
+export default jarallaxElement;

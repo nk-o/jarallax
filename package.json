@@ -1,11 +1,14 @@
 {
   "name": "jarallax",
   "version": "1.12.8",
+  "version_video_ext": "1.0.1",
   "description": "Smooth parallax scrolling effect for background images, videos and inline elements. Code in pure JavaScript with NO dependencies + jQuery supported. Youtube, Vimeo and Local Videos parallax supported.",
   "license": "MIT",
   "homepage": "https://github.com/nk-o/jarallax",
   "author": "nK <https://nkdev.info>",
-  "main": "index.js",
+  "main": "dist/jarallax.cjs",
+  "module": "dist/jarallax.esm.js",
+  "unpkg": "dist/jarallax.min.js",
   "types": "./typings/index.d.ts",
   "files": [
     "src",
@@ -13,9 +16,8 @@
     "typings"
   ],
   "scripts": {
-    "dev": "gulp dev",
-    "build": "gulp build",
-    "test": "gulp test",
+    "dev": "cross-env NODE_ENV=dev rollup --config --watch --sourcemap",
+    "build": "rollup --config --sourcemap",
     "js-lint": "eslint src/ tests/",
     "js-lint-fix": "eslint --fix src/ tests/",
     "prepare": "husky install"
@@ -36,43 +38,25 @@
     "video"
   ],
   "devDependencies": {
-    "@babel/core": "^7.15.5",
-    "@babel/plugin-proposal-class-properties": "^7.14.5",
-    "@babel/plugin-proposal-object-rest-spread": "^7.15.6",
-    "@babel/plugin-transform-async-to-generator": "^7.14.5",
-    "@babel/plugin-transform-block-scoping": "^7.15.3",
-    "@babel/preset-env": "^7.15.6",
-    "@babel/register": "^7.15.3",
+    "@rollup/plugin-babel": "^5.3.0",
+    "@rollup/plugin-node-resolve": "^13.1.3",
+    "@rollup/plugin-replace": "^3.0.1",
     "@types/jquery": "^3.5.6",
-    "babel-loader": "^8.2.2",
-    "browser-sync": "^2.27.5",
-    "del": "^6.0.0",
+    "babel-plugin-annotate-pure-calls": "^0.4.0",
+    "cross-env": "^7.0.3",
     "eslint-config-nk": "^1.0.8",
-    "gulp": "^4.0.2",
-    "gulp-header": "^2.0.9",
-    "gulp-if": "^3.0.0",
-    "gulp-load-plugins": "^2.0.7",
-    "gulp-plumber": "^1.2.1",
-    "gulp-rename": "^2.0.0",
-    "gulp-sourcemaps": "^3.0.0",
-    "gulp-uglify": "^3.0.2",
-    "gulp-watch": "^5.0.1",
     "husky": "^7.0.4",
     "jquery": "^3.6.0",
     "json-file": "^0.1.0",
     "lint-staged": "^12.3.3",
     "micromatch": "^4.0.4",
-    "node-qunit-phantomjs": "^2.1.1",
-    "object-fit-images": "^3.2.4",
     "prettier-config-nk": "^1.0.2",
-    "qunit": "^2.17.2",
-    "vinyl-named": "^1.1.0",
-    "webpack": "^5.57.1",
-    "webpack-stream": "^7.0.0"
+    "rollup": "^2.67.1",
+    "rollup-plugin-browsersync": "^1.3.3",
+    "rollup-plugin-copy": "^3.4.0",
+    "rollup-plugin-terser": "^7.0.2"
   },
   "dependencies": {
-    "global": "^4.4.0",
-    "lite-ready": "^1.0.4",
-    "video-worker": "^1.1.17"
+    "video-worker": "^2.0.0"
   }
 }

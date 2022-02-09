@@ -1,214 +1,201 @@
 /*!
- * Name    : Video Background Extension for Jarallax
- * Version : 1.0.1
- * Author  : nK <https://nkdev.info>
- * GitHub  : https://github.com/nk-o/jarallax
+ * Video Extension for Jarallax v1.12.8 (https://github.com/nk-o/jarallax)
+ * Copyright 2022 nK <https://nkdev.info>
+ * Licensed under MIT (https://github.com/nk-o/jarallax/blob/master/LICENSE)
  */
-/******/ (function() { // webpackBootstrap
-/******/ 	var __webpack_modules__ = ([
-/* 0 */,
-/* 1 */
-/***/ (function(module) {
 
-module.exports = function (callback) {
-  if (document.readyState === 'complete' || document.readyState === 'interactive') {
-    // Already ready or interactive, execute callback
-    callback.call();
-  } else if (document.attachEvent) {
-    // Old browsers
-    document.attachEvent('onreadystatechange', function () {
-      if (document.readyState === 'interactive') callback.call();
-    });
-  } else if (document.addEventListener) {
-    // Modern browsers
-    document.addEventListener('DOMContentLoaded', callback);
+(function (global, factory) {
+  typeof exports === 'object' && typeof module !== 'undefined' ? module.exports = factory() :
+  typeof define === 'function' && define.amd ? define(factory) :
+  (global = typeof globalThis !== 'undefined' ? globalThis : global || self, global.jarallaxVideo = factory());
+})(this, (function () { 'use strict';
+
+  function ready(callback) {
+    if (document.readyState === 'complete' || document.readyState === 'interactive') {
+      // Already ready or interactive, execute callback
+      callback();
+    } else {
+      document.addEventListener('DOMContentLoaded', callback, {
+        capture: true,
+        once: true,
+        passive: true
+      });
+    }
   }
-};
 
-/***/ }),
-/* 2 */
-/***/ (function(module, __unused_webpack_exports, __webpack_require__) {
+  /* eslint-disable import/no-mutable-exports */
 
-var win;
+  /* eslint-disable no-restricted-globals */
+  let win$1;
 
-if (typeof window !== "undefined") {
-  win = window;
-} else if (typeof __webpack_require__.g !== "undefined") {
-  win = __webpack_require__.g;
-} else if (typeof self !== "undefined") {
-  win = self;
-} else {
-  win = {};
-}
-
-module.exports = win;
-
-/***/ }),
-/* 3 */,
-/* 4 */,
-/* 5 */
-/***/ (function(__unused_webpack_module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "default": function() { return /* binding */ VideoWorker; }
-/* harmony export */ });
-/* harmony import */ var global__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(2);
-/* harmony import */ var global__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(global__WEBPACK_IMPORTED_MODULE_0__);
-function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
-
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
-
-function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); return Constructor; }
-
- // Deferred
-// thanks http://stackoverflow.com/questions/18096715/implement-deferred-object-without-using-jquery
-
-function Deferred() {
-  this.doneCallbacks = [];
-  this.failCallbacks = [];
-}
-
-Deferred.prototype = {
-  execute: function execute(list, args) {
-    var i = list.length;
-    args = Array.prototype.slice.call(args);
-
-    while (i) {
-      i -= 1;
-      list[i].apply(null, args);
-    }
-  },
-  resolve: function resolve() {
-    for (var _len = arguments.length, args = new Array(_len), _key = 0; _key < _len; _key++) {
-      args[_key] = arguments[_key];
-    }
-
-    this.execute(this.doneCallbacks, args);
-  },
-  reject: function reject() {
-    for (var _len2 = arguments.length, args = new Array(_len2), _key2 = 0; _key2 < _len2; _key2++) {
-      args[_key2] = arguments[_key2];
-    }
-
-    this.execute(this.failCallbacks, args);
-  },
-  done: function done(callback) {
-    this.doneCallbacks.push(callback);
-  },
-  fail: function fail(callback) {
-    this.failCallbacks.push(callback);
+  if (typeof window !== 'undefined') {
+    win$1 = window;
+  } else if (typeof global !== 'undefined') {
+    win$1 = global;
+  } else if (typeof self !== 'undefined') {
+    win$1 = self;
+  } else {
+    win$1 = {};
   }
-};
-var ID = 0;
-var YoutubeAPIadded = 0;
-var VimeoAPIadded = 0;
-var loadingYoutubePlayer = 0;
-var loadingVimeoPlayer = 0;
-var loadingYoutubeDefer = new Deferred();
-var loadingVimeoDefer = new Deferred();
 
-var VideoWorker = /*#__PURE__*/function () {
-  function VideoWorker(url, options) {
-    _classCallCheck(this, VideoWorker);
+  var global$2 = win$1;
 
-    var self = this;
-    self.url = url;
-    self.options_default = {
-      autoplay: false,
-      loop: false,
-      mute: false,
-      volume: 100,
-      showControls: true,
-      accessibilityHidden: false,
-      // start / end video time in seconds
-      startTime: 0,
-      endTime: 0
-    };
-    self.options = self.extend({}, self.options_default, options); // Fix wrong option name.
-    // Thanks to https://github.com/nk-o/video-worker/issues/13.
+  /*!
+   * Name    : Video Worker
+   * Version : 2.0.0
+   * Author  : nK <https://nkdev.info>
+   * GitHub  : https://github.com/nk-o/video-worker
+   */
 
-    if ('undefined' !== typeof self.options.showContols) {
-      self.options.showControls = self.options.showContols;
-      delete self.options.showContols;
-    } // check URL
+  /* eslint-disable import/no-mutable-exports */
 
+  /* eslint-disable no-restricted-globals */
+  let win;
 
-    self.videoID = self.parseURL(url); // init
+  if (typeof window !== 'undefined') {
+    win = window;
+  } else if (typeof global !== 'undefined') {
+    win = global;
+  } else if (typeof self !== 'undefined') {
+    win = self;
+  } else {
+    win = {};
+  }
 
-    if (self.videoID) {
-      self.ID = ID;
-      ID += 1;
-      self.loadAPI();
-      self.init();
-    }
-  } // Extend like jQuery.extend
-  // eslint-disable-next-line class-methods-use-this
+  var global$1 = win; // Deferred
+  // thanks http://stackoverflow.com/questions/18096715/implement-deferred-object-without-using-jquery
 
+  function Deferred() {
+    this.doneCallbacks = [];
+    this.failCallbacks = [];
+  }
 
-  _createClass(VideoWorker, [{
-    key: "extend",
-    value: function extend() {
-      for (var _len3 = arguments.length, args = new Array(_len3), _key3 = 0; _key3 < _len3; _key3++) {
-        args[_key3] = arguments[_key3];
+  Deferred.prototype = {
+    execute(list, args) {
+      let i = list.length; // eslint-disable-next-line no-param-reassign
+
+      args = Array.prototype.slice.call(args);
+
+      while (i) {
+        i -= 1;
+        list[i].apply(null, args);
       }
+    },
 
-      var out = args[0] || {};
-      Object.keys(args).forEach(function (i) {
+    resolve(...args) {
+      this.execute(this.doneCallbacks, args);
+    },
+
+    reject(...args) {
+      this.execute(this.failCallbacks, args);
+    },
+
+    done(callback) {
+      this.doneCallbacks.push(callback);
+    },
+
+    fail(callback) {
+      this.failCallbacks.push(callback);
+    }
+
+  };
+  let ID = 0;
+  let YoutubeAPIadded = 0;
+  let VimeoAPIadded = 0;
+  let loadingYoutubePlayer = 0;
+  let loadingVimeoPlayer = 0;
+  const loadingYoutubeDefer = /*#__PURE__*/new Deferred();
+  const loadingVimeoDefer = /*#__PURE__*/new Deferred();
+
+  class VideoWorker {
+    constructor(url, options) {
+      const self = this;
+      self.url = url;
+      self.options_default = {
+        autoplay: false,
+        loop: false,
+        mute: false,
+        volume: 100,
+        showControls: true,
+        accessibilityHidden: false,
+        // start / end video time in seconds
+        startTime: 0,
+        endTime: 0
+      };
+      self.options = self.extend({}, self.options_default, options); // Fix wrong option name.
+      // Thanks to https://github.com/nk-o/video-worker/issues/13.
+
+      if (typeof self.options.showContols !== 'undefined') {
+        self.options.showControls = self.options.showContols;
+        delete self.options.showContols;
+      } // check URL
+
+
+      self.videoID = self.parseURL(url); // init
+
+      if (self.videoID) {
+        self.ID = ID;
+        ID += 1;
+        self.loadAPI();
+        self.init();
+      }
+    } // Extend like jQuery.extend
+    // eslint-disable-next-line class-methods-use-this
+
+
+    extend(...args) {
+      const out = args[0] || {};
+      Object.keys(args).forEach(i => {
         if (!args[i]) {
           return;
         }
 
-        Object.keys(args[i]).forEach(function (key) {
+        Object.keys(args[i]).forEach(key => {
           out[key] = args[i][key];
         });
       });
       return out;
     }
-  }, {
-    key: "parseURL",
-    value: function parseURL(url) {
+
+    parseURL(url) {
       // parse youtube ID
       function getYoutubeID(ytUrl) {
         // eslint-disable-next-line no-useless-escape
-        var regExp = /.*(?:youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=)([^#\&\?]*).*/;
-        var match = ytUrl.match(regExp);
-        return match && 11 === match[1].length ? match[1] : false;
+        const regExp = /.*(?:youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=)([^#\&\?]*).*/;
+        const match = ytUrl.match(regExp);
+        return match && match[1].length === 11 ? match[1] : false;
       } // parse vimeo ID
 
 
       function getVimeoID(vmUrl) {
         // eslint-disable-next-line no-useless-escape
-        var regExp = /https?:\/\/(?:www\.|player\.)?vimeo.com\/(?:channels\/(?:\w+\/)?|groups\/([^\/]*)\/videos\/|album\/(\d+)\/video\/|video\/|)(\d+)(?:$|\/|\?)/;
-        var match = vmUrl.match(regExp);
+        const regExp = /https?:\/\/(?:www\.|player\.)?vimeo.com\/(?:channels\/(?:\w+\/)?|groups\/([^/]*)\/videos\/|album\/(\d+)\/video\/|video\/|)(\d+)(?:$|\/|\?)/;
+        const match = vmUrl.match(regExp);
         return match && match[3] ? match[3] : false;
       } // parse local string
 
 
       function getLocalVideos(locUrl) {
         // eslint-disable-next-line no-useless-escape
-        var videoFormats = locUrl.split(/,(?=mp4\:|webm\:|ogv\:|ogg\:)/);
-        var result = {};
-        var ready = 0;
-        videoFormats.forEach(function (val) {
+        const videoFormats = locUrl.split(/,(?=mp4\:|webm\:|ogv\:|ogg\:)/);
+        const result = {};
+        let ready = 0;
+        videoFormats.forEach(val => {
           // eslint-disable-next-line no-useless-escape
-          var match = val.match(/^(mp4|webm|ogv|ogg)\:(.*)/);
+          const match = val.match(/^(mp4|webm|ogv|ogg)\:(.*)/);
 
           if (match && match[1] && match[2]) {
             // eslint-disable-next-line prefer-destructuring
-            result['ogv' === match[1] ? 'ogg' : match[1]] = match[2];
+            result[match[1] === 'ogv' ? 'ogg' : match[1]] = match[2];
             ready = 1;
           }
         });
         return ready ? result : false;
       }
 
-      var Youtube = getYoutubeID(url);
-      var Vimeo = getVimeoID(url);
-      var Local = getLocalVideos(url);
+      const Youtube = getYoutubeID(url);
+      const Vimeo = getVimeoID(url);
+      const Local = getLocalVideos(url);
 
       if (Youtube) {
         this.type = 'youtube';
@@ -227,24 +214,19 @@ var VideoWorker = /*#__PURE__*/function () {
 
       return false;
     }
-  }, {
-    key: "isValid",
-    value: function isValid() {
+
+    isValid() {
       return !!this.videoID;
     } // events
 
-  }, {
-    key: "on",
-    value: function on(name, callback) {
+
+    on(name, callback) {
       this.userEventsList = this.userEventsList || []; // add new callback in events list
 
       (this.userEventsList[name] || (this.userEventsList[name] = [])).push(callback);
     }
-  }, {
-    key: "off",
-    value: function off(name, callback) {
-      var _this = this;
 
+    off(name, callback) {
       if (!this.userEventsList || !this.userEventsList[name]) {
         return;
       }
@@ -252,64 +234,56 @@ var VideoWorker = /*#__PURE__*/function () {
       if (!callback) {
         delete this.userEventsList[name];
       } else {
-        this.userEventsList[name].forEach(function (val, key) {
+        this.userEventsList[name].forEach((val, key) => {
           if (val === callback) {
-            _this.userEventsList[name][key] = false;
+            this.userEventsList[name][key] = false;
           }
         });
       }
     }
-  }, {
-    key: "fire",
-    value: function fire(name) {
-      var _this2 = this;
 
-      for (var _len4 = arguments.length, args = new Array(_len4 > 1 ? _len4 - 1 : 0), _key4 = 1; _key4 < _len4; _key4++) {
-        args[_key4 - 1] = arguments[_key4];
-      }
-
-      if (this.userEventsList && 'undefined' !== typeof this.userEventsList[name]) {
-        this.userEventsList[name].forEach(function (val) {
+    fire(name, ...args) {
+      if (this.userEventsList && typeof this.userEventsList[name] !== 'undefined') {
+        this.userEventsList[name].forEach(val => {
           // call with all arguments
           if (val) {
-            val.apply(_this2, args);
+            val.apply(this, args);
           }
         });
       }
     }
-  }, {
-    key: "play",
-    value: function play(start) {
-      var self = this;
+
+    play(start) {
+      const self = this;
 
       if (!self.player) {
         return;
       }
 
-      if ('youtube' === self.type && self.player.playVideo) {
-        if ('undefined' !== typeof start) {
+      if (self.type === 'youtube' && self.player.playVideo) {
+        if (typeof start !== 'undefined') {
           self.player.seekTo(start || 0);
         }
 
-        if ((global__WEBPACK_IMPORTED_MODULE_0___default().YT.PlayerState.PLAYING) !== self.player.getPlayerState()) {
+        if (global$1.YT.PlayerState.PLAYING !== self.player.getPlayerState()) {
           self.player.playVideo();
         }
       }
 
-      if ('vimeo' === self.type) {
-        if ('undefined' !== typeof start) {
+      if (self.type === 'vimeo') {
+        if (typeof start !== 'undefined') {
           self.player.setCurrentTime(start);
         }
 
-        self.player.getPaused().then(function (paused) {
+        self.player.getPaused().then(paused => {
           if (paused) {
             self.player.play();
           }
         });
       }
 
-      if ('local' === self.type) {
-        if ('undefined' !== typeof start) {
+      if (self.type === 'local') {
+        if (typeof start !== 'undefined') {
           self.player.currentTime = start;
         }
 
@@ -318,190 +292,185 @@ var VideoWorker = /*#__PURE__*/function () {
         }
       }
     }
-  }, {
-    key: "pause",
-    value: function pause() {
-      var self = this;
+
+    pause() {
+      const self = this;
 
       if (!self.player) {
         return;
       }
 
-      if ('youtube' === self.type && self.player.pauseVideo) {
-        if ((global__WEBPACK_IMPORTED_MODULE_0___default().YT.PlayerState.PLAYING) === self.player.getPlayerState()) {
+      if (self.type === 'youtube' && self.player.pauseVideo) {
+        if (global$1.YT.PlayerState.PLAYING === self.player.getPlayerState()) {
           self.player.pauseVideo();
         }
       }
 
-      if ('vimeo' === self.type) {
-        self.player.getPaused().then(function (paused) {
+      if (self.type === 'vimeo') {
+        self.player.getPaused().then(paused => {
           if (!paused) {
             self.player.pause();
           }
         });
       }
 
-      if ('local' === self.type) {
+      if (self.type === 'local') {
         if (!self.player.paused) {
           self.player.pause();
         }
       }
     }
-  }, {
-    key: "mute",
-    value: function mute() {
-      var self = this;
+
+    mute() {
+      const self = this;
 
       if (!self.player) {
         return;
       }
 
-      if ('youtube' === self.type && self.player.mute) {
+      if (self.type === 'youtube' && self.player.mute) {
         self.player.mute();
       }
 
-      if ('vimeo' === self.type && self.player.setVolume) {
+      if (self.type === 'vimeo' && self.player.setVolume) {
         self.player.setVolume(0);
       }
 
-      if ('local' === self.type) {
+      if (self.type === 'local') {
         self.$video.muted = true;
       }
     }
-  }, {
-    key: "unmute",
-    value: function unmute() {
-      var self = this;
+
+    unmute() {
+      const self = this;
 
       if (!self.player) {
         return;
       }
 
-      if ('youtube' === self.type && self.player.mute) {
+      if (self.type === 'youtube' && self.player.mute) {
         self.player.unMute();
       }
 
-      if ('vimeo' === self.type && self.player.setVolume) {
+      if (self.type === 'vimeo' && self.player.setVolume) {
         self.player.setVolume(self.options.volume);
       }
 
-      if ('local' === self.type) {
+      if (self.type === 'local') {
         self.$video.muted = false;
       }
     }
-  }, {
-    key: "setVolume",
-    value: function setVolume() {
-      var volume = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : false;
-      var self = this;
+
+    setVolume(volume = false) {
+      const self = this;
 
       if (!self.player || !volume) {
         return;
       }
 
-      if ('youtube' === self.type && self.player.setVolume) {
+      if (self.type === 'youtube' && self.player.setVolume) {
         self.player.setVolume(volume);
       }
 
-      if ('vimeo' === self.type && self.player.setVolume) {
+      if (self.type === 'vimeo' && self.player.setVolume) {
         self.player.setVolume(volume);
       }
 
-      if ('local' === self.type) {
+      if (self.type === 'local') {
         self.$video.volume = volume / 100;
       }
     }
-  }, {
-    key: "getVolume",
-    value: function getVolume(callback) {
-      var self = this;
+
+    getVolume(callback) {
+      const self = this;
 
       if (!self.player) {
         callback(false);
         return;
       }
 
-      if ('youtube' === self.type && self.player.getVolume) {
+      if (self.type === 'youtube' && self.player.getVolume) {
         callback(self.player.getVolume());
       }
 
-      if ('vimeo' === self.type && self.player.getVolume) {
-        self.player.getVolume().then(function (volume) {
+      if (self.type === 'vimeo' && self.player.getVolume) {
+        self.player.getVolume().then(volume => {
           callback(volume);
         });
       }
 
-      if ('local' === self.type) {
+      if (self.type === 'local') {
         callback(self.$video.volume * 100);
       }
     }
-  }, {
-    key: "getMuted",
-    value: function getMuted(callback) {
-      var self = this;
+
+    getMuted(callback) {
+      const self = this;
 
       if (!self.player) {
         callback(null);
         return;
       }
 
-      if ('youtube' === self.type && self.player.isMuted) {
+      if (self.type === 'youtube' && self.player.isMuted) {
         callback(self.player.isMuted());
       }
 
-      if ('vimeo' === self.type && self.player.getVolume) {
-        self.player.getVolume().then(function (volume) {
+      if (self.type === 'vimeo' && self.player.getVolume) {
+        self.player.getVolume().then(volume => {
           callback(!!volume);
         });
       }
 
-      if ('local' === self.type) {
+      if (self.type === 'local') {
         callback(self.$video.muted);
       }
     }
-  }, {
-    key: "getImageURL",
-    value: function getImageURL(callback) {
-      var self = this;
+
+    getImageURL(callback) {
+      const self = this;
 
       if (self.videoImage) {
         callback(self.videoImage);
         return;
       }
 
-      if ('youtube' === self.type) {
-        var availableSizes = ['maxresdefault', 'sddefault', 'hqdefault', '0'];
-        var step = 0;
-        var tempImg = new Image();
+      if (self.type === 'youtube') {
+        const availableSizes = ['maxresdefault', 'sddefault', 'hqdefault', '0'];
+        let step = 0;
+        const tempImg = new Image();
 
         tempImg.onload = function () {
           // if no thumbnail, youtube add their own image with width = 120px
-          if (120 !== (this.naturalWidth || this.width) || step === availableSizes.length - 1) {
+          if ((this.naturalWidth || this.width) !== 120 || step === availableSizes.length - 1) {
             // ok
-            self.videoImage = "https://img.youtube.com/vi/".concat(self.videoID, "/").concat(availableSizes[step], ".jpg");
+            self.videoImage = `https://img.youtube.com/vi/${self.videoID}/${availableSizes[step]}.jpg`;
             callback(self.videoImage);
           } else {
             // try another size
             step += 1;
-            this.src = "https://img.youtube.com/vi/".concat(self.videoID, "/").concat(availableSizes[step], ".jpg");
+            this.src = `https://img.youtube.com/vi/${self.videoID}/${availableSizes[step]}.jpg`;
           }
         };
 
-        tempImg.src = "https://img.youtube.com/vi/".concat(self.videoID, "/").concat(availableSizes[step], ".jpg");
+        tempImg.src = `https://img.youtube.com/vi/${self.videoID}/${availableSizes[step]}.jpg`;
       }
 
-      if ('vimeo' === self.type) {
-        var request = new XMLHttpRequest();
-        request.open('GET', "https://vimeo.com/api/v2/video/".concat(self.videoID, ".json"), true);
+      if (self.type === 'vimeo') {
+        let request = new XMLHttpRequest(); // https://vimeo.com/api/oembed.json?url=https://vimeo.com/235212527
+
+        request.open('GET', `https://vimeo.com/api/oembed.json?url=${self.url}`, true);
 
         request.onreadystatechange = function () {
-          if (4 === this.readyState) {
-            if (200 <= this.status && 400 > this.status) {
+          if (this.readyState === 4) {
+            if (this.status >= 200 && this.status < 400) {
               // Success!
-              var response = JSON.parse(this.responseText);
-              self.videoImage = response[0].thumbnail_large;
-              callback(self.videoImage);
-            } else {// Error :(
+              const response = JSON.parse(this.responseText);
+
+              if (response.thumbnail_url) {
+                self.videoImage = response.thumbnail_url;
+                callback(self.videoImage);
+              }
             }
           }
         };
@@ -511,15 +480,13 @@ var VideoWorker = /*#__PURE__*/function () {
       }
     } // fallback to the old version.
 
-  }, {
-    key: "getIframe",
-    value: function getIframe(callback) {
+
+    getIframe(callback) {
       this.getVideo(callback);
     }
-  }, {
-    key: "getVideo",
-    value: function getVideo(callback) {
-      var self = this; // return generated video block
+
+    getVideo(callback) {
+      const self = this; // return generated video block
 
       if (self.$video) {
         callback(self.$video);
@@ -527,8 +494,8 @@ var VideoWorker = /*#__PURE__*/function () {
       } // generate new video block
 
 
-      self.onAPIready(function () {
-        var hiddenDiv;
+      self.onAPIready(() => {
+        let hiddenDiv;
 
         if (!self.$video) {
           hiddenDiv = document.createElement('div');
@@ -536,7 +503,7 @@ var VideoWorker = /*#__PURE__*/function () {
         } // Youtube
 
 
-        if ('youtube' === self.type) {
+        if (self.type === 'youtube') {
           self.playerOptions = {
             // GDPR Compliance.
             host: 'https://www.youtube-nocookie.com',
@@ -559,10 +526,10 @@ var VideoWorker = /*#__PURE__*/function () {
           } // events
 
 
-          var ytStarted;
-          var ytProgressInterval;
+          let ytStarted;
+          let ytProgressInterval;
           self.playerOptions.events = {
-            onReady: function onReady(e) {
+            onReady(e) {
               // mute
               if (self.options.mute) {
                 e.target.mute();
@@ -579,13 +546,13 @@ var VideoWorker = /*#__PURE__*/function () {
               // https://github.com/nk-o/video-worker/issues/2
 
               if (self.options.loop && !self.options.endTime) {
-                var secondsOffset = 0.1;
+                const secondsOffset = 0.1;
                 self.options.endTime = self.player.getDuration() - secondsOffset;
               } // volumechange
 
 
-              setInterval(function () {
-                self.getVolume(function (volume) {
+              setInterval(() => {
+                self.getVolume(volume => {
                   if (self.options.volume !== volume) {
                     self.options.volume = volume;
                     self.fire('volumechange', e);
@@ -593,32 +560,33 @@ var VideoWorker = /*#__PURE__*/function () {
                 });
               }, 150);
             },
-            onStateChange: function onStateChange(e) {
+
+            onStateChange(e) {
               // loop
-              if (self.options.loop && e.data === (global__WEBPACK_IMPORTED_MODULE_0___default().YT.PlayerState.ENDED)) {
+              if (self.options.loop && e.data === global$1.YT.PlayerState.ENDED) {
                 self.play(self.options.startTime);
               }
 
-              if (!ytStarted && e.data === (global__WEBPACK_IMPORTED_MODULE_0___default().YT.PlayerState.PLAYING)) {
+              if (!ytStarted && e.data === global$1.YT.PlayerState.PLAYING) {
                 ytStarted = 1;
                 self.fire('started', e);
               }
 
-              if (e.data === (global__WEBPACK_IMPORTED_MODULE_0___default().YT.PlayerState.PLAYING)) {
+              if (e.data === global$1.YT.PlayerState.PLAYING) {
                 self.fire('play', e);
               }
 
-              if (e.data === (global__WEBPACK_IMPORTED_MODULE_0___default().YT.PlayerState.PAUSED)) {
+              if (e.data === global$1.YT.PlayerState.PAUSED) {
                 self.fire('pause', e);
               }
 
-              if (e.data === (global__WEBPACK_IMPORTED_MODULE_0___default().YT.PlayerState.ENDED)) {
+              if (e.data === global$1.YT.PlayerState.ENDED) {
                 self.fire('ended', e);
               } // progress check
 
 
-              if (e.data === (global__WEBPACK_IMPORTED_MODULE_0___default().YT.PlayerState.PLAYING)) {
-                ytProgressInterval = setInterval(function () {
+              if (e.data === global$1.YT.PlayerState.PLAYING) {
+                ytProgressInterval = setInterval(() => {
                   self.fire('timeupdate', e); // check for end of video and play again or stop
 
                   if (self.options.endTime && self.player.getCurrentTime() >= self.options.endTime) {
@@ -633,20 +601,22 @@ var VideoWorker = /*#__PURE__*/function () {
                 clearInterval(ytProgressInterval);
               }
             },
-            onError: function onError(e) {
+
+            onError(e) {
               self.fire('error', e);
             }
+
           };
-          var firstInit = !self.$video;
+          const firstInit = !self.$video;
 
           if (firstInit) {
-            var div = document.createElement('div');
+            const div = document.createElement('div');
             div.setAttribute('id', self.playerID);
             hiddenDiv.appendChild(div);
             document.body.appendChild(hiddenDiv);
           }
 
-          self.player = self.player || new (global__WEBPACK_IMPORTED_MODULE_0___default().YT.Player)(self.playerID, self.playerOptions);
+          self.player = self.player || new global$1.YT.Player(self.playerID, self.playerOptions);
 
           if (firstInit) {
             self.$video = document.getElementById(self.playerID); // add accessibility attributes
@@ -663,7 +633,7 @@ var VideoWorker = /*#__PURE__*/function () {
         } // Vimeo
 
 
-        if ('vimeo' === self.type) {
+        if (self.type === 'vimeo') {
           self.playerOptions = {
             // GDPR Compliance.
             dnt: 1,
@@ -689,19 +659,19 @@ var VideoWorker = /*#__PURE__*/function () {
           }
 
           if (!self.$video) {
-            var playerOptionsString = '';
-            Object.keys(self.playerOptions).forEach(function (key) {
-              if ('' !== playerOptionsString) {
+            let playerOptionsString = '';
+            Object.keys(self.playerOptions).forEach(key => {
+              if (playerOptionsString !== '') {
                 playerOptionsString += '&';
               }
 
-              playerOptionsString += "".concat(key, "=").concat(encodeURIComponent(self.playerOptions[key]));
+              playerOptionsString += `${key}=${encodeURIComponent(self.playerOptions[key])}`;
             }); // we need to create iframe manually because when we create it using API
             // js events won't triggers after iframe moved to another place
 
             self.$video = document.createElement('iframe');
             self.$video.setAttribute('id', self.playerID);
-            self.$video.setAttribute('src', "https://player.vimeo.com/video/".concat(self.videoID, "?").concat(playerOptionsString));
+            self.$video.setAttribute('src', `https://player.vimeo.com/video/${self.videoID}?${playerOptionsString}`);
             self.$video.setAttribute('frameborder', '0');
             self.$video.setAttribute('mozallowfullscreen', '');
             self.$video.setAttribute('allowfullscreen', '');
@@ -716,22 +686,22 @@ var VideoWorker = /*#__PURE__*/function () {
             document.body.appendChild(hiddenDiv);
           }
 
-          self.player = self.player || new (global__WEBPACK_IMPORTED_MODULE_0___default().Vimeo.Player)(self.$video, self.playerOptions); // set current time for autoplay
+          self.player = self.player || new global$1.Vimeo.Player(self.$video, self.playerOptions); // set current time for autoplay
 
           if (self.options.startTime && self.options.autoplay) {
             self.player.setCurrentTime(self.options.startTime);
           } // get video width and height
 
 
-          self.player.getVideoWidth().then(function (width) {
+          self.player.getVideoWidth().then(width => {
             self.videoWidth = width || 1280;
           });
-          self.player.getVideoHeight().then(function (height) {
+          self.player.getVideoHeight().then(height => {
             self.videoHeight = height || 720;
           }); // events
 
-          var vmStarted;
-          self.player.on('timeupdate', function (e) {
+          let vmStarted;
+          self.player.on('timeupdate', e => {
             if (!vmStarted) {
               self.fire('started', e);
               vmStarted = 1;
@@ -749,39 +719,39 @@ var VideoWorker = /*#__PURE__*/function () {
               }
             }
           });
-          self.player.on('play', function (e) {
+          self.player.on('play', e => {
             self.fire('play', e); // check for the start time and start with it
 
-            if (self.options.startTime && 0 === e.seconds) {
+            if (self.options.startTime && e.seconds === 0) {
               self.play(self.options.startTime);
             }
           });
-          self.player.on('pause', function (e) {
+          self.player.on('pause', e => {
             self.fire('pause', e);
           });
-          self.player.on('ended', function (e) {
+          self.player.on('ended', e => {
             self.fire('ended', e);
           });
-          self.player.on('loaded', function (e) {
+          self.player.on('loaded', e => {
             self.fire('ready', e);
           });
-          self.player.on('volumechange', function (e) {
+          self.player.on('volumechange', e => {
             self.fire('volumechange', e);
           });
-          self.player.on('error', function (e) {
+          self.player.on('error', e => {
             self.fire('error', e);
           });
         } // Local
 
 
         function addSourceToLocal(element, src, type) {
-          var source = document.createElement('source');
+          const source = document.createElement('source');
           source.src = src;
           source.type = type;
           element.appendChild(source);
         }
 
-        if ('local' === self.type) {
+        if (self.type === 'local') {
           if (!self.$video) {
             self.$video = document.createElement('video'); // show controls
 
@@ -813,14 +783,14 @@ var VideoWorker = /*#__PURE__*/function () {
             self.$video.setAttribute('id', self.playerID);
             hiddenDiv.appendChild(self.$video);
             document.body.appendChild(hiddenDiv);
-            Object.keys(self.videoID).forEach(function (key) {
-              addSourceToLocal(self.$video, self.videoID[key], "video/".concat(key));
+            Object.keys(self.videoID).forEach(key => {
+              addSourceToLocal(self.$video, self.videoID[key], `video/${key}`);
             });
           }
 
           self.player = self.player || self.$video;
-          var locStarted;
-          self.player.addEventListener('playing', function (e) {
+          let locStarted;
+          self.player.addEventListener('playing', e => {
             if (!locStarted) {
               self.fire('started', e);
             }
@@ -840,13 +810,13 @@ var VideoWorker = /*#__PURE__*/function () {
               }
             }
           });
-          self.player.addEventListener('play', function (e) {
+          self.player.addEventListener('play', e => {
             self.fire('play', e);
           });
-          self.player.addEventListener('pause', function (e) {
+          self.player.addEventListener('pause', e => {
             self.fire('pause', e);
           });
-          self.player.addEventListener('ended', function (e) {
+          self.player.addEventListener('ended', e => {
             self.fire('ended', e);
           });
           self.player.addEventListener('loadedmetadata', function () {
@@ -859,13 +829,13 @@ var VideoWorker = /*#__PURE__*/function () {
               self.play(self.options.startTime);
             }
           });
-          self.player.addEventListener('volumechange', function (e) {
-            self.getVolume(function (volume) {
+          self.player.addEventListener('volumechange', e => {
+            self.getVolume(volume => {
               self.options.volume = volume;
             });
             self.fire('volumechange', e);
           });
-          self.player.addEventListener('error', function (e) {
+          self.player.addEventListener('error', e => {
             self.fire('error', e);
           });
         }
@@ -873,33 +843,31 @@ var VideoWorker = /*#__PURE__*/function () {
         callback(self.$video);
       });
     }
-  }, {
-    key: "init",
-    value: function init() {
-      var self = this;
-      self.playerID = "VideoWorker-".concat(self.ID);
+
+    init() {
+      const self = this;
+      self.playerID = `VideoWorker-${self.ID}`;
     }
-  }, {
-    key: "loadAPI",
-    value: function loadAPI() {
-      var self = this;
+
+    loadAPI() {
+      const self = this;
 
       if (YoutubeAPIadded && VimeoAPIadded) {
         return;
       }
 
-      var src = ''; // load Youtube API
+      let src = ''; // load Youtube API
 
-      if ('youtube' === self.type && !YoutubeAPIadded) {
+      if (self.type === 'youtube' && !YoutubeAPIadded) {
         YoutubeAPIadded = 1;
         src = 'https://www.youtube.com/iframe_api';
       } // load Vimeo API
 
 
-      if ('vimeo' === self.type && !VimeoAPIadded) {
+      if (self.type === 'vimeo' && !VimeoAPIadded) {
         VimeoAPIadded = 1; // Useful when Vimeo API added using RequireJS https://github.com/nk-o/video-worker/pull/7
 
-        if ('undefined' !== typeof (global__WEBPACK_IMPORTED_MODULE_0___default().Vimeo)) {
+        if (typeof global$1.Vimeo !== 'undefined') {
           return;
         }
 
@@ -911,447 +879,330 @@ var VideoWorker = /*#__PURE__*/function () {
       } // add script in head section
 
 
-      var tag = document.createElement('script');
-      var head = document.getElementsByTagName('head')[0];
+      let tag = document.createElement('script');
+      let head = document.getElementsByTagName('head')[0];
       tag.src = src;
       head.appendChild(tag);
       head = null;
       tag = null;
     }
-  }, {
-    key: "onAPIready",
-    value: function onAPIready(callback) {
-      var self = this; // Youtube
 
-      if ('youtube' === self.type) {
+    onAPIready(callback) {
+      const self = this; // Youtube
+
+      if (self.type === 'youtube') {
         // Listen for global YT player callback
-        if (('undefined' === typeof (global__WEBPACK_IMPORTED_MODULE_0___default().YT) || 0 === (global__WEBPACK_IMPORTED_MODULE_0___default().YT.loaded)) && !loadingYoutubePlayer) {
+        if ((typeof global$1.YT === 'undefined' || global$1.YT.loaded === 0) && !loadingYoutubePlayer) {
           // Prevents Ready event from being called twice
           loadingYoutubePlayer = 1; // Creates deferred so, other players know when to wait.
 
-          window.onYouTubeIframeAPIReady = function () {
-            window.onYouTubeIframeAPIReady = null;
+          global$1.onYouTubeIframeAPIReady = function () {
+            global$1.onYouTubeIframeAPIReady = null;
             loadingYoutubeDefer.resolve('done');
             callback();
           };
-        } else if ('object' === _typeof((global__WEBPACK_IMPORTED_MODULE_0___default().YT)) && 1 === (global__WEBPACK_IMPORTED_MODULE_0___default().YT.loaded)) {
+        } else if (typeof global$1.YT === 'object' && global$1.YT.loaded === 1) {
           callback();
         } else {
-          loadingYoutubeDefer.done(function () {
+          loadingYoutubeDefer.done(() => {
             callback();
           });
         }
       } // Vimeo
 
 
-      if ('vimeo' === self.type) {
-        if ('undefined' === typeof (global__WEBPACK_IMPORTED_MODULE_0___default().Vimeo) && !loadingVimeoPlayer) {
+      if (self.type === 'vimeo') {
+        if (typeof global$1.Vimeo === 'undefined' && !loadingVimeoPlayer) {
           loadingVimeoPlayer = 1;
-          var vimeoInterval = setInterval(function () {
-            if ('undefined' !== typeof (global__WEBPACK_IMPORTED_MODULE_0___default().Vimeo)) {
+          const vimeoInterval = setInterval(() => {
+            if (typeof global$1.Vimeo !== 'undefined') {
               clearInterval(vimeoInterval);
               loadingVimeoDefer.resolve('done');
               callback();
             }
           }, 20);
-        } else if ('undefined' !== typeof (global__WEBPACK_IMPORTED_MODULE_0___default().Vimeo)) {
+        } else if (typeof global$1.Vimeo !== 'undefined') {
           callback();
         } else {
-          loadingVimeoDefer.done(function () {
+          loadingVimeoDefer.done(() => {
             callback();
           });
         }
       } // Local
 
 
-      if ('local' === self.type) {
+      if (self.type === 'local') {
         callback();
       }
     }
-  }]);
 
-  return VideoWorker;
-}();
-
-
-
-/***/ }),
-/* 6 */
-/***/ (function(__unused_webpack_module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "default": function() { return /* binding */ jarallaxVideo; }
-/* harmony export */ });
-/* harmony import */ var video_worker__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(5);
-/* harmony import */ var global__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(2);
-/* harmony import */ var global__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(global__WEBPACK_IMPORTED_MODULE_1__);
-
-
-function jarallaxVideo() {
-  var jarallax = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : (global__WEBPACK_IMPORTED_MODULE_1___default().jarallax);
-
-  if ('undefined' === typeof jarallax) {
-    return;
   }
 
-  var Jarallax = jarallax.constructor; // append video after when block will be visible.
-
-  var defOnScroll = Jarallax.prototype.onScroll;
-
-  Jarallax.prototype.onScroll = function () {
-    var self = this;
-    defOnScroll.apply(self);
-    var isReady = !self.isVideoInserted && self.video && (!self.options.videoLazyLoading || self.isElementInViewport) && !self.options.disableVideo();
-
-    if (isReady) {
-      self.isVideoInserted = true;
-      self.video.getVideo(function (video) {
-        var $parent = video.parentNode;
-        self.css(video, {
-          position: self.image.position,
-          top: '0px',
-          left: '0px',
-          right: '0px',
-          bottom: '0px',
-          width: '100%',
-          height: '100%',
-          maxWidth: 'none',
-          maxHeight: 'none',
-          pointerEvents: 'none',
-          transformStyle: 'preserve-3d',
-          backfaceVisibility: 'hidden',
-          willChange: 'transform,opacity',
-          margin: 0,
-          zIndex: -1
-        });
-        self.$video = video; // add Poster attribute to self-hosted video
-
-        if ('local' === self.video.type) {
-          if (self.image.src) {
-            self.$video.setAttribute('poster', self.image.src);
-          } else if (self.image.$item && 'IMG' === self.image.$item.tagName && self.image.$item.src) {
-            self.$video.setAttribute('poster', self.image.$item.src);
-          }
-        } // insert video tag
-
-
-        self.image.$container.appendChild(video); // remove parent video element (created by VideoWorker)
-
-        $parent.parentNode.removeChild($parent);
-      });
-    }
-  }; // cover video
-
-
-  var defCoverImage = Jarallax.prototype.coverImage;
-
-  Jarallax.prototype.coverImage = function () {
-    var self = this;
-    var imageData = defCoverImage.apply(self);
-    var node = self.image.$item ? self.image.$item.nodeName : false;
-
-    if (imageData && self.video && node && ('IFRAME' === node || 'VIDEO' === node)) {
-      var h = imageData.image.height;
-      var w = h * self.image.width / self.image.height;
-      var ml = (imageData.container.width - w) / 2;
-      var mt = imageData.image.marginTop;
-
-      if (imageData.container.width > w) {
-        w = imageData.container.width;
-        h = w * self.image.height / self.image.width;
-        ml = 0;
-        mt += (imageData.image.height - h) / 2;
-      } // add video height over than need to hide controls
-
-
-      if ('IFRAME' === node) {
-        h += 400;
-        mt -= 200;
-      }
-
-      self.css(self.$video, {
-        width: "".concat(w, "px"),
-        marginLeft: "".concat(ml, "px"),
-        height: "".concat(h, "px"),
-        marginTop: "".concat(mt, "px")
-      });
+  function jarallaxVideo(jarallax = global$2.jarallax) {
+    if (typeof jarallax === 'undefined') {
+      return;
     }
 
-    return imageData;
-  }; // init video
+    const Jarallax = jarallax.constructor; // append video after when block will be visible.
 
+    const defOnScroll = Jarallax.prototype.onScroll;
 
-  var defInitImg = Jarallax.prototype.initImg;
+    Jarallax.prototype.onScroll = function () {
+      const self = this;
+      defOnScroll.apply(self);
+      const isReady = !self.isVideoInserted && self.video && (!self.options.videoLazyLoading || self.isElementInViewport) && !self.options.disableVideo();
 
-  Jarallax.prototype.initImg = function () {
-    var self = this;
-    var defaultResult = defInitImg.apply(self);
-
-    if (!self.options.videoSrc) {
-      self.options.videoSrc = self.$item.getAttribute('data-jarallax-video') || null;
-    }
-
-    if (self.options.videoSrc) {
-      self.defaultInitImgResult = defaultResult;
-      return true;
-    }
-
-    return defaultResult;
-  };
-
-  var defCanInitParallax = Jarallax.prototype.canInitParallax;
-
-  Jarallax.prototype.canInitParallax = function () {
-    var self = this;
-    var defaultResult = defCanInitParallax.apply(self);
-
-    if (!self.options.videoSrc) {
-      return defaultResult;
-    } // Init video api
-
-
-    var video = new video_worker__WEBPACK_IMPORTED_MODULE_0__["default"](self.options.videoSrc, {
-      autoplay: true,
-      loop: self.options.videoLoop,
-      showControls: false,
-      accessibilityHidden: true,
-      startTime: self.options.videoStartTime || 0,
-      endTime: self.options.videoEndTime || 0,
-      mute: self.options.videoVolume ? 0 : 1,
-      volume: self.options.videoVolume || 0
-    });
-
-    function resetDefaultImage() {
-      if (self.image.$default_item) {
-        self.image.$item = self.image.$default_item;
-        self.image.$item.style.display = 'block'; // set image width and height
-
-        self.coverImage();
-        self.clipContainer();
-        self.onScroll();
-      }
-    }
-
-    if (video.isValid()) {
-      // Force enable parallax.
-      // When the parallax disabled on mobile devices, we still need to display videos.
-      // https://github.com/nk-o/jarallax/issues/159
-      if (this.options.disableParallax()) {
-        defaultResult = true;
-        self.image.position = 'absolute';
-        self.options.type = 'scroll';
-        self.options.speed = 1;
-      } // if parallax will not be inited, we can add thumbnail on background.
-
-
-      if (!defaultResult) {
-        if (!self.defaultInitImgResult) {
-          video.getImageURL(function (url) {
-            // save default user styles
-            var curStyle = self.$item.getAttribute('style');
-
-            if (curStyle) {
-              self.$item.setAttribute('data-jarallax-original-styles', curStyle);
-            } // set new background
-
-
-            self.css(self.$item, {
-              'background-image': "url(\"".concat(url, "\")"),
-              'background-position': 'center',
-              'background-size': 'cover'
-            });
+      if (isReady) {
+        self.isVideoInserted = true;
+        self.video.getVideo(video => {
+          const $parent = video.parentNode;
+          self.css(video, {
+            position: self.image.position,
+            top: '0px',
+            left: '0px',
+            right: '0px',
+            bottom: '0px',
+            width: '100%',
+            height: '100%',
+            maxWidth: 'none',
+            maxHeight: 'none',
+            pointerEvents: 'none',
+            transformStyle: 'preserve-3d',
+            backfaceVisibility: 'hidden',
+            willChange: 'transform,opacity',
+            margin: 0,
+            zIndex: -1
           });
-        } // init video
+          self.$video = video; // add Poster attribute to self-hosted video
 
-      } else {
-        video.on('ready', function () {
-          if (self.options.videoPlayOnlyVisible) {
-            var oldOnScroll = self.onScroll;
+          if (self.video.type === 'local') {
+            if (self.image.src) {
+              self.$video.setAttribute('poster', self.image.src);
+            } else if (self.image.$item && self.image.$item.tagName === 'IMG' && self.image.$item.src) {
+              self.$video.setAttribute('poster', self.image.$item.src);
+            }
+          } // insert video tag
 
-            self.onScroll = function () {
-              oldOnScroll.apply(self);
 
-              if (!self.videoError && (self.options.videoLoop || !self.options.videoLoop && !self.videoEnded)) {
-                if (self.isVisible()) {
-                  video.play();
-                } else {
-                  video.pause();
-                }
-              }
-            };
-          } else {
-            video.play();
-          }
+          self.image.$container.appendChild(video); // remove parent video element (created by VideoWorker)
+
+          $parent.parentNode.removeChild($parent);
         });
-        video.on('started', function () {
-          self.image.$default_item = self.image.$item;
-          self.image.$item = self.$video; // set video width and height
+      }
+    }; // cover video
 
-          self.image.width = self.video.videoWidth || 1280;
-          self.image.height = self.video.videoHeight || 720;
+
+    const defCoverImage = Jarallax.prototype.coverImage;
+
+    Jarallax.prototype.coverImage = function () {
+      const self = this;
+      const imageData = defCoverImage.apply(self);
+      const node = self.image.$item ? self.image.$item.nodeName : false;
+
+      if (imageData && self.video && node && (node === 'IFRAME' || node === 'VIDEO')) {
+        let h = imageData.image.height;
+        let w = h * self.image.width / self.image.height;
+        let ml = (imageData.container.width - w) / 2;
+        let mt = imageData.image.marginTop;
+
+        if (imageData.container.width > w) {
+          w = imageData.container.width;
+          h = w * self.image.height / self.image.width;
+          ml = 0;
+          mt += (imageData.image.height - h) / 2;
+        } // add video height over than need to hide controls
+
+
+        if (node === 'IFRAME') {
+          h += 400;
+          mt -= 200;
+        }
+
+        self.css(self.$video, {
+          width: `${w}px`,
+          marginLeft: `${ml}px`,
+          height: `${h}px`,
+          marginTop: `${mt}px`
+        });
+      }
+
+      return imageData;
+    }; // init video
+
+
+    const defInitImg = Jarallax.prototype.initImg;
+
+    Jarallax.prototype.initImg = function () {
+      const self = this;
+      const defaultResult = defInitImg.apply(self);
+
+      if (!self.options.videoSrc) {
+        self.options.videoSrc = self.$item.getAttribute('data-jarallax-video') || null;
+      }
+
+      if (self.options.videoSrc) {
+        self.defaultInitImgResult = defaultResult;
+        return true;
+      }
+
+      return defaultResult;
+    };
+
+    const defCanInitParallax = Jarallax.prototype.canInitParallax;
+
+    Jarallax.prototype.canInitParallax = function () {
+      const self = this;
+      let defaultResult = defCanInitParallax.apply(self);
+
+      if (!self.options.videoSrc) {
+        return defaultResult;
+      } // Init video api
+
+
+      const video = new VideoWorker(self.options.videoSrc, {
+        autoplay: true,
+        loop: self.options.videoLoop,
+        showControls: false,
+        accessibilityHidden: true,
+        startTime: self.options.videoStartTime || 0,
+        endTime: self.options.videoEndTime || 0,
+        mute: self.options.videoVolume ? 0 : 1,
+        volume: self.options.videoVolume || 0
+      });
+
+      function resetDefaultImage() {
+        if (self.image.$default_item) {
+          self.image.$item = self.image.$default_item;
+          self.image.$item.style.display = 'block'; // set image width and height
+
           self.coverImage();
           self.clipContainer();
-          self.onScroll(); // hide image
+          self.onScroll();
+        }
+      }
 
-          if (self.image.$default_item) {
-            self.image.$default_item.style.display = 'none';
-          }
-        });
-        video.on('ended', function () {
-          self.videoEnded = true;
+      if (video.isValid()) {
+        // Force enable parallax.
+        // When the parallax disabled on mobile devices, we still need to display videos.
+        // https://github.com/nk-o/jarallax/issues/159
+        if (this.options.disableParallax()) {
+          defaultResult = true;
+          self.image.position = 'absolute';
+          self.options.type = 'scroll';
+          self.options.speed = 1;
+        } // if parallax will not be inited, we can add thumbnail on background.
 
-          if (!self.options.videoLoop) {
-            // show default image if Loop disabled.
-            resetDefaultImage();
-          }
-        });
-        video.on('error', function () {
-          self.videoError = true; // show default image if video loading error.
 
-          resetDefaultImage();
-        });
-        self.video = video; // set image if not exists
+        if (!defaultResult) {
+          if (!self.defaultInitImgResult) {
+            video.getImageURL(url => {
+              // save default user styles
+              const curStyle = self.$item.getAttribute('style');
 
-        if (!self.defaultInitImgResult) {
-          // set empty image on self-hosted video if not defined
-          self.image.src = 'data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7';
+              if (curStyle) {
+                self.$item.setAttribute('data-jarallax-original-styles', curStyle);
+              } // set new background
 
-          if ('local' !== video.type) {
-            video.getImageURL(function (url) {
-              self.image.bgImage = "url(\"".concat(url, "\")");
-              self.init();
+
+              self.css(self.$item, {
+                'background-image': `url("${url}")`,
+                'background-position': 'center',
+                'background-size': 'cover'
+              });
             });
-            return false;
+          } // init video
+
+        } else {
+          video.on('ready', () => {
+            if (self.options.videoPlayOnlyVisible) {
+              const oldOnScroll = self.onScroll;
+
+              self.onScroll = function () {
+                oldOnScroll.apply(self);
+
+                if (!self.videoError && (self.options.videoLoop || !self.options.videoLoop && !self.videoEnded)) {
+                  if (self.isVisible()) {
+                    video.play();
+                  } else {
+                    video.pause();
+                  }
+                }
+              };
+            } else {
+              video.play();
+            }
+          });
+          video.on('started', () => {
+            self.image.$default_item = self.image.$item;
+            self.image.$item = self.$video; // set video width and height
+
+            self.image.width = self.video.videoWidth || 1280;
+            self.image.height = self.video.videoHeight || 720;
+            self.coverImage();
+            self.clipContainer();
+            self.onScroll(); // hide image
+
+            if (self.image.$default_item) {
+              self.image.$default_item.style.display = 'none';
+            }
+          });
+          video.on('ended', () => {
+            self.videoEnded = true;
+
+            if (!self.options.videoLoop) {
+              // show default image if Loop disabled.
+              resetDefaultImage();
+            }
+          });
+          video.on('error', () => {
+            self.videoError = true; // show default image if video loading error.
+
+            resetDefaultImage();
+          });
+          self.video = video; // set image if not exists
+
+          if (!self.defaultInitImgResult) {
+            // set empty image on self-hosted video if not defined
+            self.image.src = 'data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7';
+
+            if (video.type !== 'local') {
+              video.getImageURL(url => {
+                self.image.bgImage = `url("${url}")`;
+                self.init();
+              });
+              return false;
+            }
           }
         }
       }
-    }
 
-    return defaultResult;
-  }; // Destroy video parallax
-
-
-  var defDestroy = Jarallax.prototype.destroy;
-
-  Jarallax.prototype.destroy = function () {
-    var self = this;
-
-    if (self.image.$default_item) {
-      self.image.$item = self.image.$default_item;
-      delete self.image.$default_item;
-    }
-
-    defDestroy.apply(self);
-  };
-}
-
-/***/ })
-/******/ 	]);
-/************************************************************************/
-/******/ 	// The module cache
-/******/ 	var __webpack_module_cache__ = {};
-/******/ 	
-/******/ 	// The require function
-/******/ 	function __webpack_require__(moduleId) {
-/******/ 		// Check if module is in cache
-/******/ 		var cachedModule = __webpack_module_cache__[moduleId];
-/******/ 		if (cachedModule !== undefined) {
-/******/ 			return cachedModule.exports;
-/******/ 		}
-/******/ 		// Create a new module (and put it into the cache)
-/******/ 		var module = __webpack_module_cache__[moduleId] = {
-/******/ 			// no module.id needed
-/******/ 			// no module.loaded needed
-/******/ 			exports: {}
-/******/ 		};
-/******/ 	
-/******/ 		// Execute the module function
-/******/ 		__webpack_modules__[moduleId](module, module.exports, __webpack_require__);
-/******/ 	
-/******/ 		// Return the exports of the module
-/******/ 		return module.exports;
-/******/ 	}
-/******/ 	
-/************************************************************************/
-/******/ 	/* webpack/runtime/compat get default export */
-/******/ 	!function() {
-/******/ 		// getDefaultExport function for compatibility with non-harmony modules
-/******/ 		__webpack_require__.n = function(module) {
-/******/ 			var getter = module && module.__esModule ?
-/******/ 				function() { return module['default']; } :
-/******/ 				function() { return module; };
-/******/ 			__webpack_require__.d(getter, { a: getter });
-/******/ 			return getter;
-/******/ 		};
-/******/ 	}();
-/******/ 	
-/******/ 	/* webpack/runtime/define property getters */
-/******/ 	!function() {
-/******/ 		// define getter functions for harmony exports
-/******/ 		__webpack_require__.d = function(exports, definition) {
-/******/ 			for(var key in definition) {
-/******/ 				if(__webpack_require__.o(definition, key) && !__webpack_require__.o(exports, key)) {
-/******/ 					Object.defineProperty(exports, key, { enumerable: true, get: definition[key] });
-/******/ 				}
-/******/ 			}
-/******/ 		};
-/******/ 	}();
-/******/ 	
-/******/ 	/* webpack/runtime/global */
-/******/ 	!function() {
-/******/ 		__webpack_require__.g = (function() {
-/******/ 			if (typeof globalThis === 'object') return globalThis;
-/******/ 			try {
-/******/ 				return this || new Function('return this')();
-/******/ 			} catch (e) {
-/******/ 				if (typeof window === 'object') return window;
-/******/ 			}
-/******/ 		})();
-/******/ 	}();
-/******/ 	
-/******/ 	/* webpack/runtime/hasOwnProperty shorthand */
-/******/ 	!function() {
-/******/ 		__webpack_require__.o = function(obj, prop) { return Object.prototype.hasOwnProperty.call(obj, prop); }
-/******/ 	}();
-/******/ 	
-/******/ 	/* webpack/runtime/make namespace object */
-/******/ 	!function() {
-/******/ 		// define __esModule on exports
-/******/ 		__webpack_require__.r = function(exports) {
-/******/ 			if(typeof Symbol !== 'undefined' && Symbol.toStringTag) {
-/******/ 				Object.defineProperty(exports, Symbol.toStringTag, { value: 'Module' });
-/******/ 			}
-/******/ 			Object.defineProperty(exports, '__esModule', { value: true });
-/******/ 		};
-/******/ 	}();
-/******/ 	
-/************************************************************************/
-var __webpack_exports__ = {};
-// This entry need to be wrapped in an IIFE because it need to be in strict mode.
-!function() {
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony import */ var video_worker__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(5);
-/* harmony import */ var global__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(2);
-/* harmony import */ var global__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(global__WEBPACK_IMPORTED_MODULE_1__);
-/* harmony import */ var lite_ready__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(1);
-/* harmony import */ var lite_ready__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(lite_ready__WEBPACK_IMPORTED_MODULE_2__);
-/* harmony import */ var _jarallax_video_esm__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(6);
+      return defaultResult;
+    }; // Destroy video parallax
 
 
+    const defDestroy = Jarallax.prototype.destroy;
 
- // add video worker globally to fallback jarallax < 1.10 versions
+    Jarallax.prototype.destroy = function () {
+      const self = this;
 
-(global__WEBPACK_IMPORTED_MODULE_1___default().VideoWorker) = (global__WEBPACK_IMPORTED_MODULE_1___default().VideoWorker) || video_worker__WEBPACK_IMPORTED_MODULE_0__["default"];
-(0,_jarallax_video_esm__WEBPACK_IMPORTED_MODULE_3__["default"])(); // data-jarallax-video initialization
+      if (self.image.$default_item) {
+        self.image.$item = self.image.$default_item;
+        delete self.image.$default_item;
+      }
 
-lite_ready__WEBPACK_IMPORTED_MODULE_2___default()(function () {
-  if ('undefined' !== typeof (global__WEBPACK_IMPORTED_MODULE_1___default().jarallax)) {
-    global__WEBPACK_IMPORTED_MODULE_1___default().jarallax(document.querySelectorAll('[data-jarallax-video]'));
+      defDestroy.apply(self);
+    };
   }
-});
-}();
-/******/ })()
-;
+
+  jarallaxVideo(); // data-jarallax-video initialization
+
+  ready(() => {
+    if (typeof global$2.jarallax !== 'undefined') {
+      global$2.jarallax(document.querySelectorAll('[data-jarallax-video]'));
+    }
+  });
+
+  return jarallaxVideo;
+
+}));
+//# sourceMappingURL=jarallax-video.js.map

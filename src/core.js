@@ -1,8 +1,8 @@
 /* eslint-disable no-param-reassign */
-import domReady from 'lite-ready';
-import { window } from 'global';
+import domReady from './utils/ready';
+import global from './utils/global';
 
-const { navigator } = window;
+const { navigator } = global;
 
 const isIE =
   navigator.userAgent.indexOf('MSIE ') > -1 ||
@@ -39,7 +39,7 @@ function getDeviceHeight() {
 
   return (
     ($deviceHelper ? $deviceHelper.clientHeight : 0) ||
-    window.innerHeight ||
+    global.innerHeight ||
     document.documentElement.clientHeight
   );
 }
@@ -50,13 +50,13 @@ function updateWndVars() {
   if (isMobile) {
     wndH = getDeviceHeight();
   } else {
-    wndH = window.innerHeight || document.documentElement.clientHeight;
+    wndH = global.innerHeight || document.documentElement.clientHeight;
   }
 }
 updateWndVars();
-window.addEventListener('resize', updateWndVars);
-window.addEventListener('orientationchange', updateWndVars);
-window.addEventListener('load', updateWndVars);
+global.addEventListener('resize', updateWndVars);
+global.addEventListener('orientationchange', updateWndVars);
+global.addEventListener('load', updateWndVars);
 domReady(() => {
   updateWndVars({
     type: 'dom-loaded',
@@ -97,7 +97,7 @@ function updateParallax() {
       height: clientRect.height,
       top: clientRect.top,
       bottom: clientRect.bottom,
-      wndW: window.innerWidth,
+      wndW: global.innerWidth,
       wndH,
     };
 
@@ -120,7 +120,7 @@ function updateParallax() {
     }
   });
 
-  window.requestAnimationFrame(updateParallax);
+  global.requestAnimationFrame(updateParallax);
 }
 
 let instanceID = 0;
@@ -250,7 +250,7 @@ class Jarallax {
   // eslint-disable-next-line class-methods-use-this
   css(el, styles) {
     if (typeof styles === 'string') {
-      return window.getComputedStyle(el).getPropertyValue(styles);
+      return global.getComputedStyle(el).getPropertyValue(styles);
     }
 
     // add transform property with vendor prefix
@@ -285,7 +285,7 @@ class Jarallax {
   // eslint-disable-next-line class-methods-use-this
   getWindowData() {
     return {
-      width: window.innerWidth || document.documentElement.clientWidth,
+      width: global.innerWidth || document.documentElement.clientWidth,
       height: wndH,
       y: document.documentElement.scrollTop,
     };
@@ -444,7 +444,7 @@ class Jarallax {
     // 2. Check if parents have overflow scroll
     if (self.image.position === 'fixed') {
       const $parents = getParents(self.$item).filter((el) => {
-        const styles = window.getComputedStyle(el);
+        const styles = global.getComputedStyle(el);
         const parentTransform =
           styles['-webkit-transform'] || styles['-moz-transform'] || styles.transform;
         const overflowRegex = /(auto|scroll)/;
@@ -491,7 +491,7 @@ class Jarallax {
     });
 
     if (jarallaxList.length === 1) {
-      window.requestAnimationFrame(updateParallax);
+      global.requestAnimationFrame(updateParallax);
     }
   }
 
@@ -682,7 +682,7 @@ class Jarallax {
       viewportRect.bottom >= 0 &&
       viewportRect.right >= 0 &&
       viewportRect.top <= wndH &&
-      viewportRect.left <= window.innerWidth;
+      viewportRect.left <= global.innerWidth;
 
     // stop calculations if item is not in viewport
     if (force ? false : !self.isElementInViewport) {
@@ -768,7 +768,7 @@ class Jarallax {
 }
 
 // global definition
-const plugin = function (items, options, ...args) {
+const jarallax = function (items, options, ...args) {
   // check for dom element
   // thanks: http://stackoverflow.com/questions/384286/javascript-isdom-how-do-you-check-if-a-javascript-object-is-a-dom-object
   if (
@@ -803,6 +803,6 @@ const plugin = function (items, options, ...args) {
 
   return items;
 };
-plugin.constructor = Jarallax;
+jarallax.constructor = Jarallax;
 
-export default plugin;
+export default jarallax;

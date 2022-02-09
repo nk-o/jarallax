@@ -1,7 +1,12 @@
 /* eslint no-case-declarations: "off" */
-import global from 'global';
+import global from '../utils/global';
 
-export default function jarallaxElement(jarallax = global.jarallax) {
+function jarallaxElement(jarallax = global.jarallax) {
+  // eslint-disable-next-line no-console
+  console.warning(
+    "Jarallax Element extension is DEPRECATED, please, avoid using it. We recommend you look at something like `lax.js` library <https://github.com/alexfoxy/lax.js>. It is much more powerful and has a less code (in cases when you don't want to add parallax backgrounds)."
+  );
+
   if (typeof jarallax === 'undefined') {
     return;
   }
@@ -91,3 +96,5 @@ export default function jarallaxElement(jarallax = global.jarallax) {
     };
   });
 }
+
+export default jarallaxElement;

@@ -1,7 +1,8 @@
 import VideoWorker from 'video-worker';
-import global from 'global';
 
-export default function jarallaxVideo(jarallax = global.jarallax) {
+import global from './utils/global';
+
+function jarallaxVideo(jarallax = global.jarallax) {
   if (typeof jarallax === 'undefined') {
     return;
   }
@@ -275,3 +276,5 @@ export default function jarallaxVideo(jarallax = global.jarallax) {
     defDestroy.apply(self);
   };
 }
+
+export default jarallaxVideo;
