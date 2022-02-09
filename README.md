@@ -184,10 +184,6 @@ jarallax(document.querySelectorAll('.jarallax'), {
 <div class="jarallax"></div>
 ```
 
-## Elements Parallax Usage Examples
-
-Since v1.9.0 there was an extension to allow transform specific elements. This feature is still available, but DEPRECATED. We recommend you to use `laxxx` library <https://github.com/alexfoxy/laxxx>. It is much more powerful and has a less code (in cases when you don't want to add parallax backgrounds).
-
 ## Options
 
 Options can be passed in data attributes or in object when you initialize jarallax from script.
@@ -245,16 +241,6 @@ videoEndTime | float | `0` | End time in seconds when video will be ended.
 videoLoop | boolean | `true` | Loop video to play infinitely.
 videoPlayOnlyVisible | boolean | `true` | Play video only when it is visible on the screen.
 videoLazyLoading | boolean | `true` | Preload videos only when it is visible on the screen.
-
-### Options For Element Parallax
-
-Required `jarallax/jarallax-element.js` file.
-
-Name | Type | Default | Description
-:--- | :--- | :------ | :----------
-type | string | `element` | Will only work with `element` value.
-speed | mixed | `0 0` | Parallax distance in pixels. Supported Y and X axis. Example: `100 200`. Also you can use data attribute `data-jarallax-element`.
-threshold | mixed | `null null` | Specify threshold for the parallax effect to kick in. For example, if you pass `0 0`, the element will start to move only after it has been scrolled to the middle of the viewport.
 
 ## Events
 
