@@ -9,140 +9,140 @@
  * Scroll calculations used by onScroll event
  */
 interface JarallaxOnScrollCalculations {
-    rect: object;
-    beforeTop: number;
-    beforeTopEnd: number;
-    afterTop: number;
-    beforeBottom: number;
-    beforeBottomEnd: number;
-    afterBottom: number;
-    visiblePercent: number;
-    fromViewportCenter: number;
+  rect: object;
+  beforeTop: number;
+  beforeTopEnd: number;
+  afterTop: number;
+  beforeBottom: number;
+  beforeBottomEnd: number;
+  afterBottom: number;
+  visiblePercent: number;
+  fromViewportCenter: number;
 }
 
 /**
  * Configurable options for Jarallax
  */
 interface JarallaxOptions {
-    /**
-     * scroll, scale, opacity, scroll-opacity, scale-opacity.
-     */
-    type?: string;
+  /**
+   * scroll, scale, opacity, scroll-opacity, scale-opacity.
+   */
+  type?: string;
 
-    /**
-     * Parallax effect speed. Provide numbers from -1.0 to 2.0.
-     */
-    speed?: number;
+  /**
+   * Parallax effect speed. Provide numbers from -1.0 to 2.0.
+   */
+  speed?: number;
 
-    /**
-     * Image url. By default used image from background.
-     */
-    imgSrc?: string;
+  /**
+   * Image url. By default used image from background.
+   */
+  imgSrc?: string;
 
-    /**
-     * Image tag that will be used as background.
-     */
-    imgElement?: string | Element;
+  /**
+   * Image tag that will be used as background.
+   */
+  imgElement?: string | Element;
 
-    /**
-     * Image size. If you use <img> tag for background, you should add object-fit values, else use background-size
-     * values.
-     */
-    imgSize?: string;
+  /**
+   * Image size. If you use <img> tag for background, you should add object-fit values, else use background-size
+   * values.
+   */
+  imgSize?: string;
 
-    /**
-     * Image position. If you use <img> tag for background, you should add object-position values, else use
-     * background-position values.
-     */
-    imgPosition?: string;
+  /**
+   * Image position. If you use <img> tag for background, you should add object-position values, else use
+   * background-position values.
+   */
+  imgPosition?: string;
 
-    /**
-     * Image repeat. Supported only background-position values.
-     */
-    imgRepeat?: "repeat" | "no-repeat";
+  /**
+   * Image repeat. Supported only background-position values.
+   */
+  imgRepeat?: 'repeat' | 'no-repeat';
 
-    /**
-     * Keep <img> tag in it's default place after Jarallax inited.
-     */
-    keepImg?: boolean;
+  /**
+   * Keep <img> tag in it's default place after Jarallax inited.
+   */
+  keepImg?: boolean;
 
-    /**
-     * Use custom DOM / jQuery element to check if parallax block in viewport.
-     * More info here - https://github.com/nk-o/jarallax/issues/13.
-     */
-    elementInViewport?: Element | JQuery<Element>;
+  /**
+   * Use custom DOM / jQuery element to check if parallax block in viewport.
+   * More info here - https://github.com/nk-o/jarallax/issues/13.
+   */
+  elementInViewport?: Element | JQuery<Element>;
 
-    /**
-     * z-index of parallax container.
-     */
-    zIndex?: number;
+  /**
+   * z-index of parallax container.
+   */
+  zIndex?: number;
 
-    /**
-     * Disable parallax on specific user agents (using regular expression) or with function return value.
-     * The image will be set on the background.
-     */
-    disableParallax?: RegExp;
+  /**
+   * Disable parallax on specific user agents (using regular expression) or with function return value.
+   * The image will be set on the background.
+   */
+  disableParallax?: RegExp;
 
-    /**
-     * Disable video load on specific user agents (using regular expression) or with function return value.
-     * The image will be set on the background.
-     */
-    disableVideo?: RegExp;
+  /**
+   * Disable video load on specific user agents (using regular expression) or with function return value.
+   * The image will be set on the background.
+   */
+  disableVideo?: RegExp;
 
-    /**
-     * Experimental! Automatically recalculate parallax size and position when the size of parallax block changed
-     * (dynamic content inside). Uses ResizeObserver, which has a small browsers compatible.
-     * Recommended using with polyfill https://github.com/que-etc/resize-observer-polyfill.
-     */
-    automaticResize?: boolean;
+  /**
+   * Experimental! Automatically recalculate parallax size and position when the size of parallax block changed
+   * (dynamic content inside). Uses ResizeObserver, which has a small browsers compatible.
+   * Recommended using with polyfill https://github.com/que-etc/resize-observer-polyfill.
+   */
+  automaticResize?: boolean;
 
-    /**
-     * You can use Youtube, Vimeo or local videos. Also you can use data attribute data-jarallax-video.
-     */
-    videoSrc?: string;
+  /**
+   * You can use Youtube, Vimeo or local videos. Also you can use data attribute data-jarallax-video.
+   */
+  videoSrc?: string;
 
-    /**
-     * Start time in seconds when video will be started (this value will be applied also after loop).
-     */
-    videoStartTime?: number;
+  /**
+   * Start time in seconds when video will be started (this value will be applied also after loop).
+   */
+  videoStartTime?: number;
 
-    /**
-     * End time in seconds when video will be ended.
-     */
-    videoEndTime?: number;
+  /**
+   * End time in seconds when video will be ended.
+   */
+  videoEndTime?: number;
 
-    /**
-     * Video volume from 0 to 100.
-     */
-    videoVolumne?: number;
+  /**
+   * Video volume from 0 to 100.
+   */
+  videoVolumne?: number;
 
-    /**
-     * Play video only when it is visible on the screen.
-     */
-    videoPlayOnlyVisible?: boolean;
+  /**
+   * Play video only when it is visible on the screen.
+   */
+  videoPlayOnlyVisible?: boolean;
 
-    /**
-     * Called when parallax working. Use first argument with calculations.
-     * More info https://github.com/nk-o/jarallax#onscroll-event.
-     *
-     * @param {JarallaxOnScrollCalculations} calculations
-     */
-    onScroll?: (calculations: JarallaxOnScrollCalculations) => void;
+  /**
+   * Called when parallax working. Use first argument with calculations.
+   * More info https://github.com/nk-o/jarallax#onscroll-event.
+   *
+   * @param {JarallaxOnScrollCalculations} calculations
+   */
+  onScroll?: (calculations: JarallaxOnScrollCalculations) => void;
 
-    /**
-     * Called after init end.
-     */
-    onInit?: () => void;
+  /**
+   * Called after init end.
+   */
+  onInit?: () => void;
 
-    /**
-     * Called after destroy.
-     */
-    onDestroy?: () => void;
+  /**
+   * Called after destroy.
+   */
+  onDestroy?: () => void;
 
-    /**
-     * Called after cover image.
-     */
-    onCoverImage?: () => void;
+  /**
+   * Called after cover image.
+   */
+  onCoverImage?: () => void;
 }
 
 /**
@@ -152,8 +152,8 @@ interface JarallaxOptions {
  * @param {JarallaxOptions} userOptions
  */
 declare function jarallax(
-    elements: Element | Element[] | NodeListOf<Element> | JQuery<Element>,
-    userOptions: JarallaxOptions,
+  elements: Element | Element[] | NodeListOf<Element> | JQuery<Element>,
+  userOptions: JarallaxOptions
 ): void;
 
 /**
@@ -163,8 +163,8 @@ declare function jarallax(
  * @param {"destroy" | "onResize" | "onScroll"} methodName
  */
 declare function jarallax(
-    elements: Element | Element[] | NodeListOf<Element> | JQuery<Element>,
-    methodName: "destroy" | "onResize" | "onScroll",
+  elements: Element | Element[] | NodeListOf<Element> | JQuery<Element>,
+  methodName: 'destroy' | 'onResize' | 'onScroll'
 ): void;
 
 /**
@@ -175,30 +175,30 @@ declare function jarallax(
  * @returns {boolean}
  */
 declare function jarallax(
-    elements: Element | Element[] | NodeListOf<Element> | JQuery<Element>,
-    methodName: "isVisible",
+  elements: Element | Element[] | NodeListOf<Element> | JQuery<Element>,
+  methodName: 'isVisible'
 ): boolean;
 
 interface JQuery {
-    /**
-     * Init Jarallax with options
-     *
-     * @param {JarallaxOptions} userOptions
-     */
-    jarallax(userOptions: JarallaxOptions): void;
+  /**
+   * Init Jarallax with options
+   *
+   * @param {JarallaxOptions} userOptions
+   */
+  jarallax(userOptions: JarallaxOptions): void;
 
-    /**
-     * Run a method on the current instance of Jaralax
-     *
-     * @param {"destroy" | "onResize" | "onScroll"} methodName
-     */
-    jarallax(methodName: "destroy" | "onResize" | "onScroll"): void;
+  /**
+   * Run a method on the current instance of Jaralax
+   *
+   * @param {"destroy" | "onResize" | "onScroll"} methodName
+   */
+  jarallax(methodName: 'destroy' | 'onResize' | 'onScroll'): void;
 
-    /**
-     * Check if an element is visible
-     *
-     * @param {"isVisible"} methodName
-     * @returns {boolean}
-     */
-    jarallax(methodName: "isVisible"): boolean;
+  /**
+   * Check if an element is visible
+   *
+   * @param {"isVisible"} methodName
+   * @returns {boolean}
+   */
+  jarallax(methodName: 'isVisible'): boolean;
 }
