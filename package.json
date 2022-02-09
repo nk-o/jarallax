@@ -18,7 +18,7 @@
     "test": "gulp test",
     "js-lint": "eslint src/ tests/",
     "js-lint-fix": "eslint --fix src/ tests/",
-    "update-git-hooks": "npx simple-git-hooks"
+    "prepare": "husky install"
   },
   "repository": {
     "type": "git",
@@ -57,15 +57,15 @@
     "gulp-sourcemaps": "^3.0.0",
     "gulp-uglify": "^3.0.2",
     "gulp-watch": "^5.0.1",
+    "husky": "^7.0.4",
     "jquery": "^3.6.0",
     "json-file": "^0.1.0",
-    "lint-staged": "^11.2.0",
+    "lint-staged": "^12.3.3",
     "micromatch": "^4.0.4",
     "node-qunit-phantomjs": "^2.1.1",
     "object-fit-images": "^3.2.4",
     "prettier-config-nk": "^1.0.2",
     "qunit": "^2.17.2",
-    "simple-git-hooks": "^2.6.1",
     "vinyl-named": "^1.1.0",
     "webpack": "^5.57.1",
     "webpack-stream": "^7.0.0"
