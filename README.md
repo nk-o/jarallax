@@ -6,7 +6,7 @@ Smooth parallax scrolling effect for background images, videos. Code in pure Jav
 
 ## Tested Browsers
 
-* Latest browsers on Mac and Windows (Chrome, Firefox, Safari, IE11, Edge)
+* Latest browsers on Mac and Windows (Chrome, Firefox, Safari, Edge)
 * Latest Chrome on Android
 * Latest Safari on iOs
 
@@ -70,13 +70,6 @@ Link directly from [unpkg](https://unpkg.com/)
 <script src="https://unpkg.com/jarallax@1/dist/jarallax-video.min.js"></script>
 ```
 
-## Supported plugins
-
-You can add these plugins before jarallax initialize.
-
-* [object-fit-images](https://github.com/bfred-it/object-fit-images) polyfill for `object-fit` styles;
-* [lazysizes](https://github.com/aFarkas/lazysizes) lazy-load images with srcset support;
-
 ## Set up your HTML
 
 ```html
@@ -113,8 +106,6 @@ These styles need to correct background image position before Jarallax initializ
 .jarallax > .jarallax-img {
     position: absolute;
     object-fit: cover;
-    /* support for plugin https://github.com/bfred-it/object-fit-images */
-    font-family: 'object-fit: cover;';
     top: 0;
     left: 0;
     width: 100%;
