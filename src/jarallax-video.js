@@ -10,8 +10,8 @@ global.VideoWorker = global.VideoWorker || VideoWorker;
 jarallaxVideo();
 
 // data-jarallax-video initialization
-domReady( () => {
-    if ( 'undefined' !== typeof global.jarallax ) {
-        global.jarallax( document.querySelectorAll( '[data-jarallax-video]' ) );
-    }
-} );
+domReady(() => {
+  if (typeof global.jarallax !== 'undefined') {
+    global.jarallax(document.querySelectorAll('[data-jarallax-video]'));
+  }
+});

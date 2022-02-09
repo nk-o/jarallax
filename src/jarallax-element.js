@@ -6,8 +6,8 @@ import jarallaxElement from './jarallax-element.esm';
 jarallaxElement();
 
 // data-jarallax-element initialization
-domReady( () => {
-    if ( 'undefined' !== typeof global.jarallax ) {
-        global.jarallax( document.querySelectorAll( '[data-jarallax-element]' ) );
-    }
-} );
+domReady(() => {
+  if (typeof global.jarallax !== 'undefined') {
+    global.jarallax(document.querySelectorAll('[data-jarallax-element]'));
+  }
+});

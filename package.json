@@ -1,77 +1,78 @@
 {
-    "name": "jarallax",
-    "version": "1.12.8",
-    "description": "Smooth parallax scrolling effect for background images, videos and inline elements. Code in pure JavaScript with NO dependencies + jQuery supported. Youtube, Vimeo and Local Videos parallax supported.",
-    "license": "MIT",
-    "homepage": "https://github.com/nk-o/jarallax",
-    "author": "nK <https://nkdev.info>",
-    "main": "index.js",
-    "types": "./typings/index.d.ts",
-    "files": [
-        "src",
-        "dist",
-        "typings"
-    ],
-    "scripts": {
-        "dev": "gulp dev",
-        "build": "gulp build",
-        "test": "gulp test",
-        "js-lint": "eslint src/ tests/",
-        "js-lint-fix": "eslint --fix src/ tests/",
-        "update-git-hooks": "npx simple-git-hooks"
-    },
-    "repository": {
-        "type": "git",
-        "url": "git://github.com/nk-o/jarallax.git"
-    },
-    "bugs": {
-        "url": "https://github.com/nk-o/jarallax/issues"
-    },
-    "keywords": [
-        "parallax",
-        "image",
-        "background",
-        "youtube",
-        "vimeo",
-        "video"
-    ],
-    "devDependencies": {
-        "@babel/core": "^7.15.5",
-        "@babel/plugin-proposal-class-properties": "^7.14.5",
-        "@babel/plugin-proposal-object-rest-spread": "^7.15.6",
-        "@babel/plugin-transform-async-to-generator": "^7.14.5",
-        "@babel/plugin-transform-block-scoping": "^7.15.3",
-        "@babel/preset-env": "^7.15.6",
-        "@babel/register": "^7.15.3",
-        "@types/jquery": "^3.5.6",
-        "babel-loader": "^8.2.2",
-        "browser-sync": "^2.27.5",
-        "del": "^6.0.0",
-        "eslint-config-nk": "^0.0.20",
-        "gulp": "^4.0.2",
-        "gulp-header": "^2.0.9",
-        "gulp-if": "^3.0.0",
-        "gulp-load-plugins": "^2.0.7",
-        "gulp-plumber": "^1.2.1",
-        "gulp-rename": "^2.0.0",
-        "gulp-sourcemaps": "^3.0.0",
-        "gulp-uglify": "^3.0.2",
-        "gulp-watch": "^5.0.1",
-        "jquery": "^3.6.0",
-        "json-file": "^0.1.0",
-        "lint-staged": "^11.2.0",
-        "micromatch": "^4.0.4",
-        "node-qunit-phantomjs": "^2.1.1",
-        "object-fit-images": "^3.2.4",
-        "qunit": "^2.17.2",
-        "simple-git-hooks": "^2.6.1",
-        "vinyl-named": "^1.1.0",
-        "webpack": "^5.57.1",
-        "webpack-stream": "^7.0.0"
-    },
-    "dependencies": {
-        "global": "^4.4.0",
-        "lite-ready": "^1.0.4",
-        "video-worker": "^1.1.17"
-    }
+  "name": "jarallax",
+  "version": "1.12.8",
+  "description": "Smooth parallax scrolling effect for background images, videos and inline elements. Code in pure JavaScript with NO dependencies + jQuery supported. Youtube, Vimeo and Local Videos parallax supported.",
+  "license": "MIT",
+  "homepage": "https://github.com/nk-o/jarallax",
+  "author": "nK <https://nkdev.info>",
+  "main": "index.js",
+  "types": "./typings/index.d.ts",
+  "files": [
+    "src",
+    "dist",
+    "typings"
+  ],
+  "scripts": {
+    "dev": "gulp dev",
+    "build": "gulp build",
+    "test": "gulp test",
+    "js-lint": "eslint src/ tests/",
+    "js-lint-fix": "eslint --fix src/ tests/",
+    "update-git-hooks": "npx simple-git-hooks"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/nk-o/jarallax.git"
+  },
+  "bugs": {
+    "url": "https://github.com/nk-o/jarallax/issues"
+  },
+  "keywords": [
+    "parallax",
+    "image",
+    "background",
+    "youtube",
+    "vimeo",
+    "video"
+  ],
+  "devDependencies": {
+    "@babel/core": "^7.15.5",
+    "@babel/plugin-proposal-class-properties": "^7.14.5",
+    "@babel/plugin-proposal-object-rest-spread": "^7.15.6",
+    "@babel/plugin-transform-async-to-generator": "^7.14.5",
+    "@babel/plugin-transform-block-scoping": "^7.15.3",
+    "@babel/preset-env": "^7.15.6",
+    "@babel/register": "^7.15.3",
+    "@types/jquery": "^3.5.6",
+    "babel-loader": "^8.2.2",
+    "browser-sync": "^2.27.5",
+    "del": "^6.0.0",
+    "eslint-config-nk": "^1.0.8",
+    "gulp": "^4.0.2",
+    "gulp-header": "^2.0.9",
+    "gulp-if": "^3.0.0",
+    "gulp-load-plugins": "^2.0.7",
+    "gulp-plumber": "^1.2.1",
+    "gulp-rename": "^2.0.0",
+    "gulp-sourcemaps": "^3.0.0",
+    "gulp-uglify": "^3.0.2",
+    "gulp-watch": "^5.0.1",
+    "jquery": "^3.6.0",
+    "json-file": "^0.1.0",
+    "lint-staged": "^11.2.0",
+    "micromatch": "^4.0.4",
+    "node-qunit-phantomjs": "^2.1.1",
+    "object-fit-images": "^3.2.4",
+    "prettier-config-nk": "^1.0.2",
+    "qunit": "^2.17.2",
+    "simple-git-hooks": "^2.6.1",
+    "vinyl-named": "^1.1.0",
+    "webpack": "^5.57.1",
+    "webpack-stream": "^7.0.0"
+  },
+  "dependencies": {
+    "global": "^4.4.0",
+    "lite-ready": "^1.0.4",
+    "video-worker": "^1.1.17"
+  }
 }

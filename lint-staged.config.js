@@ -1,18 +1,18 @@
 // eslint-disable-next-line import/no-extraneous-dependencies
-const micromatch = require( 'micromatch' );
+const micromatch = require('micromatch');
 
-function excludeVendor( lint ) {
-    return ( filenames ) => {
-        const files = micromatch( filenames, '!dist/**/*' );
+function excludeVendor(lint) {
+  return (filenames) => {
+    const files = micromatch(filenames, '!dist/**/*');
 
-        if ( files && files.length ) {
-            return `${ lint } ${ files.join( ' ' ) }`;
-        }
+    if (files && files.length) {
+      return `${lint} ${files.join(' ')}`;
+    }
 
-        return [];
-    };
+    return [];
+  };
 }
 
 module.exports = {
-    'src/**/*.js': excludeVendor( 'eslint' ),
+  'src/**/*.js': excludeVendor('eslint'),
 };
