@@ -8,17 +8,6 @@ const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/
   navigator.userAgent
 );
 
-const supportTransform = (() => {
-  const prefixes = 'transform WebkitTransform MozTransform'.split(' ');
-  const div = document.createElement('div');
-  for (let i = 0; i < prefixes.length; i += 1) {
-    if (div && div.style[prefixes[i]] !== undefined) {
-      return prefixes[i];
-    }
-  }
-  return false;
-})();
-
 let $deviceHelper;
 
 /**
@@ -249,11 +238,6 @@ class Jarallax {
       return global.getComputedStyle(el).getPropertyValue(styles);
     }
 
-    // add transform property with vendor prefix
-    if (styles.transform && supportTransform) {
-      styles[supportTransform] = styles.transform;
-    }
-
     Object.keys(styles).forEach((key) => {
       el.style[key] = styles[key];
     });
@@ -332,7 +316,7 @@ class Jarallax {
   }
 
   canInitParallax() {
-    return supportTransform && !this.options.disableParallax();
+    return !this.options.disableParallax();
   }
 
   init() {
