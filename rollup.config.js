@@ -82,7 +82,6 @@ const bundles = [
       banner: getHeader(),
       file: path.join(__dirname, 'dist/jarallax.cjs'),
       format: 'cjs',
-      exports: 'default',
     },
   },
 

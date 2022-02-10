@@ -1,15 +1,13 @@
-import jarallax from './core';
-import jarallaxVideo from './ext-video';
-import jarallaxElement from './deprecated/ext-element';
+import jarallaxLib from './core';
+import jarallaxVideoExt from './ext-video';
+import jarallaxElementExt from './deprecated/ext-element';
 
-export default {
-  jarallax,
-  jarallaxVideo() {
-    return jarallaxVideo(jarallax);
-  },
+export const jarallax = jarallaxLib;
 
-  // Deprecated.
-  jarallaxElement() {
-    return jarallaxElement(jarallax);
-  },
+export const jarallaxVideo = function jarallaxVideo() {
+  return jarallaxVideoExt(jarallax);
+};
+
+export const jarallaxElement = function jarallaxElement() {
+  return jarallaxElementExt(jarallax);
 };
