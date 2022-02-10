@@ -404,8 +404,6 @@ class Jarallax {
         {
           'object-fit': self.options.imgSize,
           'object-position': self.options.imgPosition,
-          // support for plugin https://github.com/bfred-it/object-fit-images
-          'font-family': `object-fit: ${self.options.imgSize}; object-position: ${self.options.imgPosition};`,
           'max-width': 'none',
         },
         containerStyles,
