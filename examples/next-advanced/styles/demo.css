@@ -1,0 +1,105 @@
+/**
+ * These styles are used for DEMO purpose only.
+ */
+*,
+:after,
+:before {
+  box-sizing: border-box;
+}
+
+html {
+  font-size: 16px;
+}
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen-Sans, Ubuntu, Cantarell, "Helvetica Neue", sans-serif;
+  margin: 0;
+  padding: 0;
+  -webkit-font-smoothing: antialiased;
+  height: 200vh;
+  background-color: #fafafa;
+}
+
+.section {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 40px;
+  padding: 20px 0;
+  background: #fff;
+  border-bottom: 1px solid #eaeaea;
+}
+
+.wrapper {
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 20px;
+}
+
+.jarallax {
+  min-height: 50vh;
+}
+
+.jarallax-wrap {
+  position: relative;
+  background-color: #fff;
+  border-radius: 10px;
+  overflow: hidden;
+  margin-bottom: 20px;
+  box-shadow: 0px 2px 4px rgba(0,0,0,0.1);
+  transition: box-shadow .15s ease;
+
+  /* jarallax will use position: absolute and we can add border radius to images */
+  transform: translateX(0);
+}
+.jarallax-wrap:hover {
+  box-shadow: 0px 4px 8px rgba(0,0,0,0.12);
+}
+
+.jarallax-controls {
+  padding: 30px;
+}
+.jarallax-controls select,
+.jarallax-controls input {
+  font-size: 1rem;
+  margin-left: 10px;
+  margin-right: 20px;
+}
+.jarallax-controls .btn {
+  margin-left: auto;
+}
+.jarallax-controls .form-group {
+  display: flex;
+  align-items: center;
+}
+
+.btn {
+  font-size: 1rem;
+  border-radius: 3px;
+  border: none;
+  padding: 0.6rem 1.2rem;
+  cursor: pointer;
+  border: 1px solid #000;
+}
+
+.btn:hover,
+.btn:focus {
+  background: none;
+  color: #000;
+}
+
+.btn-primary {
+  color: #fff;
+  background: #000;
+}
+
+.btn-remove {
+  color: #fff;
+  background: #cd2525;
+  border: 1px solid #cd2525;
+}
+
+.btn-remove:hover,
+.btn-remove:focus {
+  color: #cd2525;
+}

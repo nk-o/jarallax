@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>ES Modules Example</title>
+
+    <!-- Demo Styles -->
+    <link href="./style.css" rel="stylesheet" />
+
+    <!-- Jarallax CSS -->
+    <link href="https://unpkg.com/jarallax/dist/jarallax.css" rel="stylesheet" />
+  </head>
+  <body>
+    <div class="section"><h1>ES Modules Example</h1></div>
+
+    <div class="jarallax">
+      <img class="jarallax-img" src="https://jarallax.nkdev.info/images/image1.jpg" alt="" />
+    </div>
+
+    <div class="jarallax" data-video-src="https://youtu.be/mru3Q5m4lkY"></div>
+
+    <div class="section"></div>
+
+    <!-- Init Jarallax -->
+    <script type="module">
+      import { jarallax, jarallaxVideo } from "jarallax";
+
+      // Optional video extension
+      jarallaxVideo();
+
+      jarallax(document.querySelectorAll(".jarallax"));
+    </script>
+  </body>
+</html>

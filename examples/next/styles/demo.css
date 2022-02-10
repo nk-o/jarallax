@@ -1,0 +1,26 @@
+/**
+ * These styles are used for DEMO purpose only.
+ */
+*,
+:after,
+:before {
+  box-sizing: border-box;
+}
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen-Sans, Ubuntu, Cantarell, "Helvetica Neue", sans-serif;
+  font-size: 20px;
+  margin: 0;
+  -webkit-font-smoothing: antialiased;
+}
+
+.section {
+  height: 60vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.jarallax {
+  height: 80vh;
+}

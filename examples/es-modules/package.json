@@ -1,0 +1,12 @@
+{
+  "private": true,
+  "scripts": {
+    "start": "browser-sync start --server --open local"
+  },
+  "dependencies": {
+    "jarallax": "latest"
+  },
+  "devDependencies": {
+    "browser-sync": "^2.27.7"
+  }
+}

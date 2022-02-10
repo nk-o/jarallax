@@ -1,0 +1,12 @@
+{
+  "private": true,
+  "scripts": {
+    "start": "next dev"
+  },
+  "dependencies": {
+    "jarallax": "latest"
+  },
+  "devDependencies": {
+    "next": "^12.0.10"
+  }
+}

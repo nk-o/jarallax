@@ -9,6 +9,7 @@
   "main": "dist/jarallax.cjs",
   "module": "dist/jarallax.esm.js",
   "unpkg": "dist/jarallax.min.js",
+  "style": "dist/jarallax.css",
   "types": "./typings/index.d.ts",
   "files": [
     "src",

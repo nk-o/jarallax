@@ -9,7 +9,7 @@ Parallax scrolling for modern browsers. Supported &lt;img&gt; tags, background i
 ## Table of contents
 
 - [WordPress Plugin](#wordpress-plugin)
-- [React Example](#react-example)
+- [Quick Start](#quick-start)
 - [Import Jarallax](#import-jarallax)
 - [Add styles](#add-styles)
 - [Prepare HTML](#prepare-html)
@@ -32,9 +32,16 @@ Demo: <https://wpbackgrounds.com/>
 
 Download: <https://wordpress.org/plugins/advanced-backgrounds/>
 
-## React Example
+## Quick Start
 
-Demo: <https://codepen.io/_nK/pen/mddWddr>
+There are a set of examples, which you can use as a starting point with Jarallax.
+
+- [ES Modules](examples/es-modules)
+- [JavaScript](examples/javascript)
+- [Next.js](examples/next)
+- [Next.js Advanced Usage](examples/next-advanced)
+- [HTML](examples/html)
+- [jQuery](examples/jquery)
 
 ## Import Jarallax
 
@@ -209,17 +216,17 @@ jarallax(document.querySelectorAll('.jarallax'), {
 
 ```html
 <!-- Background YouTube Parallax -->
-<div class="jarallax" data-jarallax-video="https://www.youtube.com/watch?v=ab0TSkLe-E0">
+<div class="jarallax" data-jarallax data-video-src="https://www.youtube.com/watch?v=ab0TSkLe-E0">
   Your content here...
 </div>
 
 <!-- Background Vimeo Parallax -->
-<div class="jarallax" data-jarallax-video="https://vimeo.com/110138539">
+<div class="jarallax" data-jarallax data-video-src="https://vimeo.com/110138539">
   Your content here...
 </div>
 
 <!-- Background Self-Hosted Video Parallax -->
-<div class="jarallax" data-jarallax-video="mp4:./video/local-video.mp4,webm:./video/local-video.webm,ogv:./video/local-video.ogv">
+<div class="jarallax" data-jarallax data-video-src="mp4:./video/local-video.mp4,webm:./video/local-video.webm,ogv:./video/local-video.ogv">
   Your content here...
 </div>
 ```
