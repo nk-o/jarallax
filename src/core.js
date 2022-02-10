@@ -4,10 +4,6 @@ import global from './utils/global';
 
 const { navigator } = global;
 
-const isIE =
-  navigator.userAgent.indexOf('MSIE ') > -1 ||
-  navigator.userAgent.indexOf('Trident/') > -1 ||
-  navigator.userAgent.indexOf('Edge/') > -1;
 const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(
   navigator.userAgent
 );
@@ -388,13 +384,6 @@ class Jarallax {
     self.css(self.image.$container, {
       'z-index': self.options.zIndex,
     });
-
-    // fix for IE https://github.com/nk-o/jarallax/issues/110
-    if (isIE) {
-      self.css(self.image.$container, {
-        opacity: 0.9999,
-      });
-    }
 
     self.image.$container.setAttribute('id', `jarallax-container-${self.instanceID}`);
     self.$item.appendChild(self.image.$container);
