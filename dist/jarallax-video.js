@@ -1,5 +1,5 @@
 /*!
- * Video Extension for Jarallax v1.12.8 (https://github.com/nk-o/jarallax)
+ * Video Extension for Jarallax v2.0.0 (https://github.com/nk-o/jarallax)
  * Copyright 2022 nK <https://nkdev.info>
  * Licensed under MIT (https://github.com/nk-o/jarallax/blob/master/LICENSE)
  */
@@ -986,7 +986,11 @@
 
           self.image.$container.appendChild(video); // remove parent video element (created by VideoWorker)
 
-          $parent.parentNode.removeChild($parent);
+          $parent.parentNode.removeChild($parent); // call onVideoInsert event
+
+          if (self.options.onVideoInsert) {
+            self.options.onVideoInsert.call(self);
+          }
         });
       }
     }; // cover video
@@ -1068,7 +1072,11 @@
         endTime: self.options.videoEndTime || 0,
         mute: self.options.videoVolume ? 0 : 1,
         volume: self.options.videoVolume || 0
-      });
+      }); // call onVideoWorkerInit event
+
+      if (self.options.onVideoWorkerInit) {
+        self.options.onVideoWorkerInit.call(self, video);
+      }
 
       function resetDefaultImage() {
         if (self.image.$default_item) {
