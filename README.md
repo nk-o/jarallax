@@ -4,7 +4,7 @@
 
 Parallax scrolling for modern browsers. Supported &lt;img&gt; tags, background images, YouTube, Vimeo and Self-Hosted Videos.
 
-## [Online Demo](https://jarallax.vercel.app/)
+## [Online Demo](https://jarallax.nkdev.info/)
 
 ## Table of contents
 
