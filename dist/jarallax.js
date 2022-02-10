@@ -1,5 +1,5 @@
 /*!
- * Jarallax v2.0.0 (https://github.com/nk-o/jarallax)
+ * Jarallax v2.0.1 (https://github.com/nk-o/jarallax)
  * Copyright 2022 nK <https://nkdev.info>
  * Licensed under MIT (https://github.com/nk-o/jarallax/blob/master/LICENSE)
  */
@@ -43,22 +43,7 @@
   const {
     navigator
   } = global$1;
-  const isIE = /*#__PURE__*/navigator.userAgent.indexOf('MSIE ') > -1 || /*#__PURE__*/navigator.userAgent.indexOf('Trident/') > -1 || /*#__PURE__*/navigator.userAgent.indexOf('Edge/') > -1;
   const isMobile = /*#__PURE__*/ /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
-
-  const supportTransform = /*#__PURE__*/(() => {
-    const prefixes = /*#__PURE__*/'transform WebkitTransform MozTransform'.split(' ');
-    const div = /*#__PURE__*/document.createElement('div');
-
-    for (let i = 0; i < prefixes.length; i += 1) {
-      if (div && div.style[prefixes[i]] !== undefined) {
-        return prefixes[i];
-      }
-    }
-
-    return false;
-  })();
-
   let $deviceHelper;
   /**
    * The most popular mobile browsers changes height after page scroll and this generates image jumping.
@@ -273,11 +258,6 @@
     css(el, styles) {
       if (typeof styles === 'string') {
         return global$1.getComputedStyle(el).getPropertyValue(styles);
-      } // add transform property with vendor prefix
-
-
-      if (styles.transform && supportTransform) {
-        styles[supportTransform] = styles.transform;
       }
 
       Object.keys(styles).forEach(key => {
@@ -358,7 +338,7 @@
     }
 
     canInitParallax() {
-      return supportTransform && !this.options.disableParallax();
+      return !this.options.disableParallax();
     }
 
     init() {
@@ -413,11 +393,14 @@
       self.css(self.image.$container, containerStyles);
       self.css(self.image.$container, {
         'z-index': self.options.zIndex
-      }); // fix for IE https://github.com/nk-o/jarallax/issues/110
+      }); // it will remove some image overlapping
+      // overlapping occur due to an image position fixed inside absolute position element
+      // needed only when background in fixed position
 
-      if (isIE) {
+      if (this.image.position === 'fixed') {
         self.css(self.image.$container, {
-          opacity: 0.9999
+          '-webkit-clip-path': 'polygon(0 0, 100% 0, 100% 100%, 0 100%)',
+          'clip-path': 'polygon(0 0, 100% 0, 100% 100%, 0 100%)'
         });
       }
 
@@ -428,8 +411,6 @@
         imageStyles = self.extend({
           'object-fit': self.options.imgSize,
           'object-position': self.options.imgPosition,
-          // support for plugin https://github.com/bfred-it/object-fit-images
-          'font-family': `object-fit: ${self.options.imgSize}; object-position: ${self.options.imgPosition};`,
           'max-width': 'none'
         }, containerStyles, imageStyles); // use div with background image
       } else {
@@ -537,10 +518,6 @@
       } // remove additional dom elements
 
 
-      if (self.$clipStyles) {
-        self.$clipStyles.parentNode.removeChild(self.$clipStyles);
-      }
-
       if (self.image.$container) {
         self.image.$container.parentNode.removeChild(self.image.$container);
       } // call onDestroy event
@@ -552,46 +529,12 @@
 
 
       delete self.$item.jarallax;
-    } // it will remove some image overlapping
-    // overlapping occur due to an image position fixed inside absolute position element
+    } // Fallback for removed function.
+    // Does nothing now.
+    // eslint-disable-next-line class-methods-use-this
 
 
-    clipContainer() {
-      // needed only when background in fixed position
-      if (this.image.position !== 'fixed') {
-        return;
-      }
-
-      const self = this;
-      const rect = self.image.$container.getBoundingClientRect();
-      const {
-        width,
-        height
-      } = rect;
-
-      if (!self.$clipStyles) {
-        self.$clipStyles = document.createElement('style');
-        self.$clipStyles.setAttribute('type', 'text/css');
-        self.$clipStyles.setAttribute('id', `jarallax-clip-${self.instanceID}`);
-        const head = document.head || document.getElementsByTagName('head')[0];
-        head.appendChild(self.$clipStyles);
-      } // clip is used for old browsers.
-      // clip-path for modern browsers (also fixes Safari v14 bug https://github.com/nk-o/jarallax/issues/181 ).
-
-
-      const styles = `#jarallax-container-${self.instanceID} {
-            clip: rect(0 ${width}px ${height}px 0);
-            clip: rect(0, ${width}px, ${height}px, 0);
-            -webkit-clip-path: polygon(0 0, 100% 0, 100% 100%, 0 100%);
-            clip-path: polygon(0 0, 100% 0, 100% 100%, 0 100%);
-        }`; // add clip styles inline (this method need for support IE8 and less browsers)
-
-      if (self.$clipStyles.styleSheet) {
-        self.$clipStyles.styleSheet.cssText = styles;
-      } else {
-        self.$clipStyles.innerHTML = styles;
-      }
-    }
+    clipContainer() {}
 
     coverImage() {
       const self = this;
@@ -751,7 +694,6 @@
 
     onResize() {
       this.coverImage();
-      this.clipContainer();
     }
 
   } // global definition

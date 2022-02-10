@@ -1,9 +1,11 @@
 /*!
- * Jarallax v2.0.0 (https://github.com/nk-o/jarallax)
+ * Jarallax v2.0.1 (https://github.com/nk-o/jarallax)
  * Copyright 2022 nK <https://nkdev.info>
  * Licensed under MIT (https://github.com/nk-o/jarallax/blob/master/LICENSE)
  */
 'use strict';
+
+Object.defineProperty(exports, '__esModule', { value: true });
 
 function ready(callback) {
   if (document.readyState === 'complete' || document.readyState === 'interactive') {
@@ -39,22 +41,7 @@ var global$2 = win$1;
 const {
   navigator
 } = global$2;
-const isIE = /*#__PURE__*/navigator.userAgent.indexOf('MSIE ') > -1 || /*#__PURE__*/navigator.userAgent.indexOf('Trident/') > -1 || /*#__PURE__*/navigator.userAgent.indexOf('Edge/') > -1;
 const isMobile = /*#__PURE__*/ /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
-
-const supportTransform = /*#__PURE__*/(() => {
-  const prefixes = /*#__PURE__*/'transform WebkitTransform MozTransform'.split(' ');
-  const div = /*#__PURE__*/document.createElement('div');
-
-  for (let i = 0; i < prefixes.length; i += 1) {
-    if (div && div.style[prefixes[i]] !== undefined) {
-      return prefixes[i];
-    }
-  }
-
-  return false;
-})();
-
 let $deviceHelper;
 /**
  * The most popular mobile browsers changes height after page scroll and this generates image jumping.
@@ -269,11 +256,6 @@ class Jarallax {
   css(el, styles) {
     if (typeof styles === 'string') {
       return global$2.getComputedStyle(el).getPropertyValue(styles);
-    } // add transform property with vendor prefix
-
-
-    if (styles.transform && supportTransform) {
-      styles[supportTransform] = styles.transform;
     }
 
     Object.keys(styles).forEach(key => {
@@ -354,7 +336,7 @@ class Jarallax {
   }
 
   canInitParallax() {
-    return supportTransform && !this.options.disableParallax();
+    return !this.options.disableParallax();
   }
 
   init() {
@@ -409,11 +391,14 @@ class Jarallax {
     self.css(self.image.$container, containerStyles);
     self.css(self.image.$container, {
       'z-index': self.options.zIndex
-    }); // fix for IE https://github.com/nk-o/jarallax/issues/110
+    }); // it will remove some image overlapping
+    // overlapping occur due to an image position fixed inside absolute position element
+    // needed only when background in fixed position
 
-    if (isIE) {
+    if (this.image.position === 'fixed') {
       self.css(self.image.$container, {
-        opacity: 0.9999
+        '-webkit-clip-path': 'polygon(0 0, 100% 0, 100% 100%, 0 100%)',
+        'clip-path': 'polygon(0 0, 100% 0, 100% 100%, 0 100%)'
       });
     }
 
@@ -424,8 +409,6 @@ class Jarallax {
       imageStyles = self.extend({
         'object-fit': self.options.imgSize,
         'object-position': self.options.imgPosition,
-        // support for plugin https://github.com/bfred-it/object-fit-images
-        'font-family': `object-fit: ${self.options.imgSize}; object-position: ${self.options.imgPosition};`,
         'max-width': 'none'
       }, containerStyles, imageStyles); // use div with background image
     } else {
@@ -533,10 +516,6 @@ class Jarallax {
     } // remove additional dom elements
 
 
-    if (self.$clipStyles) {
-      self.$clipStyles.parentNode.removeChild(self.$clipStyles);
-    }
-
     if (self.image.$container) {
       self.image.$container.parentNode.removeChild(self.image.$container);
     } // call onDestroy event
@@ -548,46 +527,12 @@ class Jarallax {
 
 
     delete self.$item.jarallax;
-  } // it will remove some image overlapping
-  // overlapping occur due to an image position fixed inside absolute position element
+  } // Fallback for removed function.
+  // Does nothing now.
+  // eslint-disable-next-line class-methods-use-this
 
 
-  clipContainer() {
-    // needed only when background in fixed position
-    if (this.image.position !== 'fixed') {
-      return;
-    }
-
-    const self = this;
-    const rect = self.image.$container.getBoundingClientRect();
-    const {
-      width,
-      height
-    } = rect;
-
-    if (!self.$clipStyles) {
-      self.$clipStyles = document.createElement('style');
-      self.$clipStyles.setAttribute('type', 'text/css');
-      self.$clipStyles.setAttribute('id', `jarallax-clip-${self.instanceID}`);
-      const head = document.head || document.getElementsByTagName('head')[0];
-      head.appendChild(self.$clipStyles);
-    } // clip is used for old browsers.
-    // clip-path for modern browsers (also fixes Safari v14 bug https://github.com/nk-o/jarallax/issues/181 ).
-
-
-    const styles = `#jarallax-container-${self.instanceID} {
-            clip: rect(0 ${width}px ${height}px 0);
-            clip: rect(0, ${width}px, ${height}px, 0);
-            -webkit-clip-path: polygon(0 0, 100% 0, 100% 100%, 0 100%);
-            clip-path: polygon(0 0, 100% 0, 100% 100%, 0 100%);
-        }`; // add clip styles inline (this method need for support IE8 and less browsers)
-
-    if (self.$clipStyles.styleSheet) {
-      self.$clipStyles.styleSheet.cssText = styles;
-    } else {
-      self.$clipStyles.innerHTML = styles;
-    }
-  }
+  clipContainer() {}
 
   coverImage() {
     const self = this;
@@ -747,13 +692,12 @@ class Jarallax {
 
   onResize() {
     this.coverImage();
-    this.clipContainer();
   }
 
 } // global definition
 
 
-const jarallax = function (items, options, ...args) {
+const jarallax$1 = function (items, options, ...args) {
   // check for dom element
   // thanks: http://stackoverflow.com/questions/384286/javascript-isdom-how-do-you-check-if-a-javascript-object-is-a-dom-object
   if (typeof HTMLElement === 'object' ? items instanceof HTMLElement : items && typeof items === 'object' && items !== null && items.nodeType === 1 && typeof items.nodeName === 'string') {
@@ -782,7 +726,7 @@ const jarallax = function (items, options, ...args) {
   return items;
 };
 
-jarallax.constructor = Jarallax;
+jarallax$1.constructor = Jarallax;
 
 /*!
  * Name    : Video Worker
@@ -1682,7 +1626,7 @@ class VideoWorker {
 
 }
 
-function jarallaxVideo(jarallax = global$2.jarallax) {
+function jarallaxVideo$1(jarallax = global$2.jarallax) {
   if (typeof jarallax === 'undefined') {
     return;
   }
@@ -1828,7 +1772,6 @@ function jarallaxVideo(jarallax = global$2.jarallax) {
         self.image.$item.style.display = 'block'; // set image width and height
 
         self.coverImage();
-        self.clipContainer();
         self.onScroll();
       }
     }
@@ -1891,7 +1834,6 @@ function jarallaxVideo(jarallax = global$2.jarallax) {
           self.image.width = self.video.videoWidth || 1280;
           self.image.height = self.video.videoHeight || 720;
           self.coverImage();
-          self.clipContainer();
           self.onScroll(); // hide image
 
           if (self.image.$default_item) {
@@ -1948,7 +1890,7 @@ function jarallaxVideo(jarallax = global$2.jarallax) {
 
 /* eslint no-case-declarations: "off" */
 
-function jarallaxElement(jarallax = global$2.jarallax) {
+function jarallaxElement$1(jarallax = global$2.jarallax) {
   // eslint-disable-next-line no-console
   console.warning("Jarallax Element extension is DEPRECATED, please, avoid using it. We recommend you look at something like `lax.js` library <https://github.com/alexfoxy/lax.js>. It is much more powerful and has a less code (in cases when you don't want to add parallax backgrounds).");
 
@@ -1958,7 +1900,7 @@ function jarallaxElement(jarallax = global$2.jarallax) {
 
   const Jarallax = jarallax.constructor; // redefine default methods
 
-  ['initImg', 'canInitParallax', 'init', 'destroy', 'clipContainer', 'coverImage', 'isVisible', 'onScroll', 'onResize'].forEach(key => {
+  ['initImg', 'canInitParallax', 'init', 'destroy', 'coverImage', 'isVisible', 'onScroll', 'onResize'].forEach(key => {
     const def = Jarallax.prototype[key];
 
     Jarallax.prototype[key] = function (...args) {
@@ -2027,7 +1969,6 @@ function jarallaxElement(jarallax = global$2.jarallax) {
 
         case 'initImg':
         case 'isVisible':
-        case 'clipContainer':
         case 'coverImage':
           return true;
         // no default
@@ -2038,19 +1979,15 @@ function jarallaxElement(jarallax = global$2.jarallax) {
   });
 }
 
-var core_esm = {
-  jarallax,
-
-  jarallaxVideo() {
-    return jarallaxVideo(jarallax);
-  },
-
-  // Deprecated.
-  jarallaxElement() {
-    return jarallaxElement(jarallax);
-  }
-
+const jarallax = jarallax$1;
+const jarallaxVideo = function jarallaxVideo() {
+  return jarallaxVideo$1(jarallax);
+};
+const jarallaxElement = function jarallaxElement() {
+  return jarallaxElement$1(jarallax);
 };
 
-module.exports = core_esm;
+exports.jarallax = jarallax;
+exports.jarallaxElement = jarallaxElement;
+exports.jarallaxVideo = jarallaxVideo;
 //# sourceMappingURL=jarallax.cjs.map

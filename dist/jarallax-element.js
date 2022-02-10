@@ -50,7 +50,7 @@
 
     const Jarallax = jarallax.constructor; // redefine default methods
 
-    ['initImg', 'canInitParallax', 'init', 'destroy', 'clipContainer', 'coverImage', 'isVisible', 'onScroll', 'onResize'].forEach(key => {
+    ['initImg', 'canInitParallax', 'init', 'destroy', 'coverImage', 'isVisible', 'onScroll', 'onResize'].forEach(key => {
       const def = Jarallax.prototype[key];
 
       Jarallax.prototype[key] = function (...args) {
@@ -119,7 +119,6 @@
 
           case 'initImg':
           case 'isVisible':
-          case 'clipContainer':
           case 'coverImage':
             return true;
           // no default
