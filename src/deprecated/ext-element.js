@@ -19,7 +19,6 @@ function jarallaxElement(jarallax = global.jarallax) {
     'canInitParallax',
     'init',
     'destroy',
-    'clipContainer',
     'coverImage',
     'isVisible',
     'onScroll',
@@ -87,7 +86,6 @@ function jarallaxElement(jarallax = global.jarallax) {
           break;
         case 'initImg':
         case 'isVisible':
-        case 'clipContainer':
         case 'coverImage':
           return true;
         // no default

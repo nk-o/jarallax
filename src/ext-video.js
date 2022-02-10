@@ -161,7 +161,6 @@ function jarallaxVideo(jarallax = global.jarallax) {
 
         // set image width and height
         self.coverImage();
-        self.clipContainer();
         self.onScroll();
       }
     }
@@ -226,7 +225,6 @@ function jarallaxVideo(jarallax = global.jarallax) {
           self.image.width = self.video.videoWidth || 1280;
           self.image.height = self.video.videoHeight || 720;
           self.coverImage();
-          self.clipContainer();
           self.onScroll();
 
           // hide image

@@ -385,6 +385,16 @@ class Jarallax {
       'z-index': self.options.zIndex,
     });
 
+    // it will remove some image overlapping
+    // overlapping occur due to an image position fixed inside absolute position element
+    // needed only when background in fixed position
+    if (this.image.position === 'fixed') {
+      self.css(self.image.$container, {
+        '-webkit-clip-path': 'polygon(0 0, 100% 0, 100% 100%, 0 100%)',
+        'clip-path': 'polygon(0 0, 100% 0, 100% 100%, 0 100%)',
+      });
+    }
+
     self.image.$container.setAttribute('id', `jarallax-container-${self.instanceID}`);
     self.$item.appendChild(self.image.$container);
 
@@ -528,9 +538,6 @@ class Jarallax {
     }
 
     // remove additional dom elements
-    if (self.$clipStyles) {
-      self.$clipStyles.parentNode.removeChild(self.$clipStyles);
-    }
     if (self.image.$container) {
       self.image.$container.parentNode.removeChild(self.image.$container);
     }
@@ -544,42 +551,10 @@ class Jarallax {
     delete self.$item.jarallax;
   }
 
-  // it will remove some image overlapping
-  // overlapping occur due to an image position fixed inside absolute position element
-  clipContainer() {
-    // needed only when background in fixed position
-    if (this.image.position !== 'fixed') {
-      return;
-    }
-
-    const self = this;
-    const rect = self.image.$container.getBoundingClientRect();
-    const { width, height } = rect;
-
-    if (!self.$clipStyles) {
-      self.$clipStyles = document.createElement('style');
-      self.$clipStyles.setAttribute('type', 'text/css');
-      self.$clipStyles.setAttribute('id', `jarallax-clip-${self.instanceID}`);
-      const head = document.head || document.getElementsByTagName('head')[0];
-      head.appendChild(self.$clipStyles);
-    }
-
-    // clip is used for old browsers.
-    // clip-path for modern browsers (also fixes Safari v14 bug https://github.com/nk-o/jarallax/issues/181 ).
-    const styles = `#jarallax-container-${self.instanceID} {
-            clip: rect(0 ${width}px ${height}px 0);
-            clip: rect(0, ${width}px, ${height}px, 0);
-            -webkit-clip-path: polygon(0 0, 100% 0, 100% 100%, 0 100%);
-            clip-path: polygon(0 0, 100% 0, 100% 100%, 0 100%);
-        }`;
-
-    // add clip styles inline (this method need for support IE8 and less browsers)
-    if (self.$clipStyles.styleSheet) {
-      self.$clipStyles.styleSheet.cssText = styles;
-    } else {
-      self.$clipStyles.innerHTML = styles;
-    }
-  }
+  // Fallback for removed function.
+  // Does nothing now.
+  // eslint-disable-next-line class-methods-use-this
+  clipContainer() {}
 
   coverImage() {
     const self = this;
@@ -752,7 +727,6 @@ class Jarallax {
 
   onResize() {
     this.coverImage();
-    this.clipContainer();
   }
 }
 
