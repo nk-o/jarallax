@@ -9,7 +9,7 @@
 })(this, (function () { 'use strict';
 
   function ready(callback) {
-    if (document.readyState === 'complete' || document.readyState === 'interactive') {
+    if ('complete' === document.readyState || 'interactive' === document.readyState) {
       // Already ready or interactive, execute callback
       callback();
     } else {
@@ -26,11 +26,11 @@
   /* eslint-disable no-restricted-globals */
   let win;
 
-  if (typeof window !== 'undefined') {
+  if ('undefined' !== typeof window) {
     win = window;
-  } else if (typeof global !== 'undefined') {
+  } else if ('undefined' !== typeof global) {
     win = global;
-  } else if (typeof self !== 'undefined') {
+  } else if ('undefined' !== typeof self) {
     win = self;
   } else {
     win = {};
@@ -38,13 +38,11 @@
 
   var global$1 = win;
 
-  /* eslint no-case-declarations: "off" */
-
   function jarallaxElement(jarallax = global$1.jarallax) {
     // eslint-disable-next-line no-console
     console.warning("Jarallax Element extension is DEPRECATED, please, avoid using it. We recommend you look at something like `lax.js` library <https://github.com/alexfoxy/lax.js>. It is much more powerful and has a less code (in cases when you don't want to add parallax backgrounds).");
 
-    if (typeof jarallax === 'undefined') {
+    if ('undefined' === typeof jarallax) {
       return;
     }
 
@@ -56,12 +54,12 @@
       Jarallax.prototype[key] = function (...args) {
         const self = this;
 
-        if (key === 'initImg' && self.$item.getAttribute('data-jarallax-element') !== null) {
+        if ('initImg' === key && null !== self.$item.getAttribute('data-jarallax-element')) {
           self.options.type = 'element';
           self.pureOptions.speed = self.$item.getAttribute('data-jarallax-element') || self.pureOptions.speed;
         }
 
-        if (self.options.type !== 'element') {
+        if ('element' !== self.options.type) {
           return def.apply(self, args);
         }
 
@@ -69,53 +67,59 @@
 
         switch (key) {
           case 'init':
-            const speedArr = self.pureOptions.speed.split(' ');
-            self.options.speed = self.pureOptions.speed || 0;
-            self.options.speedY = speedArr[0] ? parseFloat(speedArr[0]) : 0;
-            self.options.speedX = speedArr[1] ? parseFloat(speedArr[1]) : 0;
-            const thresholdArr = self.pureOptions.threshold.split(' ');
-            self.options.thresholdY = thresholdArr[0] ? parseFloat(thresholdArr[0]) : null;
-            self.options.thresholdX = thresholdArr[1] ? parseFloat(thresholdArr[1]) : null;
-            def.apply(self, args); // restore background image if available.
+            {
+              const speedArr = self.pureOptions.speed.split(' ');
+              self.options.speed = self.pureOptions.speed || 0;
+              self.options.speedY = speedArr[0] ? parseFloat(speedArr[0]) : 0;
+              self.options.speedX = speedArr[1] ? parseFloat(speedArr[1]) : 0;
+              const thresholdArr = self.pureOptions.threshold.split(' ');
+              self.options.thresholdY = thresholdArr[0] ? parseFloat(thresholdArr[0]) : null;
+              self.options.thresholdX = thresholdArr[1] ? parseFloat(thresholdArr[1]) : null;
+              def.apply(self, args); // restore background image if available.
 
-            const originalStylesTag = self.$item.getAttribute('data-jarallax-original-styles');
+              const originalStylesTag = self.$item.getAttribute('data-jarallax-original-styles');
 
-            if (originalStylesTag) {
-              self.$item.setAttribute('style', originalStylesTag);
+              if (originalStylesTag) {
+                self.$item.setAttribute('style', originalStylesTag);
+              }
+
+              return true;
             }
 
-            return true;
-
           case 'onResize':
-            const defTransform = self.css(self.$item, 'transform');
-            self.css(self.$item, {
-              transform: ''
-            });
-            const rect = self.$item.getBoundingClientRect();
-            self.itemData = {
-              width: rect.width,
-              height: rect.height,
-              y: rect.top + self.getWindowData().y,
-              x: rect.left
-            };
-            self.css(self.$item, {
-              transform: defTransform
-            });
-            break;
+            {
+              const defTransform = self.css(self.$item, 'transform');
+              self.css(self.$item, {
+                transform: ''
+              });
+              const rect = self.$item.getBoundingClientRect();
+              self.itemData = {
+                width: rect.width,
+                height: rect.height,
+                y: rect.top + self.getWindowData().y,
+                x: rect.left
+              };
+              self.css(self.$item, {
+                transform: defTransform
+              });
+              break;
+            }
 
           case 'onScroll':
-            const wnd = self.getWindowData();
-            const centerPercent = (wnd.y + wnd.height / 2 - self.itemData.y - self.itemData.height / 2) / (wnd.height / 2);
-            const moveY = centerPercent * self.options.speedY;
-            const moveX = centerPercent * self.options.speedX;
-            let my = moveY;
-            let mx = moveX;
-            if (self.options.thresholdY !== null && moveY > self.options.thresholdY) my = 0;
-            if (self.options.thresholdX !== null && moveX > self.options.thresholdX) mx = 0;
-            self.css(self.$item, {
-              transform: `translate3d(${mx}px,${my}px,0)`
-            });
-            break;
+            {
+              const wnd = self.getWindowData();
+              const centerPercent = (wnd.y + wnd.height / 2 - self.itemData.y - self.itemData.height / 2) / (wnd.height / 2);
+              const moveY = centerPercent * self.options.speedY;
+              const moveX = centerPercent * self.options.speedX;
+              let my = moveY;
+              let mx = moveX;
+              if (null !== self.options.thresholdY && moveY > self.options.thresholdY) my = 0;
+              if (null !== self.options.thresholdX && moveX > self.options.thresholdX) mx = 0;
+              self.css(self.$item, {
+                transform: `translate3d(${mx}px,${my}px,0)`
+              });
+              break;
+            }
 
           case 'initImg':
           case 'isVisible':
@@ -132,7 +136,7 @@
   jarallaxElement(); // data-jarallax-element initialization
 
   ready(() => {
-    if (typeof global$1.jarallax !== 'undefined') {
+    if ('undefined' !== typeof global$1.jarallax) {
       global$1.jarallax(document.querySelectorAll('[data-jarallax-element]'));
     }
   });
