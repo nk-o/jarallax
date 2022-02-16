@@ -2,11 +2,11 @@
 /* eslint-disable no-restricted-globals */
 let win;
 
-if (typeof window !== 'undefined') {
+if ('undefined' !== typeof window) {
   win = window;
-} else if (typeof global !== 'undefined') {
+} else if ('undefined' !== typeof global) {
   win = global;
-} else if (typeof self !== 'undefined') {
+} else if ('undefined' !== typeof self) {
   win = self;
 } else {
   win = {};

@@ -1,6 +1,5 @@
-
 {
-    "extends": [
-        "eslint-config-nk"
-    ]
+  "extends": [
+    "eslint-config-nk"
+  ]
 }

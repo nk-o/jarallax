@@ -6,7 +6,7 @@ jarallaxVideo();
 
 // data-jarallax-video initialization
 domReady(() => {
-  if (typeof global.jarallax !== 'undefined') {
+  if ('undefined' !== typeof global.jarallax) {
     global.jarallax(document.querySelectorAll('[data-jarallax-video]'));
   }
 });

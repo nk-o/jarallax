@@ -7,7 +7,7 @@ jarallaxElement();
 
 // data-jarallax-element initialization
 domReady(() => {
-  if (typeof global.jarallax !== 'undefined') {
+  if ('undefined' !== typeof global.jarallax) {
     global.jarallax(document.querySelectorAll('[data-jarallax-element]'));
   }
 });
