@@ -40,7 +40,7 @@
 
   function jarallaxElement(jarallax = global$1.jarallax) {
     // eslint-disable-next-line no-console
-    console.warning("Jarallax Element extension is DEPRECATED, please, avoid using it. We recommend you look at something like `lax.js` library <https://github.com/alexfoxy/lax.js>. It is much more powerful and has a less code (in cases when you don't want to add parallax backgrounds).");
+    console.warn("Jarallax Element extension is DEPRECATED, please, avoid using it. We recommend you look at something like `lax.js` library <https://github.com/alexfoxy/lax.js>. It is much more powerful and has a less code (in cases when you don't want to add parallax backgrounds).");
 
     if ('undefined' === typeof jarallax) {
       return;
@@ -56,7 +56,7 @@
 
         if ('initImg' === key && null !== self.$item.getAttribute('data-jarallax-element')) {
           self.options.type = 'element';
-          self.pureOptions.speed = self.$item.getAttribute('data-jarallax-element') || self.pureOptions.speed;
+          self.pureOptions.speed = self.$item.getAttribute('data-jarallax-element') || '100';
         }
 
         if ('element' !== self.options.type) {
@@ -68,7 +68,7 @@
         switch (key) {
           case 'init':
             {
-              const speedArr = self.pureOptions.speed.split(' ');
+              const speedArr = `${self.pureOptions.speed}`.split(' ');
               self.options.speed = self.pureOptions.speed || 0;
               self.options.speedY = speedArr[0] ? parseFloat(speedArr[0]) : 0;
               self.options.speedX = speedArr[1] ? parseFloat(speedArr[1]) : 0;
