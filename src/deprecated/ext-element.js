@@ -2,7 +2,7 @@ import global from '../utils/global';
 
 function jarallaxElement(jarallax = global.jarallax) {
   // eslint-disable-next-line no-console
-  console.warning(
+  console.warn(
     "Jarallax Element extension is DEPRECATED, please, avoid using it. We recommend you look at something like `lax.js` library <https://github.com/alexfoxy/lax.js>. It is much more powerful and has a less code (in cases when you don't want to add parallax backgrounds)."
   );
 
