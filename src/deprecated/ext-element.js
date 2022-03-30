@@ -40,7 +40,7 @@ function jarallaxElement(jarallax = global.jarallax) {
 
       switch (key) {
         case 'init': {
-          const speedArr = self.pureOptions.speed.split(' ');
+          const speedArr = `${self.pureOptions.speed}`.split(' ');
           self.options.speed = self.pureOptions.speed || 0;
           self.options.speedY = speedArr[0] ? parseFloat(speedArr[0]) : 0;
           self.options.speedX = speedArr[1] ? parseFloat(speedArr[1]) : 0;
