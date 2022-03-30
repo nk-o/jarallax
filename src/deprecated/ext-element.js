@@ -29,8 +29,7 @@ function jarallaxElement(jarallax = global.jarallax) {
 
       if ('initImg' === key && null !== self.$item.getAttribute('data-jarallax-element')) {
         self.options.type = 'element';
-        self.pureOptions.speed =
-          self.$item.getAttribute('data-jarallax-element') || self.pureOptions.speed;
+        self.pureOptions.speed = self.$item.getAttribute('data-jarallax-element') || '100';
       }
       if ('element' !== self.options.type) {
         return def.apply(self, args);
