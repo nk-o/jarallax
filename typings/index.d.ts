@@ -8,7 +8,7 @@
 /**
  * Scroll calculations used by onScroll event
  */
-interface JarallaxOnScrollCalculations {
+export interface JarallaxOnScrollCalculations {
   rect: object;
   beforeTop: number;
   beforeTopEnd: number;
@@ -23,7 +23,7 @@ interface JarallaxOnScrollCalculations {
 /**
  * Configurable options for Jarallax
  */
-interface JarallaxOptions {
+export interface JarallaxOptions {
   /**
    * scroll, scale, opacity, scroll-opacity, scale-opacity.
    */
@@ -151,7 +151,7 @@ interface JarallaxOptions {
  * @param {Element | Element[] | NodeListOf<Element> | JQuery<Element>} elements
  * @param {JarallaxOptions} userOptions
  */
-declare function jarallax(
+export function jarallax(
   elements: Element | Element[] | NodeListOf<Element> | JQuery<Element>,
   userOptions: JarallaxOptions
 ): void;
@@ -162,7 +162,7 @@ declare function jarallax(
  * @param {Element | Element[] | NodeListOf<Element> | JQuery<Element>} elements
  * @param {"destroy" | "onResize" | "onScroll"} methodName
  */
-declare function jarallax(
+export function jarallax(
   elements: Element | Element[] | NodeListOf<Element> | JQuery<Element>,
   methodName: 'destroy' | 'onResize' | 'onScroll'
 ): void;
@@ -174,12 +174,12 @@ declare function jarallax(
  * @param {"isVisible"} methodName
  * @returns {boolean}
  */
-declare function jarallax(
+export function jarallax(
   elements: Element | Element[] | NodeListOf<Element> | JQuery<Element>,
   methodName: 'isVisible'
 ): boolean;
 
-interface JQuery {
+export interface JQuery {
   /**
    * Init Jarallax with options
    *
