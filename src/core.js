@@ -332,7 +332,6 @@ class Jarallax {
       pointerEvents: 'none',
       transformStyle: 'preserve-3d',
       backfaceVisibility: 'hidden',
-      willChange: 'transform,opacity',
     };
 
     if (!self.options.keepImg) {
