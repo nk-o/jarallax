@@ -1,5 +1,5 @@
 /*!
- * Jarallax v2.0.3 (https://github.com/nk-o/jarallax)
+ * Jarallax v2.0.4 (https://github.com/nk-o/jarallax)
  * Copyright 2022 nK <https://nkdev.info>
  * Licensed under MIT (https://github.com/nk-o/jarallax/blob/master/LICENSE)
  */
@@ -353,8 +353,7 @@
       let imageStyles = {
         pointerEvents: 'none',
         transformStyle: 'preserve-3d',
-        backfaceVisibility: 'hidden',
-        willChange: 'transform,opacity'
+        backfaceVisibility: 'hidden'
       };
 
       if (!self.options.keepImg) {
