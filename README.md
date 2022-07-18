@@ -60,11 +60,11 @@ We provide a version of Jarallax built as ESM (jarallax.esm.js and jarallax.esm.
 </script>
 ```
 
-### ESM + [Skypack](https://www.skypack.dev/)
+#### ESM CDN
 
 ```html
 <script type="module">
-  import { jarallax, jarallaxVideo } from "https://cdn.skypack.dev/jarallax@2.0?min";
+  import { jarallax, jarallaxVideo } from "https://cdn.jsdelivr.net/npm/jarallax@2/+esm";
 
   // Optional video extension
   jarallaxVideo();
@@ -82,13 +82,13 @@ Jarallax may be also used in a traditional way by including script in HTML and u
 <script src="jarallax-video.min.js"></script>
 ```
 
-### UMD + [UNPKG](https://unpkg.com/)
+#### UMD CDN
 
 ```html
-<script src="https://unpkg.com/jarallax@2.0"></script>
+<script src="https://cdn.jsdelivr.net/npm/jarallax@2/dist/jarallax.min.js"></script>
 
 <!-- Optional video extension -->
-<script src="https://unpkg.com/jarallax@2.0/dist/jarallax-video.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/jarallax@2/dist/jarallax-video.min.js"></script>
 ```
 
 ### CJS (Bundlers like Webpack)
