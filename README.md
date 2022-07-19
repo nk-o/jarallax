@@ -1,23 +1,40 @@
-## Jarallax
+# Jarallax <!-- omit in toc -->
 
 ![jarallax.min.js](https://img.badgesize.io/nk-o/jarallax/master/dist/jarallax.min.js?compression=gzip&label=core%20gzip%20size) ![jarallax-video.min.js](https://img.badgesize.io/nk-o/jarallax/master/dist/jarallax-video.min.js?compression=gzip&label=video%20ext%20gzip%20size)
 
 Parallax scrolling for modern browsers. Supported &lt;img&gt; tags, background images, YouTube, Vimeo and Self-Hosted Videos.
 
-## [Online Demo](https://jarallax.nkdev.info/)
+## [Online Demo](https://jarallax.nkdev.info/) <!-- omit in toc -->
 
-## Table of contents
+## Table of Contents <!-- omit in toc -->
 
 - [WordPress Plugin](#wordpress-plugin)
 - [Quick Start](#quick-start)
 - [Import Jarallax](#import-jarallax)
+  - [ESM](#esm)
+  - [ESM CDN](#esm-cdn)
+  - [UMD](#umd)
+  - [UMD CDN](#umd-cdn)
+  - [CJS (Bundlers like Webpack)](#cjs-bundlers-like-webpack)
 - [Add styles](#add-styles)
 - [Prepare HTML](#prepare-html)
 - [Run Jarallax](#run-jarallax)
+  - [A. JavaScript way](#a-javascript-way)
+  - [B. Data attribute way](#b-data-attribute-way)
+  - [C. jQuery way](#c-jquery-way)
 - [Background Video Usage Examples](#background-video-usage-examples)
+  - [A. JavaScript way](#a-javascript-way-1)
+  - [B. Data attribute way](#b-data-attribute-way-1)
 - [Options](#options)
+  - [Disable on mobile devices](#disable-on-mobile-devices)
+  - [Additional options for video extension](#additional-options-for-video-extension)
 - [Events](#events)
+  - [Additional events for video extension](#additional-events-for-video-extension)
+  - [onScroll event](#onscroll-event)
 - [Methods](#methods)
+  - [Call methods example](#call-methods-example)
+    - [A. JavaScript way](#a-javascript-way-2)
+    - [B. jQuery way](#b-jquery-way)
 - [For Developers](#for-developers)
 - [Real Usage Examples](#real-usage-examples)
 - [Credits](#credits)
@@ -60,7 +77,7 @@ We provide a version of Jarallax built as ESM (jarallax.esm.js and jarallax.esm.
 </script>
 ```
 
-#### ESM CDN
+### ESM CDN
 
 ```html
 <script type="module">
@@ -82,7 +99,7 @@ Jarallax may be also used in a traditional way by including script in HTML and u
 <script src="jarallax-video.min.js"></script>
 ```
 
-#### UMD CDN
+### UMD CDN
 
 ```html
 <script src="https://cdn.jsdelivr.net/npm/jarallax@2/dist/jarallax.min.js"></script>
@@ -185,7 +202,7 @@ $('.jarallax').jarallax({
 });
 ```
 
-#### No conflict (only if you use jQuery)
+#### No conflict (only if you use jQuery) <!-- omit in toc -->
 
 Sometimes to prevent existing namespace collisions you may call `.noConflict` on the script to revert the value of.
 
@@ -372,21 +389,21 @@ $('.jarallax').jarallax('destroy');
 
 ## For Developers
 
-### Installation
+### Installation <!-- omit in toc -->
 
 * Run `npm install` in the command line
 
-### Building
+### Building <!-- omit in toc -->
 
 * `npm run dev` to run build and start local server with files watcher
 * `npm run build` to run build
 
-### Linting
+### Linting <!-- omit in toc -->
 
 * `npm run js-lint` to show eslint errors
 * `npm run js-lint-fix` to automatically fix some of the eslint errors
 
-### Test
+### Test <!-- omit in toc -->
 
 * `npm run test` to run unit tests
 
