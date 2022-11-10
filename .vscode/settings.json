@@ -9,5 +9,13 @@
   "[json]": {
     "editor.defaultFormatter": "esbenp.prettier-vscode"
   },
-  "editor.formatOnSave": true
+  "editor.formatOnSave": true,
+  "npm.exclude": [
+    "**/dist",
+    "**/dist/**",
+    "**/demo",
+    "**/demo/**",
+    "**/examples",
+    "**/examples/**"
+  ]
 }
