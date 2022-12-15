@@ -1,7 +1,6 @@
 {
   "name": "jarallax",
   "version": "2.0.4",
-  "version_video_ext": "2.0.4",
   "description": "Smooth parallax scrolling effect for background images, videos and inline elements. Code in pure JavaScript with NO dependencies + jQuery supported. Youtube, Vimeo and Local Videos parallax supported.",
   "license": "MIT",
   "homepage": "https://github.com/nk-o/jarallax",
@@ -17,7 +16,7 @@
     "typings"
   ],
   "scripts": {
-    "dev": "cross-env NODE_ENV=dev rollup --config --watch --sourcemap",
+    "dev": "cross-env NODE_ENV=dev rollup --config --sourcemap --watch",
     "build": "rollup --config --sourcemap",
     "js-lint": "eslint src/ tests/",
     "js-lint-fix": "eslint --fix src/ tests/",
@@ -39,26 +38,26 @@
     "video"
   ],
   "devDependencies": {
-    "@rollup/plugin-babel": "^5.3.1",
-    "@rollup/plugin-node-resolve": "^13.3.0",
-    "@rollup/plugin-replace": "^4.0.0",
+    "@rollup/plugin-babel": "^6.0.3",
+    "@rollup/plugin-node-resolve": "^15.0.1",
+    "@rollup/plugin-replace": "^5.0.1",
+    "@rollup/plugin-terser": "^0.1.0",
     "@types/jquery": "^3.5.14",
     "babel-plugin-annotate-pure-calls": "^0.4.0",
-    "browserslist-config-nk": "^1.0.0",
+    "browserslist-config-nk": "^1.1.1",
     "cross-env": "^7.0.3",
-    "eslint-config-nk": "^1.1.0",
-    "husky": "^8.0.1",
-    "jquery": "^3.6.0",
+    "eslint-config-nk": "^1.2.0",
+    "husky": "^8.0.2",
+    "jquery": "^3.6.2",
     "json-file": "^0.1.0",
-    "lint-staged": "^13.0.3",
+    "lint-staged": "^13.1.0",
     "micromatch": "^4.0.5",
-    "prettier-config-nk": "^1.1.0",
-    "rollup": "^2.77.0",
-    "rollup-plugin-browsersync": "^1.3.3",
+    "prettier-config-nk": "^1.1.1",
+    "rollup": "^3.7.4",
     "rollup-plugin-copy": "^3.4.0",
-    "rollup-plugin-terser": "^7.0.2"
+    "rollup-plugin-serve": "^2.0.2"
   },
   "dependencies": {
-    "video-worker": "^2.0.0"
+    "video-worker": "^2.1.0"
   }
 }

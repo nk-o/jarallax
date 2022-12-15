@@ -6,7 +6,7 @@ function jarallaxElement(jarallax = global.jarallax) {
     "Jarallax Element extension is DEPRECATED, please, avoid using it. We recommend you look at something like `lax.js` library <https://github.com/alexfoxy/lax.js>. It is much more powerful and has a less code (in cases when you don't want to add parallax backgrounds)."
   );
 
-  if ('undefined' === typeof jarallax) {
+  if (typeof jarallax === 'undefined') {
     return;
   }
 
@@ -27,11 +27,11 @@ function jarallaxElement(jarallax = global.jarallax) {
     Jarallax.prototype[key] = function (...args) {
       const self = this;
 
-      if ('initImg' === key && null !== self.$item.getAttribute('data-jarallax-element')) {
+      if (key === 'initImg' && self.$item.getAttribute('data-jarallax-element') !== null) {
         self.options.type = 'element';
         self.pureOptions.speed = self.$item.getAttribute('data-jarallax-element') || '100';
       }
-      if ('element' !== self.options.type) {
+      if (self.options.type !== 'element') {
         return def.apply(self, args);
       }
 
@@ -80,8 +80,8 @@ function jarallaxElement(jarallax = global.jarallax) {
           const moveX = centerPercent * self.options.speedX;
           let my = moveY;
           let mx = moveX;
-          if (null !== self.options.thresholdY && moveY > self.options.thresholdY) my = 0;
-          if (null !== self.options.thresholdX && moveX > self.options.thresholdX) mx = 0;
+          if (self.options.thresholdY !== null && moveY > self.options.thresholdY) my = 0;
+          if (self.options.thresholdX !== null && moveX > self.options.thresholdX) mx = 0;
           self.css(self.$item, { transform: `translate3d(${mx}px,${my}px,0)` });
           break;
         }

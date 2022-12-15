@@ -5,11 +5,11 @@ import jarallax from './core';
 const $ = global.jQuery;
 
 // jQuery support
-if ('undefined' !== typeof $) {
+if (typeof $ !== 'undefined') {
   const $Plugin = function (...args) {
     Array.prototype.unshift.call(args, this);
     const res = jarallax.apply(global, args);
-    return 'object' !== typeof res ? res : this;
+    return typeof res !== 'object' ? res : this;
   };
   $Plugin.constructor = jarallax.constructor;
 

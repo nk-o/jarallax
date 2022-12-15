@@ -1,13 +1,19 @@
-import path from 'path';
+/* eslint-disable import/no-extraneous-dependencies */
 
 import { babel } from '@rollup/plugin-babel';
 import replace from '@rollup/plugin-replace';
-import { terser } from 'rollup-plugin-terser';
+import terser from '@rollup/plugin-terser';
 import { nodeResolve } from '@rollup/plugin-node-resolve';
 import copy from 'rollup-plugin-copy';
-import browsersync from 'rollup-plugin-browsersync';
+import serve from 'rollup-plugin-serve';
 
-const { data } = require('json-file').read('./package.json');
+// TODO: Wait once this issue will be fixed before update the terser plugin https://github.com/rollup/plugins/issues/1371
+// TODO: Remove this hack once this issue will be resolved https://github.com/rollup/plugins/issues/1366
+import { fileURLToPath } from 'url';
+const __filename = fileURLToPath(import.meta.url);
+global['__filename'] = __filename;
+
+import data from './package.json' assert { type: 'json' };
 
 const year = new Date().getFullYear();
 
@@ -35,10 +41,10 @@ function getElementHeader() {
 `;
 }
 
-const pathCore = path.join(__dirname, 'src/core.esm.js');
-const pathCoreUmd = path.join(__dirname, 'src/core.umd.js');
-const pathExtVideoUmd = path.join(__dirname, 'src/ext-video.umd.js');
-const pathExtElementUmd = path.join(__dirname, 'src/deprecated/ext-element.umd.js');
+const pathCore = './src/core.esm.js';
+const pathCoreUmd = './src/core.umd.js';
+const pathExtVideoUmd = './src/ext-video.umd.js';
+const pathExtElementUmd = './src/deprecated/ext-element.umd.js';
 
 const bundles = [
   // Core.
@@ -46,7 +52,7 @@ const bundles = [
     input: pathCore,
     output: {
       banner: getHeader(),
-      file: path.join(__dirname, 'dist/jarallax.esm.js'),
+      file: './dist/jarallax.esm.js',
       format: 'esm',
     },
   },
@@ -54,8 +60,9 @@ const bundles = [
     input: pathCore,
     output: {
       banner: getHeader(),
-      file: path.join(__dirname, 'dist/jarallax.esm.min.js'),
+      file: './dist/jarallax.esm.min.js',
       format: 'esm',
+      compact: true,
     },
   },
   {
@@ -63,7 +70,7 @@ const bundles = [
     output: {
       banner: getHeader(),
       name: 'jarallax',
-      file: path.join(__dirname, 'dist/jarallax.js'),
+      file: './dist/jarallax.js',
       format: 'umd',
     },
   },
@@ -72,15 +79,16 @@ const bundles = [
     output: {
       banner: getHeader(),
       name: 'jarallax',
-      file: path.join(__dirname, 'dist/jarallax.min.js'),
+      file: './dist/jarallax.min.js',
       format: 'umd',
+      compact: true,
     },
   },
   {
     input: pathCore,
     output: {
       banner: getHeader(),
-      file: path.join(__dirname, 'dist/jarallax.cjs'),
+      file: './dist/jarallax.cjs',
       format: 'cjs',
     },
   },
@@ -91,7 +99,7 @@ const bundles = [
     output: {
       banner: getVideoHeader(),
       name: 'jarallaxVideo',
-      file: path.join(__dirname, 'dist/jarallax-video.js'),
+      file: './dist/jarallax-video.js',
       format: 'umd',
     },
   },
@@ -100,8 +108,9 @@ const bundles = [
     output: {
       banner: getVideoHeader(),
       name: 'jarallaxVideo',
-      file: path.join(__dirname, 'dist/jarallax-video.min.js'),
+      file: './dist/jarallax-video.min.js',
       format: 'umd',
+      compact: true,
     },
   },
 
@@ -111,7 +120,7 @@ const bundles = [
     output: {
       banner: getElementHeader(),
       name: 'jarallaxElement',
-      file: path.join(__dirname, 'dist/jarallax-element.js'),
+      file: './dist/jarallax-element.js',
       format: 'umd',
     },
   },
@@ -120,8 +129,9 @@ const bundles = [
     output: {
       banner: getElementHeader(),
       name: 'jarallaxElement',
-      file: path.join(__dirname, 'dist/jarallax-element.min.js'),
+      file: './dist/jarallax-element.min.js',
       format: 'umd',
+      compact: true,
     },
   },
 ];
@@ -154,17 +164,17 @@ const configs = bundles.map(({ input: inputPath, output }) => ({
 // Copy CSS file to dist.
 configs[0].plugins.unshift(
   copy({
-    targets: [{ src: 'src/core.css', dest: 'dist', rename: () => 'jarallax.css' }],
+    targets: [{ src: './src/core.css', dest: 'dist', rename: () => 'jarallax.css' }],
   })
 );
 
 // Dev server.
 if (isDev()) {
   configs[configs.length - 1].plugins.push(
-    browsersync({
-      server: {
-        baseDir: ['demo', './'],
-      },
+    serve({
+      open: true,
+      contentBase: ['demo', './'],
+      port: 3002,
     })
   );
 }

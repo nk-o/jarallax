@@ -3,7 +3,7 @@ import VideoWorker from 'video-worker';
 import global from './utils/global';
 
 function jarallaxVideo(jarallax = global.jarallax) {
-  if ('undefined' === typeof jarallax) {
+  if (typeof jarallax === 'undefined') {
     return;
   }
 
@@ -46,12 +46,12 @@ function jarallaxVideo(jarallax = global.jarallax) {
         self.$video = video;
 
         // add Poster attribute to self-hosted video
-        if ('local' === self.video.type) {
+        if (self.video.type === 'local') {
           if (self.image.src) {
             self.$video.setAttribute('poster', self.image.src);
           } else if (
             self.image.$item &&
-            'IMG' === self.image.$item.tagName &&
+            self.image.$item.tagName === 'IMG' &&
             self.image.$item.src
           ) {
             self.$video.setAttribute('poster', self.image.$item.src);
@@ -79,7 +79,7 @@ function jarallaxVideo(jarallax = global.jarallax) {
     const imageData = defCoverImage.apply(self);
     const node = self.image.$item ? self.image.$item.nodeName : false;
 
-    if (imageData && self.video && node && ('IFRAME' === node || 'VIDEO' === node)) {
+    if (imageData && self.video && node && (node === 'IFRAME' || node === 'VIDEO')) {
       let h = imageData.image.height;
       let w = (h * self.image.width) / self.image.height;
       let ml = (imageData.container.width - w) / 2;
@@ -93,7 +93,7 @@ function jarallaxVideo(jarallax = global.jarallax) {
       }
 
       // add video height over than need to hide controls
-      if ('IFRAME' === node) {
+      if (node === 'IFRAME') {
         h += 400;
         mt -= 200;
       }
@@ -255,7 +255,7 @@ function jarallaxVideo(jarallax = global.jarallax) {
           self.image.src =
             'data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7';
 
-          if ('local' !== video.type) {
+          if (video.type !== 'local') {
             video.getImageURL((url) => {
               self.image.bgImage = `url("${url}")`;
               self.init();
