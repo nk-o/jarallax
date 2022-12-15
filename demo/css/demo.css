@@ -8,6 +8,7 @@
     max-width: 100%;
     height: auto;
     z-index: -100;
+    opacity: 0;
 }
 
 
@@ -24,6 +25,8 @@ body {
     margin: 0;
     line-height: 1.5;
     -webkit-font-smoothing: antialiased;
+    color: #f3f4f6;
+    background-color: #000;
 }
 h1 {
     font-size: 50px;
@@ -41,8 +44,8 @@ p ~ div {
 }
 
 small {
-    font-size: 75%;
-    color: #606060;
+    font-size: 80%;
+    opacity: 0.6;
 }
 a, a:visited, a:hover, a:focus {
     color: inherit;
@@ -72,17 +75,47 @@ a:hover, a:focus {
 }
 
 /* hero block */
+.hero h1 {
+    font-size: 80px;
+    max-width: 1200px;
+    margin: 0 auto;
+    line-height: 1;
+    letter-spacing: -0.01em;
+    font-weight: 800;
+}
+.hero.jarallax > .jarallax-img,
+.hero.jarallax > .jarallax-container {
+    filter: blur(5px);
+}
+.hero-name {
+    font-size: 20px;
+    font-weight: 300;
+    letter-spacing: 1.1em;
+    margin-bottom: 20px;
+    text-transform: uppercase;
+}
 .demo-table {
     display: table;
     width: 100%;
-    height: 600px;
-    background-color: rgba(39, 35, 51, 0.6);
-    color: #fff;
+    height: 700px;
 }
 .demo-table-cell {
     display: table-cell;
     text-align: center;
     vertical-align: middle;
+}
+.text-center {
+    text-align: center;
+}
+
+.jarallax,
+.jarallax-keep-img {
+    background: linear-gradient(300deg, rgb(17, 18, 50), rgb(56, 24, 24)) !important;
+}
+.jarallax > .jarallax-img,
+.jarallax > .jarallax-container,
+.jarallax-keep-img > .jarallax-container {
+    opacity: 0.3;
 }
 
 /* gap */
@@ -119,7 +152,7 @@ a:hover, a:focus {
 
 /* Demo Content */
 .demo-content {
-    background-color: #f7f7f7;
+    background-color: #0b0b0b;
     padding: 80px;
 }
 
@@ -130,26 +163,6 @@ a:hover, a:focus {
 }
 .demo-float-right {
     float: right;
-}
-
-
-/* Carousel */
-.demo-carousel {
-    background-color: rgb(39, 35, 51);
-}
-.demo-carousel .demo-carousel-item {
-    width: 33.33%;
-    min-height: 300px;
-}
-@media screen and (max-width: 780px) {
-    .demo-carousel .demo-carousel-item {
-        width: 50%;
-    }
-}
-@media screen and (max-width: 400px) {
-    .demo-carousel .demo-carousel-item {
-        width: 100%;
-    }
 }
 
 
