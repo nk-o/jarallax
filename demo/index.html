@@ -16,16 +16,12 @@
     <script src="../dist/jarallax.js"></script>
     <script src="../dist/jarallax-video.js"></script>
 
-    <!-- Global site tag (gtag.js) - Google Analytics -->
-    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-48958097-8"></script>
+    <!-- Plausible -->
+    <script defer async data-domain="jarallax.nkdev.info" src="https://plausible.io/js/plausible.outbound-links.js"></script>
     <script>
-      window.dataLayer = window.dataLayer || [];
-      function gtag() {
-        dataLayer.push(arguments);
+      window.plausible = window.plausible || function() {
+        (window.plausible.q = window.plausible.q || []).push(arguments)
       }
-      gtag("js", new Date());
-
-      gtag("config", "UA-48958097-8");
     </script>
   </head>
   <body>
