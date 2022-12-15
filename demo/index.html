@@ -4,11 +4,17 @@
     <meta charset="utf-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>Jarallax | JavaScript parallax scrolling with NO dependencies</title>
+    <title>Jarallax - The parallax scrolling effect for JavaScript</title>
     <meta
       name="description"
-      content="Pure JavaScript parallax scrolling effect. jQuery supported. Youtube and Vimeo parallax supported."
+      content="Jarallax is a high-performance smooth parallax scrolling effect for JavaScript. Easily enable parallax on images, Youtube, Vimeo, and mp4 videos."
     />
+    <link rel="icon" href="./icons/icon-32x32.png" sizes="32x32"/>
+    <link rel="icon" href="./icons/icon-192x192.png" sizes="192x192"/>
+    <link rel="apple-touch-icon" href="./icons/icon-180x180.png"/>
+    <meta name="msapplication-TileImage" content="./icons/icon-270x270.png"/>
+
+    <!-- CSS -->
     <link href="./css/demo.css" rel="stylesheet" />
 
     <!-- Jarallax -->
@@ -26,12 +32,10 @@
   </head>
   <body>
     <div class="jarallax hero">
-      <img class="jarallax-img" src="images/image1.jpg" alt="" />
-      <div class="demo-table">
-        <div class="demo-table-cell">
-          <div class="hero-name">Jarallax</div>
-          <h1>The easiest advanced Parallax and Video backgrounds</h1>
-        </div>
+      <img class="jarallax-img" src="images/image-1.jpg" alt="" />
+      <div class="hero-content">
+        <div class="hero-name">Jarallax</div>
+        <h1>The easiest advanced Parallax and Video backgrounds</h1>
       </div>
     </div>
     <div class="demo-gap">
@@ -39,36 +43,20 @@
         <p>
           Jarallax is a high-performance smooth parallax scrolling effect for JavaScript. Easily enable parallax on images, Youtube, Vimeo, and mp4 videos.
         </p>
-        <br />
-        <a
-          class="github-button"
-          href="https://github.com/nk-o/jarallax"
-          data-size="large"
-          data-icon="octicon-star"
-          data-count-href="/nk-o/jarallax/stargazers"
-          data-show-count="true"
-          data-count-aria-label="# stargazers on GitHub"
-          aria-label="Star nk-o/jarallax on GitHub"
-        >Stars</a>
-        <a
-          class="github-button"
-          href="https://github.com/nk-o/jarallax/"
-          data-size="large"
-          aria-label="Download nk-o/jarallax on GitHub"
-        >Get Started</a>
+        <div class="buttons">
+          <a class="button" href="https://github.com/nk-o/jarallax/blob/master/README.md" target="_blank">Get Started</a>
+          <a class="button button-outline" href="https://github.com/nk-o/jarallax/" target="_blank">GitHub</a>
+        </div>
       </div>
     </div>
     <div class="jarallax" data-speed="0">
-      <img class="jarallax-img" src="images/image5.jpg" alt="" loading="lazy" />
+      <img class="jarallax-img" src="images/image-2.jpg" alt="" loading="lazy" />
     </div>
     <div class="demo-gap">
       <h2>Different parallax speed</h2>
     </div>
     <div class="jarallax" data-speed="-0.3">
-      <img class="jarallax-img" src="images/image3.jpg" alt="" loading="lazy" />
-    </div>
-    <div class="jarallax" data-speed="1.4">
-      <img class="jarallax-img" src="images/image4.jpg" alt="" loading="lazy" />
+      <img class="jarallax-img" src="images/image-3.jpg" alt="" loading="lazy" />
     </div>
 
     <div class="demo-content demo-gap">
@@ -83,8 +71,8 @@
           wherein.
         </p>
 
-        <div class="jarallax-keep-img demo-float-left" data-speed="0.5">
-          <img class="jarallax-img" src="images/image3.jpg" alt="" width="400" loading="lazy" />
+        <div class="jarallax-keep-img demo-float-right" data-speed="0.8">
+          <img class="jarallax-img" src="images/image-small.jpg" alt="" width="400" loading="lazy" />
         </div>
 
         <p>
@@ -99,19 +87,6 @@
         </p>
 
         <p>
-          Fifth green, they're moved creeping years, man. Fifth, be To there were over together
-          sixth fish heaven sea. Spirit may is unto second that seasons without. Darkness whose day
-          fruit rule firmament Whales. Fourth replenish dominion. After subdue creature in sea
-          morning. Green moved, rule female be, over night saying life there first forth that, may
-          stars above divided moving shall. Together deep meat image subdue you created be two.
-          Thing their you're great gathering male day divide. Moveth said deep.
-        </p>
-
-        <div class="jarallax-keep-img demo-float-right" data-speed="0.8">
-          <img class="jarallax-img" src="images/image5.jpg" alt="" width="400" loading="lazy" />
-        </div>
-
-        <p>
           Winged upon one were you given. Bearing lights deep meat a bring fish female. Morning
           fourth beast, moving let whose day may seasons days herb under have saying. Upon isn't
           abundantly beast, give dry moved, together midst land whales. Very bearing you're be god
@@ -122,26 +97,16 @@
       </div>
     </div>
 
-    <!--<div class="demo-gap">-->
-    <!--<h2>Scale and Opacity</h2>-->
-    <!--</div>-->
-    <!--<div class="jarallax" data-speed="0.2" data-type="scale-opacity" style="background-image: url(images/image3.jpg);"></div>-->
-    <!--<div class="jarallax" data-type="scroll-opacity" style="background-image: url(images/image4.jpg);"></div>-->
-    <!--<div class="jarallax" data-type="opacity" style="background-image: url(images/image5.jpg);"></div>-->
-    <!--<div class="jarallax" data-speed="-0.2" data-type="scale" style="background-image: url(images/image6.jpg);"></div>-->
-
     <div class="demo-gap">
-      <h2>Youtube Vimeo and &lt;video> parallax</h2>
+      <h2>Self-Hosted Videos / Youtube / Vimeo</h2>
     </div>
-    <div class="jarallax" data-speed="1" data-video-src="https://youtu.be/mru3Q5m4lkY"></div>
     <div
       class="jarallax"
-      data-speed="0"
-      data-video-src="mp4:video/local-video.mp4,webm:video/local-video.webm,ogv:video/local-video.ogv"
+      data-speed="0.7"
+      data-video-src="mp4:video/video.mp4"
     >
-      <img class="jarallax-img" src="video/local-video.png" alt="" loading="lazy" />
+      <img class="jarallax-img" src="video/video.png" alt="" loading="lazy" />
     </div>
-    <div class="jarallax" data-speed="1.2" data-video-src="https://vimeo.com/235212527"></div>
 
     <div class="demo-gap">
       <p>Jarallax &copy; 2022 nK</p>
@@ -150,7 +115,6 @@
       </small>
     </div>
 
-    <script async defer id="github-bjs" src="https://buttons.github.io/buttons.js"></script>
     <script type="text/javascript">
       /* init Jarallax */
       jarallax(document.querySelectorAll(".jarallax"));
