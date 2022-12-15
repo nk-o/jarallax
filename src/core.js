@@ -1,128 +1,13 @@
-import domReady from './utils/ready';
+/* eslint-disable class-methods-use-this */
+import defaults from './defaults';
 import global from './utils/global';
+import css from './utils/css';
+import extend from './utils/extend';
+import getParents from './utils/getParents';
+import getWindowSize from './utils/getWindowSize';
+import { addObserver, removeObserver } from './utils/observer';
 
 const { navigator } = global;
-
-const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(
-  navigator.userAgent
-);
-
-let $deviceHelper;
-
-/**
- * The most popular mobile browsers changes height after page scroll and this generates image jumping.
- * We can fix it using this workaround with vh units.
- */
-function getDeviceHeight() {
-  if (!$deviceHelper && document.body) {
-    $deviceHelper = document.createElement('div');
-    $deviceHelper.style.cssText =
-      'position: fixed; top: -9999px; left: 0; height: 100vh; width: 0;';
-    document.body.appendChild($deviceHelper);
-  }
-
-  return (
-    ($deviceHelper ? $deviceHelper.clientHeight : 0) ||
-    global.innerHeight ||
-    document.documentElement.clientHeight
-  );
-}
-
-// Window height data
-let wndH;
-function updateWndVars() {
-  if (isMobile) {
-    wndH = getDeviceHeight();
-  } else {
-    wndH = global.innerHeight || document.documentElement.clientHeight;
-  }
-}
-updateWndVars();
-global.addEventListener('resize', updateWndVars);
-global.addEventListener('orientationchange', updateWndVars);
-global.addEventListener('load', updateWndVars);
-domReady(() => {
-  updateWndVars({
-    type: 'dom-loaded',
-  });
-});
-
-// list with all jarallax instances
-// need to render all in one scroll/resize event
-const jarallaxList = [];
-
-// get all parents of the element.
-function getParents(elem) {
-  const parents = [];
-
-  while (elem.parentElement !== null) {
-    elem = elem.parentElement;
-
-    if (elem.nodeType === 1) {
-      parents.push(elem);
-    }
-  }
-
-  return parents;
-}
-
-function updateParallax() {
-  if (!jarallaxList.length) {
-    return;
-  }
-
-  jarallaxList.forEach((data, k) => {
-    const { instance, oldData } = data;
-
-    if (!instance.isVisible()) {
-      return;
-    }
-
-    const clientRect = instance.$item.getBoundingClientRect();
-
-    const newData = {
-      width: clientRect.width,
-      height: clientRect.height,
-      top: clientRect.top,
-      bottom: clientRect.bottom,
-      wndW: global.innerWidth,
-      wndH,
-    };
-
-    const isResized =
-      !oldData ||
-      oldData.wndW !== newData.wndW ||
-      oldData.wndH !== newData.wndH ||
-      oldData.width !== newData.width ||
-      oldData.height !== newData.height;
-    const isScrolled =
-      isResized || !oldData || oldData.top !== newData.top || oldData.bottom !== newData.bottom;
-
-    jarallaxList[k].oldData = newData;
-
-    if (isResized) {
-      instance.onResize();
-    }
-    if (isScrolled) {
-      instance.onScroll();
-    }
-  });
-
-  global.requestAnimationFrame(updateParallax);
-}
-
-const visibilityObserver = new global.IntersectionObserver((entries) => {
-  entries.forEach((entry) => {
-    entry.target.jarallax.isElementInViewport = entry.isIntersecting;
-  });
-});
-
-function addVisibilityObserver($element) {
-  visibilityObserver.observe($element);
-}
-function removeVisibilityObserver($element) {
-  visibilityObserver.unobserve($element);
-}
 
 let instanceID = 0;
 
@@ -136,43 +21,15 @@ class Jarallax {
 
     self.$item = item;
 
-    self.defaults = {
-      type: 'scroll', // type of parallax: scroll, scale, opacity, scale-opacity, scroll-opacity
-      speed: 0.5, // supported value from -1 to 2
-      imgSrc: null,
-      imgElement: '.jarallax-img',
-      imgSize: 'cover',
-      imgPosition: '50% 50%',
-      imgRepeat: 'no-repeat', // supported only for background, not for <img> tag
-      keepImg: false, // keep <img> tag in it's default place
-      elementInViewport: null,
-      zIndex: -100,
-      disableParallax: false,
-      disableVideo: false,
-
-      // video
-      videoSrc: null,
-      videoStartTime: 0,
-      videoEndTime: 0,
-      videoVolume: 0,
-      videoLoop: true,
-      videoPlayOnlyVisible: true,
-      videoLazyLoading: true,
-
-      // events
-      onScroll: null, // function(calculations) {}
-      onInit: null, // function() {}
-      onDestroy: null, // function() {}
-      onCoverImage: null, // function() {}
-    };
+    self.defaults = { ...defaults };
 
     // prepare data-options
     const dataOptions = self.$item.dataset || {};
     const pureDataOptions = {};
     Object.keys(dataOptions).forEach((key) => {
-      const loweCaseOption = key.substr(0, 1).toLowerCase() + key.substr(1);
-      if (loweCaseOption && typeof self.defaults[loweCaseOption] !== 'undefined') {
-        pureDataOptions[loweCaseOption] = dataOptions[key];
+      const lowerCaseOption = key.substr(0, 1).toLowerCase() + key.substr(1);
+      if (lowerCaseOption && typeof self.defaults[lowerCaseOption] !== 'undefined') {
+        pureDataOptions[lowerCaseOption] = dataOptions[key];
       }
     });
 
@@ -247,42 +104,21 @@ class Jarallax {
     }
   }
 
-  // add styles to element
-  // eslint-disable-next-line class-methods-use-this
   css(el, styles) {
-    if (typeof styles === 'string') {
-      return global.getComputedStyle(el).getPropertyValue(styles);
-    }
-
-    Object.keys(styles).forEach((key) => {
-      el.style[key] = styles[key];
-    });
-    return el;
+    return css(el, styles);
   }
 
-  // Extend like jQuery.extend
-  // eslint-disable-next-line class-methods-use-this
   extend(out, ...args) {
-    out = out || {};
-
-    Object.keys(args).forEach((i) => {
-      if (!args[i]) {
-        return;
-      }
-      Object.keys(args[i]).forEach((key) => {
-        out[key] = args[i][key];
-      });
-    });
-
-    return out;
+    return extend(out, ...args);
   }
 
   // get window size and scroll position. Useful for extensions
-  // eslint-disable-next-line class-methods-use-this
   getWindowData() {
+    const { width, height } = getWindowSize();
+
     return {
-      width: global.innerWidth || document.documentElement.clientWidth,
-      height: wndH,
+      width,
+      height,
       y: document.documentElement.scrollTop,
     };
   }
@@ -477,39 +313,13 @@ class Jarallax {
       });
     }
 
-    addVisibilityObserver(self.options.elementInViewport || self.$item);
-
-    self.addToParallaxList();
-  }
-
-  // add to parallax instances list
-  addToParallaxList() {
-    jarallaxList.push({
-      instance: this,
-    });
-
-    if (jarallaxList.length === 1) {
-      global.requestAnimationFrame(updateParallax);
-    }
-  }
-
-  // remove from parallax instances list
-  removeFromParallaxList() {
-    const self = this;
-
-    jarallaxList.forEach((data, key) => {
-      if (data.instance.instanceID === self.instanceID) {
-        jarallaxList.splice(key, 1);
-      }
-    });
+    addObserver(self);
   }
 
   destroy() {
     const self = this;
 
-    self.removeFromParallaxList();
-
-    removeVisibilityObserver(self.$item);
+    removeObserver(self);
 
     // return styles on container as before jarallax init
     const originalStylesTag = self.$item.getAttribute('data-jarallax-original-styles');
@@ -555,6 +365,7 @@ class Jarallax {
   coverImage() {
     const self = this;
 
+    const { height: wndH } = getWindowSize();
     const rect = self.image.$container.getBoundingClientRect();
     const contH = rect.height;
     const { speed } = self.options;
@@ -628,15 +439,16 @@ class Jarallax {
   onScroll(force) {
     const self = this;
 
+    // stop calculations if item is not in viewport
+    if (!force && !self.isVisible()) {
+      return;
+    }
+
+    const { height: wndH } = getWindowSize();
     const rect = self.$item.getBoundingClientRect();
     const contT = rect.top;
     const contH = rect.height;
     const styles = {};
-
-    // stop calculations if item is not in viewport
-    if (!force && !self.isElementInViewport) {
-      return;
-    }
 
     // calculate parallax helping variables
     const beforeTop = Math.max(0, contT);
