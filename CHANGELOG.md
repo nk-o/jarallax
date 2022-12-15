@@ -1,5 +1,18 @@
 # Changelog
 
+## [2.1.0] - Dec 16, 2022
+
+- added IntersectionObserver to detect element in viewport (increased performance)
+- added support for Youtube Shorts
+- added support for Vimeo high quality thumbnails
+- added `containerClass` and `videoClass` options
+- updated TS typings
+- updated demo site
+- fixed Vimeo unmute when initial volume is 0
+- fixed Vimeo volume value (used range from 0 to 1)
+- split some core script functions to separate files
+- removed unused methods `clipContainer`, `addToParallaxList`, `removeFromParallaxList`
+
 ## [2.0.4] - Jul 17, 2022
 
 - removed `will-change` usage
