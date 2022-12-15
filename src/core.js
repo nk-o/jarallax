@@ -74,6 +74,10 @@ function updateParallax() {
   jarallaxList.forEach((data, k) => {
     const { instance, oldData } = data;
 
+    if (!instance.isVisible()) {
+      return;
+    }
+
     const clientRect = instance.$item.getBoundingClientRect();
 
     const newData = {
@@ -105,6 +109,19 @@ function updateParallax() {
   });
 
   global.requestAnimationFrame(updateParallax);
+}
+
+const visibilityObserver = new global.IntersectionObserver((entries) => {
+  entries.forEach((entry) => {
+    entry.target.jarallax.isElementInViewport = entry.isIntersecting;
+  });
+});
+
+function addVisibilityObserver($element) {
+  visibilityObserver.observe($element);
+}
+function removeVisibilityObserver($element) {
+  visibilityObserver.unobserve($element);
 }
 
 let instanceID = 0;
@@ -460,6 +477,8 @@ class Jarallax {
       });
     }
 
+    addVisibilityObserver(self.options.elementInViewport || self.$item);
+
     self.addToParallaxList();
   }
 
@@ -489,6 +508,8 @@ class Jarallax {
     const self = this;
 
     self.removeFromParallaxList();
+
+    removeVisibilityObserver(self.$item);
 
     // return styles on container as before jarallax init
     const originalStylesTag = self.$item.getAttribute('data-jarallax-original-styles');
@@ -617,19 +638,8 @@ class Jarallax {
     const contH = rect.height;
     const styles = {};
 
-    // check if in viewport
-    let viewportRect = rect;
-    if (self.options.elementInViewport) {
-      viewportRect = self.options.elementInViewport.getBoundingClientRect();
-    }
-    self.isElementInViewport =
-      viewportRect.bottom >= 0 &&
-      viewportRect.right >= 0 &&
-      viewportRect.top <= wndH &&
-      viewportRect.left <= global.innerWidth;
-
     // stop calculations if item is not in viewport
-    if (force ? false : !self.isElementInViewport) {
+    if (!force && !self.isElementInViewport) {
       return;
     }
 
