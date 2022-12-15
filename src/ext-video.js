@@ -58,6 +58,14 @@ function jarallaxVideo(jarallax = global.jarallax) {
           }
         }
 
+        // add classname to video element
+        if (self.options.videoClass) {
+          self.$video.setAttribute(
+            'class',
+            `${self.options.videoClass} ${self.options.videoClass}-${self.video.type}`
+          );
+        }
+
         // insert video tag
         self.image.$container.appendChild(video);
 

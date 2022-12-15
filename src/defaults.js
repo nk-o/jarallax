@@ -2,6 +2,7 @@ export default {
   // Base parallax options.
   type: 'scroll',
   speed: 0.5,
+  containerClass: 'jarallax-container',
   imgSrc: null,
   imgElement: '.jarallax-img',
   imgSize: 'cover',
@@ -19,6 +20,7 @@ export default {
   onCoverImage: null,
 
   // Video options.
+  videoClass: 'jarallax-video',
   videoSrc: null,
   videoStartTime: 0,
   videoEndTime: 0,

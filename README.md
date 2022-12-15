@@ -258,6 +258,7 @@ Name | Type | Default | Description
 :--- | :--- | :------ | :----------
 type | string | `scroll` | scroll, scale, opacity, scroll-opacity, scale-opacity.
 speed | float | `0.5` | Parallax effect speed. Provide numbers from -1.0 to 2.0.
+containerClass | string | `jarallax-container` | Container block class attribute.
 imgSrc | path | `null` | Image url. By default used image from background.
 imgElement | dom / selector | `.jarallax-img` | Image tag that will be used as background.
 imgSize | string | `cover` | Image size. If you use `<img>` tag for background, you should add `object-fit` values, else use `background-size` values.
@@ -301,6 +302,7 @@ Required `jarallax/jarallax-video.js` file.
 
 Name | Type | Default | Description
 :--- | :--- | :------ | :----------
+videoClass | string | `jarallax-video` | Video frame class attribute. Will also contain the type of the video, for example `jarallax-video jarallax-video-youtube`
 videoSrc | string | `null` | You can use Youtube, Vimeo or Self-Hosted videos. Also you can use data attribute `data-jarallax-video`.
 videoStartTime | float | `0` | Start time in seconds when video will be started (this value will be applied also after loop).
 videoEndTime | float | `0` | End time in seconds when video will be ended.

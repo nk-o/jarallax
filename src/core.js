@@ -230,7 +230,14 @@ class Jarallax {
       });
     }
 
+    // Add container unique ID.
     self.image.$container.setAttribute('id', `jarallax-container-${self.instanceID}`);
+
+    // Add container class.
+    if (self.options.containerClass) {
+      self.image.$container.setAttribute('class', self.options.containerClass);
+    }
+
     self.$item.appendChild(self.image.$container);
 
     // use img tag
