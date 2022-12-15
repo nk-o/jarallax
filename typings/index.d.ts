@@ -35,6 +35,11 @@ export interface JarallaxOptions {
   speed?: number;
 
   /**
+   * Container class attribute.
+   */
+  containerClass?: string;
+
+  /**
    * Image url. By default used image from background.
    */
   imgSrc?: string;
@@ -84,44 +89,6 @@ export interface JarallaxOptions {
   disableParallax?: RegExp;
 
   /**
-   * Disable video load on specific user agents (using regular expression) or with function return value.
-   * The image will be set on the background.
-   */
-  disableVideo?: RegExp;
-
-  /**
-   * Experimental! Automatically recalculate parallax size and position when the size of parallax block changed
-   * (dynamic content inside). Uses ResizeObserver, which has a small browsers compatible.
-   * Recommended using with polyfill https://github.com/que-etc/resize-observer-polyfill.
-   */
-  automaticResize?: boolean;
-
-  /**
-   * You can use Youtube, Vimeo or local videos. Also you can use data attribute data-jarallax-video.
-   */
-  videoSrc?: string;
-
-  /**
-   * Start time in seconds when video will be started (this value will be applied also after loop).
-   */
-  videoStartTime?: number;
-
-  /**
-   * End time in seconds when video will be ended.
-   */
-  videoEndTime?: number;
-
-  /**
-   * Video volume from 0 to 100.
-   */
-  videoVolumne?: number;
-
-  /**
-   * Play video only when it is visible on the screen.
-   */
-  videoPlayOnlyVisible?: boolean;
-
-  /**
    * Called when parallax working. Use first argument with calculations.
    * More info https://github.com/nk-o/jarallax#onscroll-event.
    *
@@ -143,6 +110,64 @@ export interface JarallaxOptions {
    * Called after cover image.
    */
   onCoverImage?: () => void;
+
+  // --- Video Extension ---
+
+  /**
+   * Video element class attribute.
+   */
+  videoClass?: string;
+
+  /**
+   * You can use Youtube, Vimeo or local videos. Also you can use data attribute data-jarallax-video.
+   */
+  videoSrc?: string;
+
+  /**
+   * Start time in seconds when video will be started (this value will be applied also after loop).
+   */
+  videoStartTime?: number;
+
+  /**
+   * End time in seconds when video will be ended.
+   */
+  videoEndTime?: number;
+
+  /**
+   * Video volume from 0 to 100.
+   */
+  videoVolume?: number;
+
+  /**
+   * Loop video to play infinitely.
+   */
+  videoLoop?: boolean;
+
+  /**
+   * Play video only when it is visible on the screen.
+   */
+  videoPlayOnlyVisible?: boolean;
+
+  /**
+   * Preload videos only when it is visible on the screen.
+   */
+  videoLazyLoading?: boolean;
+
+  /**
+   * Disable video load on specific user agents (using regular expression) or with function return value.
+   * The image will be set on the background.
+   */
+  disableVideo?: RegExp;
+
+  /**
+   * Called right after video is inserted in the parallax block. Video can be accessed by `this.$video`
+   */
+  onVideoInsert?: () => void;
+
+  /**
+   * Called after VideoWorker script initialized. Available parameter with videoWorkerObject.
+   */
+  onVideoWorkerInit?: () => void;
 }
 
 /**
