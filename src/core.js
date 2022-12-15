@@ -552,11 +552,6 @@ class Jarallax {
     delete self.$item.jarallax;
   }
 
-  // Fallback for removed function.
-  // Does nothing now.
-  // eslint-disable-next-line class-methods-use-this
-  clipContainer() {}
-
   coverImage() {
     const self = this;
 
