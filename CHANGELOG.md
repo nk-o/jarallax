@@ -1,6 +1,6 @@
 # Changelog
 
-## [2.1.2] - Dec 17, 2022
+## [2.1.3] - Dec 17, 2022
 
 - updated VideoWorker
 - fixed wrong mute option provided to the VideoWorker

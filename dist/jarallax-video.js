@@ -1,5 +1,5 @@
 /*!
- * Video Extension for Jarallax v2.1.2 (https://github.com/nk-o/jarallax)
+ * Video Extension for Jarallax v2.1.3 (https://github.com/nk-o/jarallax)
  * Copyright 2022 nK <https://nkdev.info>
  * Licensed under MIT (https://github.com/nk-o/jarallax/blob/master/LICENSE)
  */
@@ -11,7 +11,7 @@
 })(this, (function () { 'use strict';
 
   /*!
-   * Video Worker v2.1.4 (https://github.com/nk-o/video-worker)
+   * Video Worker v2.1.5 (https://github.com/nk-o/video-worker)
    * Copyright 2022 nK <https://nkdev.info>
    * Licensed under MIT (https://github.com/nk-o/video-worker/blob/master/LICENSE)
    */
@@ -663,6 +663,7 @@
         if (self.type === 'local') {
           if (!self.$video) {
             self.$video = document.createElement('video');
+            self.player = self.$video;
 
             // show controls
             if (self.options.showControls) {
@@ -700,7 +701,6 @@
               addSourceToLocal(self.$video, self.videoID[key], `video/${key}`);
             });
           }
-          self.player = self.player || self.$video;
           let locStarted;
           self.player.addEventListener('playing', e => {
             if (!locStarted) {
