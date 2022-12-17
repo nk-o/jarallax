@@ -58,6 +58,6 @@
     "rollup-plugin-serve": "^2.0.2"
   },
   "dependencies": {
-    "video-worker": "^2.1.3"
+    "video-worker": "^2.1.4"
   }
 }
