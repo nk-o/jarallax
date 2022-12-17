@@ -152,7 +152,7 @@ function jarallaxVideo(jarallax = global.jarallax) {
       accessibilityHidden: true,
       startTime: self.options.videoStartTime || 0,
       endTime: self.options.videoEndTime || 0,
-      mute: !!self.options.videoVolume,
+      mute: !self.options.videoVolume,
       volume: self.options.videoVolume || 0,
     });
 
