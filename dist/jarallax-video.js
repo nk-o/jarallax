@@ -1,5 +1,5 @@
 /*!
- * Video Extension for Jarallax v2.1.1 (https://github.com/nk-o/jarallax)
+ * Video Extension for Jarallax v2.1.2 (https://github.com/nk-o/jarallax)
  * Copyright 2022 nK <https://nkdev.info>
  * Licensed under MIT (https://github.com/nk-o/jarallax/blob/master/LICENSE)
  */
@@ -11,7 +11,7 @@
 })(this, (function () { 'use strict';
 
   /*!
-   * Video Worker v2.1.3 (https://github.com/nk-o/video-worker)
+   * Video Worker v2.1.4 (https://github.com/nk-o/video-worker)
    * Copyright 2022 nK <https://nkdev.info>
    * Licensed under MIT (https://github.com/nk-o/video-worker/blob/master/LICENSE)
    */
@@ -669,11 +669,14 @@
               self.$video.controls = true;
             }
 
-            // mute
-            if (self.options.mute) {
-              self.$video.muted = true;
-            } else {
+            // set volume
+            if (typeof self.options.volume === 'number') {
               self.setVolume(self.options.volume);
+            }
+
+            // mute (it is required to mute after the volume set)
+            if (self.options.mute) {
+              self.mute();
             }
 
             // loop
@@ -999,7 +1002,7 @@
         accessibilityHidden: true,
         startTime: self.options.videoStartTime || 0,
         endTime: self.options.videoEndTime || 0,
-        mute: !!self.options.videoVolume,
+        mute: !self.options.videoVolume,
         volume: self.options.videoVolume || 0
       });
 
