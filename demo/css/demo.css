@@ -77,6 +77,12 @@ a:hover, a:focus {
     }
 }
 
+
+/* Lighter background */
+.lighter-bg {
+    background-color: #0f0f11;
+}
+
 /* hero block */
 .hero {
     display: flex;
@@ -95,8 +101,8 @@ a:hover, a:focus {
     letter-spacing: -0.01em;
     font-weight: 800;
 }
-.hero.jarallax > .jarallax-img,
-.hero.jarallax > .jarallax-container {
+.hero.jarallax > .jarallax-img img,
+.hero.jarallax > .jarallax-container img {
     filter: blur(3px);
 }
 .hero-name {
@@ -108,6 +114,10 @@ a:hover, a:focus {
     margin-bottom: 20px;
     text-transform: uppercase;
 }
+.hero + .demo-gap {
+    min-height: 230px;
+}
+
 .text-center {
     text-align: center;
 }
@@ -124,6 +134,8 @@ a:hover, a:focus {
     flex-wrap: wrap;
     justify-content: center;
     gap: 10px;
+}
+* + .buttons {
     margin-top: 20px;
 }
 a.button {
@@ -131,6 +143,7 @@ a.button {
     text-decoration: none;
     font-size: 16px;
     font-weight: 500;
+    text-align: center;
     padding: 12px;
     border-radius: 4px;
     min-width: 200px;
@@ -171,7 +184,6 @@ a.button-outline:focus {
 
 /* Demo Content */
 .demo-content {
-    background-color: #0b0b0b;
     padding: 80px;
 }
 
@@ -182,6 +194,12 @@ a.button-outline:focus {
 }
 .demo-float-right {
     float: right;
+}
+
+
+/* Footer */
+.footer {
+    text-align: center;
 }
 
 
