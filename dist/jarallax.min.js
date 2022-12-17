@@ -1,5 +1,5 @@
 /*!
- * Jarallax v2.1.0 (https://github.com/nk-o/jarallax)
+ * Jarallax v2.1.1 (https://github.com/nk-o/jarallax)
  * Copyright 2022 nK <https://nkdev.info>
  * Licensed under MIT (https://github.com/nk-o/jarallax/blob/master/LICENSE)
  */

@@ -1,9 +1,9 @@
 /*!
- * Jarallax v2.1.0 (https://github.com/nk-o/jarallax)
+ * Jarallax v2.1.1 (https://github.com/nk-o/jarallax)
  * Copyright 2022 nK <https://nkdev.info>
  * Licensed under MIT (https://github.com/nk-o/jarallax/blob/master/LICENSE)
  */
-var defaults = {
+var defaults$1 = {
   // Base parallax options.
   type: 'scroll',
   speed: 0.5,
@@ -77,7 +77,7 @@ function css(el, styles) {
  *
  * @returns {Object}
  */
-function extend(out, ...args) {
+function extend$1(out, ...args) {
   out = out || {};
   Object.keys(args).forEach(i => {
     if (!args[i]) {
@@ -252,7 +252,7 @@ class Jarallax {
     instanceID += 1;
     self.$item = item;
     self.defaults = {
-      ...defaults
+      ...defaults$1
     };
 
     // prepare data-options
@@ -331,7 +331,7 @@ class Jarallax {
     return css(el, styles);
   }
   extend(out, ...args) {
-    return extend(out, ...args);
+    return extend$1(out, ...args);
   }
 
   // get window size and scroll position. Useful for extensions
@@ -746,7 +746,7 @@ const jarallax$1 = function (items, options, ...args) {
 jarallax$1.constructor = Jarallax;
 
 /*!
- * Video Worker v2.1.2 (https://github.com/nk-o/video-worker)
+ * Video Worker v2.1.3 (https://github.com/nk-o/video-worker)
  * Copyright 2022 nK <https://nkdev.info>
  * Licensed under MIT (https://github.com/nk-o/video-worker/blob/master/LICENSE)
  */
@@ -794,6 +794,38 @@ Deferred.prototype = {
     this.failCallbacks.push(callback);
   }
 };
+var defaults = {
+  autoplay: false,
+  loop: false,
+  mute: false,
+  volume: 100,
+  showControls: true,
+  accessibilityHidden: false,
+  // start / end video time in seconds
+  startTime: 0,
+  endTime: 0
+};
+
+/**
+ * Extend like jQuery.extend
+ *
+ * @param {Object} out - output object.
+ * @param {...any} args - additional objects to extend.
+ *
+ * @returns {Object}
+ */
+function extend(out, ...args) {
+  out = out || {};
+  Object.keys(args).forEach(i => {
+    if (!args[i]) {
+      return;
+    }
+    Object.keys(args[i]).forEach(key => {
+      out[key] = args[i][key];
+    });
+  });
+  return out;
+}
 let ID = 0;
 let YoutubeAPIadded = 0;
 let VimeoAPIadded = 0;
@@ -806,24 +838,9 @@ class VideoWorker {
     const self = this;
     self.url = url;
     self.options_default = {
-      autoplay: false,
-      loop: false,
-      mute: false,
-      volume: 100,
-      showControls: true,
-      accessibilityHidden: false,
-      // start / end video time in seconds
-      startTime: 0,
-      endTime: 0
+      ...defaults
     };
-    self.options = self.extend({}, self.options_default, options);
-
-    // Fix wrong option name.
-    // Thanks to https://github.com/nk-o/video-worker/issues/13.
-    if (typeof self.options.showContols !== 'undefined') {
-      self.options.showControls = self.options.showContols;
-      delete self.options.showContols;
-    }
+    self.options = extend({}, self.options_default, options);
 
     // check URL
     self.videoID = self.parseURL(url);
@@ -835,21 +852,6 @@ class VideoWorker {
       self.loadAPI();
       self.init();
     }
-  }
-
-  // Extend like jQuery.extend
-  // eslint-disable-next-line class-methods-use-this
-  extend(...args) {
-    const out = args[0] || {};
-    Object.keys(args).forEach(i => {
-      if (!args[i]) {
-        return;
-      }
-      Object.keys(args[i]).forEach(key => {
-        out[key] = args[i][key];
-      });
-    });
-    return out;
   }
   parseURL(url) {
     // parse youtube ID
@@ -1025,7 +1027,7 @@ class VideoWorker {
   }
   setVolume(volume = false) {
     const self = this;
-    if (!self.player || !volume) {
+    if (!self.player || typeof volume !== 'number') {
       return;
     }
     if (self.type === 'youtube' && self.player.setVolume) {
@@ -1178,7 +1180,7 @@ class VideoWorker {
             // mute
             if (self.options.mute) {
               e.target.mute();
-            } else if (self.options.volume) {
+            } else if (typeof self.options.volume === 'number') {
               e.target.setVolume(self.options.volume);
             }
 
@@ -1279,18 +1281,16 @@ class VideoWorker {
           transparent: 0,
           autoplay: self.options.autoplay ? 1 : 0,
           loop: self.options.loop ? 1 : 0,
-          muted: self.options.mute ? 1 : 0
+          muted: self.options.mute || self.options.volume === 0 ? 1 : 0
         };
-        if (self.options.volume) {
-          self.playerOptions.volume = self.options.volume / 100;
-        }
 
         // hide controls
         if (!self.options.showControls) {
-          self.playerOptions.badge = 0;
-          self.playerOptions.byline = 0;
-          self.playerOptions.portrait = 0;
-          self.playerOptions.title = 0;
+          self.playerOptions.controls = 0;
+        }
+
+        // enable background option
+        if (!self.options.showControls && self.options.loop && self.options.autoplay) {
           self.playerOptions.background = 1;
         }
         if (!self.$video) {
@@ -1321,6 +1321,11 @@ class VideoWorker {
           document.body.appendChild(hiddenDiv);
         }
         self.player = self.player || new global$1.Vimeo.Player(self.$video, self.playerOptions);
+
+        // Since Vimeo removed the `volume` parameter, we have to set it manually.
+        if (!self.options.mute && typeof self.options.volume === 'number') {
+          self.setVolume(self.options.volume);
+        }
 
         // set current time for autoplay
         if (self.options.startTime && self.options.autoplay) {
@@ -1373,6 +1378,9 @@ class VideoWorker {
           self.fire('ready', e);
         });
         self.player.on('volumechange', e => {
+          self.getVolume(volume => {
+            self.options.volume = volume;
+          });
           self.fire('volumechange', e);
         });
         self.player.on('error', e => {
@@ -1399,8 +1407,8 @@ class VideoWorker {
           // mute
           if (self.options.mute) {
             self.$video.muted = true;
-          } else if (self.$video.volume) {
-            self.$video.volume = self.options.volume / 100;
+          } else {
+            self.setVolume(self.options.volume);
           }
 
           // loop

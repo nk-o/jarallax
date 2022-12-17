@@ -1,5 +1,9 @@
 # Changelog
 
+## [2.1.1] - Dec 17, 2022
+
+- updated VideoWorker
+
 ## [2.1.0] - Dec 16, 2022
 
 - added IntersectionObserver to detect element in viewport (increased performance)
