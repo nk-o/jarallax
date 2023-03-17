@@ -1,6 +1,6 @@
 /*!
  * Jarallax v2.1.3 (https://github.com/nk-o/jarallax)
- * Copyright 2022 nK <https://nkdev.info>
+ * Copyright 2023 nK <https://nkdev.info>
  * Licensed under MIT (https://github.com/nk-o/jarallax/blob/master/LICENSE)
  */
 var defaults$1 = {
