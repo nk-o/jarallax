@@ -1,5 +1,10 @@
 # Changelog
 
+## [2.1.4] - Aug 29, 2023
+
+- added correct styles to support picture tag in jarallax.css
+- added minified styles jarallax.min.css
+
 ## [2.1.3] - Dec 17, 2022
 
 - updated VideoWorker
