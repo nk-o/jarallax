@@ -2,7 +2,8 @@
   position: relative;
   z-index: 0;
 }
-.jarallax > .jarallax-img {
+.jarallax > .jarallax-img,
+picture.jarallax-img img {
   position: absolute;
   object-fit: cover;
   top: 0;
