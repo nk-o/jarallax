@@ -16,7 +16,6 @@ Parallax scrolling for modern browsers. Supported &lt;img&gt; tags, background i
   - [UMD](#umd)
   - [UMD CDN](#umd-cdn)
   - [CJS (Bundlers like Webpack)](#cjs-bundlers-like-webpack)
-- [Add styles](#add-styles)
 - [Prepare HTML](#prepare-html)
 - [Run Jarallax](#run-jarallax)
   - [A. JavaScript way](#a-javascript-way)
@@ -69,6 +68,10 @@ Use one of the following examples to import jarallax.
 We provide a version of Jarallax built as ESM (jarallax.esm.js and jarallax.esm.min.js) which allows you to use Jarallax as a module in your browser, if your [targeted browsers support it](https://caniuse.com/es6-module).
 
 ```html
+<!-- Jarallax CSS -->
+<link href="jarallax.min.css" rel="stylesheet">
+
+<!-- Jarallax JS -->
 <script type="module">
   import { jarallax, jarallaxVideo } from "jarallax.esm.min.js";
 
@@ -80,6 +83,10 @@ We provide a version of Jarallax built as ESM (jarallax.esm.js and jarallax.esm.
 ### ESM CDN
 
 ```html
+<!-- Jarallax CSS -->
+<link href="https://cdn.jsdelivr.net/npm/jarallax@2/dist/jarallax.min.css" rel="stylesheet">
+
+<!-- Jarallax JS -->
 <script type="module">
   import { jarallax, jarallaxVideo } from "https://cdn.jsdelivr.net/npm/jarallax@2/+esm";
 
@@ -93,18 +100,26 @@ We provide a version of Jarallax built as ESM (jarallax.esm.js and jarallax.esm.
 Jarallax may be also used in a traditional way by including script in HTML and using library by accessing `window.jarallax`.
 
 ```html
+<!-- Jarallax CSS -->
+<link href="jarallax.min.css" rel="stylesheet">
+
+<!-- Jarallax JS -->
 <script src="jarallax.min.js"></script>
 
-<!-- Optional video extension -->
+<!-- Jarallax JS: Optional video extension -->
 <script src="jarallax-video.min.js"></script>
 ```
 
 ### UMD CDN
 
 ```html
+<!-- Jarallax CSS -->
+<link href="https://cdn.jsdelivr.net/npm/jarallax@2/dist/jarallax.min.css" rel="stylesheet">
+
+<!-- Jarallax JS -->
 <script src="https://cdn.jsdelivr.net/npm/jarallax@2/dist/jarallax.min.js"></script>
 
-<!-- Optional video extension -->
+<!-- Jarallax JS: Optional video extension -->
 <script src="https://cdn.jsdelivr.net/npm/jarallax@2/dist/jarallax-video.min.js"></script>
 ```
 
@@ -120,32 +135,11 @@ Import Jarallax by adding this line to your app's entry point (usually `index.js
 
 ```javascript
 import { jarallax, jarallaxVideo } from "jarallax";
+import 'jarallax/dist/jarallax.min.css';
 
 // Optional video extension
 jarallaxVideo();
 ```
-
-## Add styles
-
-These styles required to set proper background image position before Jarallax script initialized:
-
-```css
-.jarallax {
-  position: relative;
-  z-index: 0;
-}
-.jarallax > .jarallax-img {
-  position: absolute;
-  object-fit: cover;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  z-index: -1;
-}
-```
-
-You can include it from `/dist/jarallax.css`.
 
 ## Prepare HTML
 

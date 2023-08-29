@@ -6,6 +6,7 @@ import terser from '@rollup/plugin-terser';
 import { nodeResolve } from '@rollup/plugin-node-resolve';
 import copy from 'rollup-plugin-copy';
 import serve from 'rollup-plugin-serve';
+import CleanCSS from 'clean-css';
 
 // TODO: Wait once this issue will be fixed before update the terser plugin https://github.com/rollup/plugins/issues/1371
 // TODO: Remove this hack once this issue will be resolved https://github.com/rollup/plugins/issues/1366
@@ -165,6 +166,19 @@ const configs = bundles.map(({ input: inputPath, output }) => ({
 configs[0].plugins.unshift(
   copy({
     targets: [{ src: './src/core.css', dest: 'dist', rename: () => 'jarallax.css' }],
+  })
+);
+
+configs[0].plugins.unshift(
+  copy({
+    targets: [
+      {
+        src: './src/core.css',
+        dest: 'dist',
+        rename: () => 'jarallax.min.css',
+        transform: (contents) => new CleanCSS().minify(contents).styles,
+      },
+    ],
   })
 );
 

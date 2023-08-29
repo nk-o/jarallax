@@ -45,6 +45,7 @@
     "@types/jquery": "^3.5.16",
     "babel-plugin-annotate-pure-calls": "^0.4.0",
     "browserslist-config-nk": "^1.1.1",
+    "clean-css": "^5.3.2",
     "cross-env": "^7.0.3",
     "eslint-config-nk": "^1.2.0",
     "husky": "^8.0.3",

@@ -1,7 +1,7 @@
 import React, { useRef, useEffect } from 'react';
 
 import { jarallax, jarallaxVideo } from 'jarallax';
-import 'jarallax/dist/jarallax.css';
+import 'jarallax/dist/jarallax.min.css';
 
 // Optional video extension
 jarallaxVideo();
