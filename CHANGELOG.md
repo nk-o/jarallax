@@ -1,5 +1,11 @@
 # Changelog
 
+## [2.2.0] - Jan 27, 2024
+
+- updated video worker:
+  - added support for private Vimeo videos hash in URL
+  - fixed `play` method play when `endTime` reached
+
 ## [2.1.4] - Aug 29, 2023
 
 - added correct styles to support picture tag in jarallax.css

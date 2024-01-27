@@ -118,7 +118,6 @@
             return true;
           // no default
         }
-
         return def.apply(self, args);
       };
     });
