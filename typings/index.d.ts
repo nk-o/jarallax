@@ -182,6 +182,13 @@ export function jarallax(
 ): void;
 
 /**
+ * Invocation of jarallaxVideo
+ *
+ * @param {typeof jarallax} jarallaxInstance
+ */
+export function jarallaxVideo(jarallaxInstance?: typeof jarallax): void
+
+/**
  * Void callable methods
  *
  * @param {Element | Element[] | NodeListOf<Element> | JQuery<Element>} elements
