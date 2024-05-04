@@ -261,7 +261,7 @@ imgRepeat | string | `no-repeat` | Image repeat. Supported only `background-posi
 keepImg | boolean | `false` | Keep `<img>` tag in it's default place after Jarallax inited.
 elementInViewport | dom | `null` | Use custom DOM / jQuery element to check if parallax block in viewport. More info here - [Issue 13](https://github.com/nk-o/jarallax/issues/13).
 zIndex | number | `-100` | z-index of parallax container.
-disableParallax | RegExp / function | - | Disable parallax on specific user agents (using regular expression) or with function return value. The image will be set on the background.
+disableParallax | boolean / RegExp / function | - | Disable parallax on specific user agents (using regular expression) or with function return value. The image will be set on the background.
 
 ### Disable on mobile devices
 
@@ -302,7 +302,7 @@ videoEndTime | float | `0` | End time in seconds when video will be ended.
 videoLoop | boolean | `true` | Loop video to play infinitely.
 videoPlayOnlyVisible | boolean | `true` | Play video only when it is visible on the screen.
 videoLazyLoading | boolean | `true` | Preload videos only when it is visible on the screen.
-disableVideo | RegExp / function | - | Disable video load on specific user agents (using regular expression) or with function return value. The image will be set on the background.
+disableVideo | boolean / RegExp / function | - | Disable video load on specific user agents (using regular expression) or with function return value. The image will be set on the background.
 
 ## Events
 
