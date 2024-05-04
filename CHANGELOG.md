@@ -1,5 +1,10 @@
 # Changelog
 
+## [2.2.1] - May 4, 2024
+
+- added support for boolean in `disableParallax` and `disableVideo` options
+- fixed `jarallaxVideo` support in typings (#224)
+
 ## [2.2.0] - Jan 27, 2024
 
 - updated video worker:

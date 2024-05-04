@@ -1,5 +1,5 @@
 /*!
- * Jarallax v2.2.0 (https://github.com/nk-o/jarallax)
+ * Jarallax v2.2.1 (https://github.com/nk-o/jarallax)
  * Copyright 2024 nK <https://nkdev.info>
  * Licensed under MIT (https://github.com/nk-o/jarallax/blob/master/LICENSE)
  */
@@ -288,7 +288,9 @@ class Jarallax {
       self.options.disableParallax = () => disableParallaxRegexp.test(navigator.userAgent);
     }
     if (typeof self.options.disableParallax !== 'function') {
-      self.options.disableParallax = () => false;
+      // Support for `true` option value.
+      const disableParallaxDefault = self.options.disableParallax;
+      self.options.disableParallax = () => disableParallaxDefault === true;
     }
 
     // prepare disableVideo callback
@@ -300,7 +302,9 @@ class Jarallax {
       self.options.disableVideo = () => disableVideoRegexp.test(navigator.userAgent);
     }
     if (typeof self.options.disableVideo !== 'function') {
-      self.options.disableVideo = () => false;
+      // Support for `true` option value.
+      const disableVideoDefault = self.options.disableVideo;
+      self.options.disableVideo = () => disableVideoDefault === true;
     }
 
     // custom element to check if parallax in viewport
