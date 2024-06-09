@@ -1,0 +1,46 @@
+body {
+  font-size: 20px;
+  margin: 0;
+  -webkit-font-smoothing: antialiased;
+}
+
+section {
+  height: 60vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+}
+
+.jarallax {
+  height: 80vh;
+}
+
+.img-style {
+  position: relative;
+  height: 500px;
+  display: flex;
+  align-items: center;
+}
+
+.eg-text {
+  text-align: center;
+  margin-bottom: 100px;
+  margin-top: 100px;
+}
+
+hr {
+  height: 80vh;
+  border: none;
+}
+
+.card {
+  height: 180px;
+  width: 200px;
+  margin-left:80%;
+  background-color: whitesmoke;
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
