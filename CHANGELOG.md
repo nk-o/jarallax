@@ -1,5 +1,9 @@
 # Changelog
 
+## [3.0.1] - Jun 9, 2026
+
+- updated `video-worker` and dev dependencies
+
 ## [3.0.0] - Mar 17, 2026
 
 - updated package metadata and TypeScript declarations while keeping existing public import paths available

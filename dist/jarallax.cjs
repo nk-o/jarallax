@@ -1,5 +1,5 @@
 /*!
- * Jarallax v3.0.0 (https://github.com/nk-o/jarallax)
+ * Jarallax v3.0.1 (https://github.com/nk-o/jarallax)
  * Copyright 2026 nK <https://nkdev.info>
  * Licensed under MIT (https://github.com/nk-o/jarallax/blob/master/LICENSE)
  */
@@ -687,7 +687,7 @@ function jarallaxElement$1(jarallax = global$2.jarallax) {
 }
 
 /*!
- * Video Worker v3.0.0 (https://github.com/nk-o/video-worker)
+ * Video Worker v3.0.1 (https://github.com/nk-o/video-worker)
  * Copyright 2026 nK <https://nkdev.info>
  * Licensed under MIT (https://github.com/nk-o/video-worker/blob/master/LICENSE)
  */
@@ -1243,11 +1243,11 @@ class VideoWorkerVimeo extends VideoWorkerBase {
       width *= global$1.devicePixelRatio;
     }
     width = Math.min(width, 1920);
-    let request = new XMLHttpRequest();
+    const request = new XMLHttpRequest();
     this.imageRequest = request;
     request.open("GET", `https://vimeo.com/api/oembed.json?url=${this.url}&width=${width}`, true);
     request.onreadystatechange = () => {
-      if (!request || request.readyState !== 4) {
+      if (request.readyState !== 4) {
         return;
       }
       if (request.status >= 200 && request.status < 400) {
@@ -1260,7 +1260,6 @@ class VideoWorkerVimeo extends VideoWorkerBase {
       this.imageRequest = void 0;
     };
     request.send();
-    request = null;
   }
   getVideo(callback) {
     if (this.destroyed) {
