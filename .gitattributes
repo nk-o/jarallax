@@ -10,3 +10,7 @@
 *.svg   text eol=lf
 *.txt   text eol=lf
 *.yml   text eol=lf
+
+# Generated build output. Hidden in pull request diffs and excluded from the
+# language statistics — rebuild it with `npm run build`, never edit by hand.
+dist/** -diff linguist-generated=true
