@@ -117,4 +117,24 @@ describe('jarallax video DOM integration', () => {
       expect(inserted.getAttribute('poster')).toContain('https://via.placeholder.com/100x50');
     }
   });
+
+  // https://github.com/nk-o/jarallax/issues/227
+  it.each([
+    ['0', true],
+    ['30', false],
+  ])('mutes based on the numeric value of data-video-volume="%s"', async (attr, expectedMute) => {
+    const { default: jarallax } = await import('../src/core.ts');
+    const { default: jarallaxVideo } = await import('../src/ext-video.ts');
+    const block = createJarallaxBlock({ mode: 'img' });
+    block.setAttribute('data-video-src', 'https://youtu.be/mru3Q5m4lkY');
+    block.setAttribute('data-video-volume', attr);
+
+    jarallaxVideo(jarallax);
+    jarallax(block);
+
+    const [worker] = videoWorkerState.instances;
+
+    expect(worker.options.mute).toBe(expectedMute);
+    expect(worker.options.volume).toBe(Number(attr));
+  });
 });
