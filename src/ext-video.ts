@@ -155,7 +155,8 @@ function jarallaxVideo(jarallax: JarallaxStatic | undefined = global.jarallax): 
       accessibilityHidden: true,
       startTime: Number(this.options.videoStartTime || 0),
       endTime: Number(this.options.videoEndTime || 0),
-      mute: !this.options.videoVolume,
+      // `data-video-volume` reaches us as a string, and "0" is truthy. Compare the number.
+      mute: !Number(this.options.videoVolume),
       volume: Number(this.options.videoVolume || 0),
     });
 

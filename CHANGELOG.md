@@ -1,5 +1,9 @@
 # Changelog
 
+## [Unreleased]
+
+- fixed `data-video-volume="0"` leaving the video unmuted, which blocked background autoplay on mobile
+
 ## [3.0.1] - Jun 9, 2026
 
 - updated `video-worker` and dev dependencies
