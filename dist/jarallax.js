@@ -1,5 +1,5 @@
 /*!
- * Jarallax v3.0.1 (https://github.com/nk-o/jarallax)
+ * Jarallax v3.1.0 (https://github.com/nk-o/jarallax)
  * Copyright 2026 nK <https://nkdev.info>
  * Licensed under MIT (https://github.com/nk-o/jarallax/blob/master/LICENSE)
  */
@@ -58,6 +58,9 @@
     videoStartTime: 0,
     videoEndTime: 0,
     videoVolume: 0,
+    // Empty means "whatever video-worker defaults to", so the host is not pinned in two places.
+    videoYoutubeHost: "",
+    videoVimeoHost: "",
     videoLoop: true,
     videoPlayOnlyVisible: true,
     videoLazyLoading: true,
@@ -213,6 +216,14 @@
     visibilityObserver?.unobserve(instance.options.elementInViewport || instance.$item);
   }
 
+  let query;
+  function prefersReducedMotion() {
+    if (typeof query === "undefined") {
+      query = typeof global$1.matchMedia === "function" ? global$1.matchMedia("(prefers-reduced-motion: reduce)") : null;
+    }
+    return query?.matches ?? false;
+  }
+
   const globalNavigator = global$1.navigator ?? { userAgent: "" };
   const canUseDOM = typeof document !== "undefined" && typeof Element !== "undefined" && typeof HTMLElement !== "undefined";
   let instanceID = 0;
@@ -263,9 +274,10 @@
         }
       });
       this.options.speed = Math.min(2, Math.max(-1, parseFloat(`${this.options.speed}`)));
-      this.options.disableParallax = resolveDisableOption(
+      const disableParallax = resolveDisableOption(
         userOptions?.disableParallax ?? this.options.disableParallax
       );
+      this.options.disableParallax = () => prefersReducedMotion() || disableParallax();
       this.options.disableVideo = resolveDisableOption(
         userOptions?.disableVideo ?? this.options.disableVideo
       );

@@ -1,5 +1,5 @@
 /*!
- * Jarallax v3.0.1 (https://github.com/nk-o/jarallax)
+ * Jarallax v3.1.0 (https://github.com/nk-o/jarallax)
  * Copyright 2026 nK <https://nkdev.info>
  * Licensed under MIT (https://github.com/nk-o/jarallax/blob/master/LICENSE)
  */
@@ -27,6 +27,9 @@ const defaults$1 = {
   videoStartTime: 0,
   videoEndTime: 0,
   videoVolume: 0,
+  // Empty means "whatever video-worker defaults to", so the host is not pinned in two places.
+  videoYoutubeHost: "",
+  videoVimeoHost: "",
   videoLoop: true,
   videoPlayOnlyVisible: true,
   videoLazyLoading: true,
@@ -209,6 +212,14 @@ function removeObserver(instance) {
   visibilityObserver?.unobserve(instance.options.elementInViewport || instance.$item);
 }
 
+let query;
+function prefersReducedMotion() {
+  if (typeof query === "undefined") {
+    query = typeof global$2.matchMedia === "function" ? global$2.matchMedia("(prefers-reduced-motion: reduce)") : null;
+  }
+  return query?.matches ?? false;
+}
+
 const globalNavigator = global$2.navigator ?? { userAgent: "" };
 const canUseDOM = typeof document !== "undefined" && typeof Element !== "undefined" && typeof HTMLElement !== "undefined";
 let instanceID = 0;
@@ -259,9 +270,10 @@ class Jarallax {
       }
     });
     this.options.speed = Math.min(2, Math.max(-1, parseFloat(`${this.options.speed}`)));
-    this.options.disableParallax = resolveDisableOption(
+    const disableParallax = resolveDisableOption(
       userOptions?.disableParallax ?? this.options.disableParallax
     );
+    this.options.disableParallax = () => prefersReducedMotion() || disableParallax();
     this.options.disableVideo = resolveDisableOption(
       userOptions?.disableVideo ?? this.options.disableVideo
     );
@@ -687,7 +699,7 @@ function jarallaxElement$1(jarallax = global$2.jarallax) {
 }
 
 /*!
- * Video Worker v3.0.1 (https://github.com/nk-o/video-worker)
+ * Video Worker v3.1.0 (https://github.com/nk-o/video-worker)
  * Copyright 2026 nK <https://nkdev.info>
  * Licensed under MIT (https://github.com/nk-o/video-worker/blob/master/LICENSE)
  */
@@ -699,6 +711,9 @@ const defaults = {
   volume: 100,
   showControls: true,
   accessibilityHidden: false,
+  // Origin the player embed is loaded from. Override to use youtube-nocookie.com or a proxy.
+  youtubeHost: "https://www.youtube.com",
+  vimeoHost: "https://player.vimeo.com",
   // start / end video time in seconds
   startTime: 0,
   endTime: 0
@@ -1080,6 +1095,11 @@ if (typeof window !== "undefined") {
 }
 var global$1 = win;
 
+function trimTrailingSlash(url) {
+  return url.replace(/\/+$/, "");
+}
+
+const VIMEO_IFRAME_ALLOW = "autoplay; fullscreen; picture-in-picture; clipboard-write; encrypted-media; web-share";
 let VimeoAPIadded = 0;
 let loadingVimeoPlayer = 0;
 const loadingVimeoDefer = new Deferred();
@@ -1317,11 +1337,12 @@ class VideoWorkerVimeo extends VideoWorkerBase {
         this.$video.setAttribute("id", this.playerID);
         this.$video.setAttribute(
           "src",
-          `https://player.vimeo.com/video/${String(this.videoID)}?${playerOptionsString}`
+          `${trimTrailingSlash(this.options.vimeoHost)}/video/${String(this.videoID)}?${playerOptionsString}`
         );
         this.$video.setAttribute("frameborder", "0");
         this.$video.setAttribute("mozallowfullscreen", "");
         this.$video.setAttribute("allowfullscreen", "");
+        this.$video.setAttribute("allow", VIMEO_IFRAME_ALLOW);
         this.$video.setAttribute("title", "Vimeo video player");
         if (this.options.accessibilityHidden) {
           this.$video.setAttribute("tabindex", "-1");
@@ -1529,6 +1550,19 @@ class VideoWorkerYoutube extends VideoWorkerBase {
     }
     callback(this.player.getCurrentTime());
   }
+  // Time the progress check stops the video at. A looped video restarts right before its
+  // natural end, so the player never switches to the ENDED state and never shows its own UI
+  // over the video. getDuration() alone is not enough for that: it returns 0 until the video
+  // metadata is loaded and is sometimes rounded up to the next second.
+  // https://github.com/nk-o/video-worker/issues/2
+  getEndTime() {
+    var _a;
+    if (this.options.endTime || !this.options.loop) {
+      return this.options.endTime;
+    }
+    const duration = this.observedDuration || ((_a = this.player) == null ? void 0 : _a.getDuration()) || 0;
+    return duration > 0.3 ? duration - 0.3 : 0;
+  }
   getImageURL(callback) {
     if (this.videoImage) {
       callback(this.videoImage);
@@ -1566,8 +1600,7 @@ class VideoWorkerYoutube extends VideoWorkerBase {
         hiddenDiv.style.display = "none";
       }
       this.playerOptions = {
-        // GDPR Compliance.
-        host: "https://www.youtube-nocookie.com",
+        host: trimTrailingSlash(this.options.youtubeHost),
         videoId: String(this.videoID),
         playerVars: {
           autohide: 1,
@@ -1587,10 +1620,6 @@ class VideoWorkerYoutube extends VideoWorkerBase {
               this.play(this.options.startTime);
             }
             this.fire("ready", event);
-            if (this.options.loop && !this.options.endTime && this.player) {
-              const secondsOffset = 0.1;
-              this.options.endTime = this.player.getDuration() - secondsOffset;
-            }
             if (this.volumeChangeInterval) {
               clearInterval(this.volumeChangeInterval);
             }
@@ -1622,8 +1651,11 @@ class VideoWorkerYoutube extends VideoWorkerBase {
         if (!videoGlobal.YT || !this.player) {
           return;
         }
-        if (this.options.loop && event.data === videoGlobal.YT.PlayerState.ENDED) {
-          this.play(this.options.startTime);
+        if (event.data === videoGlobal.YT.PlayerState.ENDED) {
+          this.observedDuration = this.player.getCurrentTime();
+          if (this.options.loop) {
+            this.play(this.options.startTime);
+          }
         }
         if (!ytStarted && event.data === videoGlobal.YT.PlayerState.PLAYING) {
           ytStarted = true;
@@ -1647,7 +1679,8 @@ class VideoWorkerYoutube extends VideoWorkerBase {
               return;
             }
             this.fire("timeupdate", event);
-            if (this.options.endTime && this.player.getCurrentTime() >= this.options.endTime) {
+            const endTime = this.getEndTime();
+            if (endTime && this.player.getCurrentTime() >= endTime) {
               if (this.options.loop) {
                 this.play(this.options.startTime);
               } else {
@@ -1716,6 +1749,9 @@ VideoWorker.providers = {
   Local: VideoWorkerLocal
 };
 
+function isPosterOnlyVideo(instance) {
+  return prefersReducedMotion() && instance.video?.type === "local" && !instance.defaultInitImgResult;
+}
 function jarallaxVideo$1(jarallax = global$2.jarallax) {
   if (typeof jarallax === "undefined") {
     return;
@@ -1724,7 +1760,8 @@ function jarallaxVideo$1(jarallax = global$2.jarallax) {
   const defOnScroll = Jarallax.prototype.onScroll;
   Jarallax.prototype.onScroll = function onScrollWithVideo() {
     defOnScroll.apply(this);
-    const isReady = !this.isVideoInserted && this.video && (!this.options.videoLazyLoading || this.isElementInViewport) && !this.options.disableVideo();
+    const posterOnly = isPosterOnlyVideo(this);
+    const isReady = !this.isVideoInserted && this.video && (!this.options.videoLazyLoading || this.isElementInViewport) && !this.options.disableVideo() && (!prefersReducedMotion() || posterOnly);
     if (!isReady) {
       return;
     }
@@ -1750,7 +1787,9 @@ function jarallaxVideo$1(jarallax = global$2.jarallax) {
       });
       this.$video = insertedVideo;
       if (this.video?.type === "local") {
-        if (this.image.src) {
+        if (posterOnly) {
+          this.css(insertedVideo, { objectFit: "cover" });
+        } else if (this.image.src) {
           insertedVideo.setAttribute("poster", this.image.src);
         } else if (this.image.$item?.tagName === "IMG") {
           insertedVideo.setAttribute("poster", this.image.$item.src);
@@ -1815,14 +1854,20 @@ function jarallaxVideo$1(jarallax = global$2.jarallax) {
       return defaultResult;
     }
     const video = new VideoWorker(this.options.videoSrc, {
-      autoplay: true,
+      // Self-hosted players autoplay themselves once metadata lands, so this is what keeps a
+      // poster-only video paused.
+      autoplay: !prefersReducedMotion(),
       loop: this.options.videoLoop,
       showControls: false,
       accessibilityHidden: true,
       startTime: Number(this.options.videoStartTime || 0),
       endTime: Number(this.options.videoEndTime || 0),
-      mute: !this.options.videoVolume,
-      volume: Number(this.options.videoVolume || 0)
+      // `data-video-volume` reaches us as a string, and "0" is truthy. Compare the number.
+      mute: !Number(this.options.videoVolume),
+      volume: Number(this.options.videoVolume || 0),
+      // video-worker ignores undefined, so an unset host keeps its own default.
+      youtubeHost: this.options.videoYoutubeHost || void 0,
+      vimeoHost: this.options.videoVimeoHost || void 0
     });
     this.options.onVideoWorkerInit?.call(this, video);
     const resetDefaultImage = () => {
@@ -1859,6 +1904,9 @@ function jarallaxVideo$1(jarallax = global$2.jarallax) {
       return defaultResult;
     }
     video.on("ready", () => {
+      if (prefersReducedMotion()) {
+        return;
+      }
       if (this.options.videoPlayOnlyVisible) {
         const oldOnScroll = this.onScroll;
         this.onScroll = function onScrollPlayVideo() {

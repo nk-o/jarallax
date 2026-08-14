@@ -1,1 +1,1 @@
-{"version":3,"file":"ext-video.d.ts","sourceRoot":"","sources":["../../../src/ext-video.ts"],"names":[],"mappings":"AAEA,OAAO,KAAK,EAA4C,cAAc,EAAE,MAAM,SAAS,CAAC;AAGxF,iBAAS,aAAa,CAAC,QAAQ,GAAE,cAAc,GAAG,SAA2B,GAAG,IAAI,CA2RnF;AAED,eAAe,aAAa,CAAC"}
+{"version":3,"file":"ext-video.d.ts","sourceRoot":"","sources":["../../../src/ext-video.ts"],"names":[],"mappings":"AAEA,OAAO,KAAK,EAA4C,cAAc,EAAE,MAAM,SAAS,CAAC;AAaxF,iBAAS,aAAa,CAAC,QAAQ,GAAE,cAAc,GAAG,SAA2B,GAAG,IAAI,CA6SnF;AAED,eAAe,aAAa,CAAC"}
