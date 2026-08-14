@@ -27,6 +27,7 @@ Parallax scrolling for modern browsers. Supported &lt;img&gt; tags, background i
   - [A. JavaScript way](#a-javascript-way-1)
   - [B. Data attribute way](#b-data-attribute-way-1)
 - [Options](#options)
+  - [Reduced motion](#reduced-motion)
   - [Disable on mobile devices](#disable-on-mobile-devices)
   - [Additional options for video extension](#additional-options-for-video-extension)
 - [Events](#events)
@@ -418,6 +419,23 @@ jarallax(document.querySelectorAll('.jarallax'), {
 });
 ```
 
+### Reduced motion
+
+Nothing to configure. When the reader's system asks for reduced motion, Jarallax stops on its own: the image is still covered and positioned, it just does not move with the scroll, and background video never plays. The block always keeps something to look at:
+
+| Background | Reduced motion shows |
+| :--- | :--- |
+| Image | The image, positioned as usual, not moving |
+| YouTube / Vimeo | The provider thumbnail; the player iframe is never requested |
+| Self-hosted, with a fallback image | That image; the video is never requested |
+| Self-hosted, no fallback image | The video's own first frame, inserted paused |
+
+The parallax side matches what `disableParallax: true` already does, so the layout is the one that path has always produced. `disableVideo` keeps meaning only what you asked for — reduced motion is decided separately, because what replaces the video depends on the provider.
+
+A fallback image (`imgSrc`, a `.jarallax-img` element, or a CSS `background-image`) is still worth adding for a self-hosted video: it gives you control over the frame and it loads faster than the video does.
+
+Read from `(prefers-reduced-motion: reduce)` when the instance is created; changing the system setting applies on the next page load.
+
 ### Additional options for video extension
 
 Requires the video extension bundle. In package-based apps call `jarallaxVideo()` after importing from `jarallax`. In script-tag usage load `dist/jarallax-video(.min).js` after the core bundle.
@@ -431,6 +449,8 @@ videoEndTime | float | `0` | End time in seconds when video will be ended.
 videoLoop | boolean | `true` | Loop video to play infinitely.
 videoPlayOnlyVisible | boolean | `true` | Play video only when it is visible on the screen.
 videoLazyLoading | boolean | `true` | Preload videos only when it is visible on the screen.
+videoYoutubeHost | string | - | Origin the YouTube embed is loaded from, for example `https://www.youtube-nocookie.com`. Left empty, video-worker picks its own default.
+videoVimeoHost | string | - | Origin the Vimeo embed is loaded from. Left empty, video-worker picks its own default.
 disableVideo | boolean / RegExp / function | - | Disable video load on specific user agents (using regular expression) or with function return value. The image will be set on the background.
 
 ## Events

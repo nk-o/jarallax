@@ -57,6 +57,8 @@ export interface JarallaxOptions {
   videoStartTime?: number | string;
   videoEndTime?: number | string;
   videoVolume?: number | string;
+  videoYoutubeHost?: string;
+  videoVimeoHost?: string;
   videoLoop?: boolean;
   videoPlayOnlyVisible?: boolean;
   videoLazyLoading?: boolean;
@@ -93,6 +95,8 @@ export interface JarallaxResolvedOptions
   videoStartTime: number | string;
   videoEndTime: number | string;
   videoVolume: number | string;
+  videoYoutubeHost: string;
+  videoVimeoHost: string;
   videoLoop: boolean;
   videoPlayOnlyVisible: boolean;
   videoLazyLoading: boolean;

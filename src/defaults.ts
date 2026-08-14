@@ -22,6 +22,10 @@ const defaults: JarallaxOptions = {
   videoStartTime: 0,
   videoEndTime: 0,
   videoVolume: 0,
+
+  // Empty means "whatever video-worker defaults to", so the host is not pinned in two places.
+  videoYoutubeHost: '',
+  videoVimeoHost: '',
   videoLoop: true,
   videoPlayOnlyVisible: true,
   videoLazyLoading: true,

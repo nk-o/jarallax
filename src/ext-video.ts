@@ -2,6 +2,16 @@ import VideoWorker from 'video-worker';
 
 import type { JarallaxCoverImageData, JarallaxInstance, JarallaxStatic } from './types';
 import global from './utils/global';
+import prefersReducedMotion from './utils/prefersReducedMotion';
+
+// Under reduced motion a provider iframe buys nothing — its thumbnail is already painted as the
+// background — but a self-hosted video with no fallback image is the only thing that element has
+// to show, so it is inserted paused and the browser paints its first frame.
+function isPosterOnlyVideo(instance: JarallaxInstance): boolean {
+  return (
+    prefersReducedMotion() && instance.video?.type === 'local' && !instance.defaultInitImgResult
+  );
+}
 
 function jarallaxVideo(jarallax: JarallaxStatic | undefined = global.jarallax): void {
   if (typeof jarallax === 'undefined') {
@@ -15,11 +25,13 @@ function jarallaxVideo(jarallax: JarallaxStatic | undefined = global.jarallax): 
   Jarallax.prototype.onScroll = function onScrollWithVideo(this: JarallaxInstance): void {
     defOnScroll.apply(this);
 
+    const posterOnly = isPosterOnlyVideo(this);
     const isReady =
       !this.isVideoInserted &&
       this.video &&
       (!this.options.videoLazyLoading || this.isElementInViewport) &&
-      !this.options.disableVideo();
+      !this.options.disableVideo() &&
+      (!prefersReducedMotion() || posterOnly);
 
     if (!isReady) {
       return;
@@ -49,8 +61,13 @@ function jarallaxVideo(jarallax: JarallaxStatic | undefined = global.jarallax): 
       this.$video = insertedVideo;
 
       // Self-hosted video should keep using the image as a poster, just like the legacy extension did.
+      // In the poster-only case that image is the transparent placeholder, and setting it would
+      // cover the very frame this element was inserted to show, so it is left off and the video
+      // is stretched to cover by itself — `started` never fires to hand it to coverImage().
       if (this.video?.type === 'local') {
-        if (this.image.src) {
+        if (posterOnly) {
+          this.css(insertedVideo, { objectFit: 'cover' });
+        } else if (this.image.src) {
           insertedVideo.setAttribute('poster', this.image.src);
         } else if (this.image.$item?.tagName === 'IMG') {
           insertedVideo.setAttribute('poster', (this.image.$item as HTMLImageElement).src);
@@ -149,7 +166,9 @@ function jarallaxVideo(jarallax: JarallaxStatic | undefined = global.jarallax): 
     }
 
     const video = new VideoWorker(this.options.videoSrc, {
-      autoplay: true,
+      // Self-hosted players autoplay themselves once metadata lands, so this is what keeps a
+      // poster-only video paused.
+      autoplay: !prefersReducedMotion(),
       loop: this.options.videoLoop,
       showControls: false,
       accessibilityHidden: true,
@@ -158,6 +177,9 @@ function jarallaxVideo(jarallax: JarallaxStatic | undefined = global.jarallax): 
       // `data-video-volume` reaches us as a string, and "0" is truthy. Compare the number.
       mute: !Number(this.options.videoVolume),
       volume: Number(this.options.videoVolume || 0),
+      // video-worker ignores undefined, so an unset host keeps its own default.
+      youtubeHost: this.options.videoYoutubeHost || undefined,
+      vimeoHost: this.options.videoVimeoHost || undefined,
     });
 
     this.options.onVideoWorkerInit?.call(this, video);
@@ -206,6 +228,11 @@ function jarallaxVideo(jarallax: JarallaxStatic | undefined = global.jarallax): 
     }
 
     video.on('ready', () => {
+      // Nothing starts on its own under reduced motion, so the visibility hook is never installed.
+      if (prefersReducedMotion()) {
+        return;
+      }
+
       // Visibility-driven play/pause is applied by wrapping the existing onScroll implementation.
       if (this.options.videoPlayOnlyVisible) {
         const oldOnScroll = this.onScroll;

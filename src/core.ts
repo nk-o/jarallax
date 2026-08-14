@@ -5,6 +5,7 @@ import extend from './utils/extend';
 import getParents from './utils/getParents';
 import getWindowSize from './utils/getWindowSize';
 import { addObserver, removeObserver } from './utils/observer';
+import prefersReducedMotion from './utils/prefersReducedMotion';
 import type {
   DisableOption,
   JarallaxCoverImageData,
@@ -109,9 +110,17 @@ class Jarallax {
     });
 
     this.options.speed = Math.min(2, Math.max(-1, parseFloat(`${this.options.speed}`)));
-    this.options.disableParallax = resolveDisableOption(
+
+    // Readers who ask for reduced motion get the same treatment as `disableParallax: true`:
+    // the image is still covered and positioned, it just never moves with the scroll.
+    const disableParallax = resolveDisableOption(
       userOptions?.disableParallax ?? this.options.disableParallax
     );
+    this.options.disableParallax = () => prefersReducedMotion() || disableParallax();
+
+    // Reduced motion stops background video too, but what to show instead depends on the
+    // provider, so that decision lives in the video extension and this option keeps meaning
+    // only what the author asked for.
     this.options.disableVideo = resolveDisableOption(
       userOptions?.disableVideo ?? this.options.disableVideo
     );
