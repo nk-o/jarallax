@@ -158,6 +158,9 @@ function jarallaxVideo(jarallax: JarallaxStatic | undefined = global.jarallax): 
       // `data-video-volume` reaches us as a string, and "0" is truthy. Compare the number.
       mute: !Number(this.options.videoVolume),
       volume: Number(this.options.videoVolume || 0),
+      // video-worker ignores undefined, so an unset host keeps its own default.
+      youtubeHost: this.options.videoYoutubeHost || undefined,
+      vimeoHost: this.options.videoVimeoHost || undefined,
     });
 
     this.options.onVideoWorkerInit?.call(this, video);

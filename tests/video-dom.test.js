@@ -137,4 +137,24 @@ describe('jarallax video DOM integration', () => {
     expect(worker.options.mute).toBe(expectedMute);
     expect(worker.options.volume).toBe(Number(attr));
   });
+
+  it('forwards the player host options and leaves them undefined when unset', async () => {
+    const { default: jarallax } = await import('../src/core.ts');
+    const { default: jarallaxVideo } = await import('../src/ext-video.ts');
+    const block = createJarallaxBlock({ mode: 'img' });
+    const other = createJarallaxBlock({ mode: 'img' });
+
+    jarallaxVideo(jarallax);
+    jarallax(block, {
+      videoSrc: 'https://youtu.be/mru3Q5m4lkY',
+      videoYoutubeHost: 'https://www.youtube-nocookie.com',
+    });
+    jarallax(other, { videoSrc: 'https://youtu.be/mru3Q5m4lkY' });
+
+    const [withHost, withoutHost] = videoWorkerState.instances;
+
+    expect(withHost.options.youtubeHost).toBe('https://www.youtube-nocookie.com');
+    expect(withoutHost.options.youtubeHost).toBeUndefined();
+    expect(withoutHost.options.vimeoHost).toBeUndefined();
+  });
 });

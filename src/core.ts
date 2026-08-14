@@ -5,6 +5,7 @@ import extend from './utils/extend';
 import getParents from './utils/getParents';
 import getWindowSize from './utils/getWindowSize';
 import { addObserver, removeObserver } from './utils/observer';
+import prefersReducedMotion from './utils/prefersReducedMotion';
 import type {
   DisableOption,
   JarallaxCoverImageData,
@@ -109,12 +110,19 @@ class Jarallax {
     });
 
     this.options.speed = Math.min(2, Math.max(-1, parseFloat(`${this.options.speed}`)));
-    this.options.disableParallax = resolveDisableOption(
+
+    // Readers who ask for reduced motion get the same treatment as `disableParallax: true`:
+    // the image is still covered and positioned, it just never moves with the scroll.
+    const disableParallax = resolveDisableOption(
       userOptions?.disableParallax ?? this.options.disableParallax
     );
-    this.options.disableVideo = resolveDisableOption(
+    this.options.disableParallax = () => prefersReducedMotion() || disableParallax();
+    // Same for the background video: it is never inserted, so the poster the instance already
+    // shows stays on screen and the provider player is never downloaded.
+    const disableVideo = resolveDisableOption(
       userOptions?.disableVideo ?? this.options.disableVideo
     );
+    this.options.disableVideo = () => prefersReducedMotion() || disableVideo();
 
     // `elementInViewport` historically accepts a DOM node or a jQuery-like collection.
     let elementInVP = this.options.elementInViewport;

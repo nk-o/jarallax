@@ -8,6 +8,8 @@ declare module 'video-worker' {
     endTime?: number;
     mute?: boolean;
     volume?: number;
+    youtubeHost?: string;
+    vimeoHost?: string;
   }
 
   export type VideoWorkerEvent = 'ready' | 'started' | 'ended' | 'error';
