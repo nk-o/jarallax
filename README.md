@@ -421,11 +421,20 @@ jarallax(document.querySelectorAll('.jarallax'), {
 
 ### Reduced motion
 
-Nothing to configure. When the reader's system asks for reduced motion, Jarallax stops on its own: the image is still covered and positioned, it just does not move with the scroll, and a background video is never loaded — the poster stays on screen instead.
+Nothing to configure. When the reader's system asks for reduced motion, Jarallax stops on its own: the image is still covered and positioned, it just does not move with the scroll, and background video never plays. The block always keeps something to look at:
 
-This matches what `disableParallax: true` and `disableVideo: true` already do, so the layout is the same one those paths have always produced. It is read from `(prefers-reduced-motion: reduce)` when the instance is created; changing the system setting applies on the next page load.
+| Background | Reduced motion shows |
+| :--- | :--- |
+| Image | The image, positioned as usual, not moving |
+| YouTube / Vimeo | The provider thumbnail; the player iframe is never requested |
+| Self-hosted, with a fallback image | That image; the video is never requested |
+| Self-hosted, no fallback image | The video's own first frame, inserted paused |
 
-Give background videos a fallback image (`imgSrc`, a `.jarallax-img` element, or a CSS `background-image`). YouTube and Vimeo backgrounds fall back to the provider thumbnail automatically, but a self-hosted video has no thumbnail to borrow.
+The parallax side matches what `disableParallax: true` already does, so the layout is the one that path has always produced. `disableVideo` keeps meaning only what you asked for — reduced motion is decided separately, because what replaces the video depends on the provider.
+
+A fallback image (`imgSrc`, a `.jarallax-img` element, or a CSS `background-image`) is still worth adding for a self-hosted video: it gives you control over the frame and it loads faster than the video does.
+
+Read from `(prefers-reduced-motion: reduce)` when the instance is created; changing the system setting applies on the next page load.
 
 ### Additional options for video extension
 

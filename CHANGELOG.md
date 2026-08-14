@@ -2,7 +2,7 @@
 
 ## [Unreleased]
 
-- added automatic `prefers-reduced-motion` support, which stops the parallax movement and keeps the background video from loading
+- added automatic `prefers-reduced-motion` support, which stops the parallax movement and background video playback, falling back to the provider thumbnail, the author's image, or the video's own first frame
 - added `videoYoutubeHost` and `videoVimeoHost` options, passed through to video-worker
 - updated `video-worker` to 3.1.0, which fixes Vimeo backgrounds playing muted in Chrome and moves YouTube off the nocookie host
 - fixed `data-video-volume="0"` leaving the video unmuted, which blocked background autoplay on mobile

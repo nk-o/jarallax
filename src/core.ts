@@ -117,12 +117,13 @@ class Jarallax {
       userOptions?.disableParallax ?? this.options.disableParallax
     );
     this.options.disableParallax = () => prefersReducedMotion() || disableParallax();
-    // Same for the background video: it is never inserted, so the poster the instance already
-    // shows stays on screen and the provider player is never downloaded.
-    const disableVideo = resolveDisableOption(
+
+    // Reduced motion stops background video too, but what to show instead depends on the
+    // provider, so that decision lives in the video extension and this option keeps meaning
+    // only what the author asked for.
+    this.options.disableVideo = resolveDisableOption(
       userOptions?.disableVideo ?? this.options.disableVideo
     );
-    this.options.disableVideo = () => prefersReducedMotion() || disableVideo();
 
     // `elementInViewport` historically accepts a DOM node or a jQuery-like collection.
     let elementInVP = this.options.elementInViewport;

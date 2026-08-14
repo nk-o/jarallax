@@ -11,7 +11,11 @@ vi.mock('video-worker', () => {
       this.source = source;
       this.options = options;
       this.handlers = new Map();
-      this.type = source.includes('vimeo.com') ? 'vimeo' : 'youtube';
+      this.type = source.startsWith('mp4:')
+        ? 'local'
+        : source.includes('vimeo.com')
+          ? 'vimeo'
+          : 'youtube';
       this.videoID = 'mru3Q5m4lkY';
       this.videoWidth = 1280;
       this.videoHeight = 720;
@@ -32,10 +36,10 @@ vi.mock('video-worker', () => {
 
     getVideo(callback) {
       const hidden = document.createElement('div');
-      const iframe = document.createElement('iframe');
-      hidden.appendChild(iframe);
+      const node = document.createElement(this.type === 'local' ? 'video' : 'iframe');
+      hidden.appendChild(node);
       document.body.appendChild(hidden);
-      callback(iframe);
+      callback(node);
     }
 
     play = vi.fn();
@@ -98,7 +102,8 @@ describe('prefers-reduced-motion', () => {
     jarallax(block, 'onScroll');
 
     expect(Boolean(block.querySelector('iframe'))).toBe(expectVideo);
-    expect(block.jarallax.options.disableVideo()).toBe(reduce);
+    // `disableVideo` keeps reporting only what the author asked for.
+    expect(block.jarallax.options.disableVideo()).toBe(false);
   });
 
   it('keeps the poster visible instead of the player when motion is reduced', async () => {
@@ -118,5 +123,70 @@ describe('prefers-reduced-motion', () => {
     expect(block.jarallax.image.bgImage).toContain('https://via.placeholder.com/100x50');
     expect(block.querySelector('iframe')).toBeNull();
     expect(videoWorkerState.instances[0].play).not.toHaveBeenCalled();
+  });
+
+  // A self-hosted video with no fallback image has nothing else to show, so it is inserted
+  // paused. The placeholder poster must stay off or it would hide the frame.
+  it('inserts a self-hosted video paused when the element has no fallback image', async () => {
+    stubReducedMotion(true);
+
+    const { default: jarallax } = await import('../src/core.ts');
+    const { default: jarallaxVideo } = await import('../src/ext-video.ts');
+    const block = document.createElement('div');
+    block.className = 'jarallax';
+    document.body.appendChild(block);
+
+    jarallaxVideo(jarallax);
+    jarallax(block, { videoSrc: 'mp4:../demo/video/video.mp4' });
+
+    block.jarallax.isElementInViewport = true;
+    jarallax(block, 'onScroll');
+
+    const inserted = block.querySelector('video');
+
+    expect(inserted).toBeTruthy();
+    expect(inserted.getAttribute('poster')).toBeNull();
+    expect(inserted.style.objectFit).toBe('cover');
+    expect(videoWorkerState.instances[0].options.autoplay).toBe(false);
+    expect(videoWorkerState.instances[0].play).not.toHaveBeenCalled();
+  });
+
+  it('skips the self-hosted video when the element already has a fallback image', async () => {
+    stubReducedMotion(true);
+
+    const { default: jarallax } = await import('../src/core.ts');
+    const { default: jarallaxVideo } = await import('../src/ext-video.ts');
+    const block = createJarallaxBlock({ mode: 'background' });
+
+    jarallaxVideo(jarallax);
+    jarallax(block, { videoSrc: 'mp4:../demo/video/video.mp4' });
+
+    block.jarallax.isElementInViewport = true;
+    jarallax(block, 'onScroll');
+
+    expect(block.querySelector('video')).toBeNull();
+    expect(block.jarallax.image.bgImage).toContain('https://via.placeholder.com/100x50');
+  });
+
+  it('keeps autoplay and the poster when motion is not reduced', async () => {
+    stubReducedMotion(false);
+
+    const { default: jarallax } = await import('../src/core.ts');
+    const { default: jarallaxVideo } = await import('../src/ext-video.ts');
+    const block = document.createElement('div');
+    block.className = 'jarallax';
+    document.body.appendChild(block);
+
+    jarallaxVideo(jarallax);
+    jarallax(block, { videoSrc: 'mp4:../demo/video/video.mp4' });
+
+    block.jarallax.isElementInViewport = true;
+    jarallax(block, 'onScroll');
+
+    const inserted = block.querySelector('video');
+
+    expect(inserted).toBeTruthy();
+    expect(inserted.getAttribute('poster')).toContain('data:image/gif;base64,');
+    expect(videoWorkerState.instances[0].options.autoplay).toBe(true);
   });
 });
