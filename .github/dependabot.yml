@@ -1,0 +1,37 @@
+version: 2
+updates:
+  - package-ecosystem: npm
+    directory: "/"
+    schedule:
+      interval: monthly
+    open-pull-requests-limit: 0
+    groups:
+      security-runtime:
+        applies-to: security-updates
+        dependency-type: production
+        update-types:
+          - patch
+          - minor
+        patterns:
+          - "*"
+      security-development:
+        applies-to: security-updates
+        dependency-type: development
+        update-types:
+          - patch
+          - minor
+        patterns:
+          - "*"
+  - package-ecosystem: github-actions
+    directory: "/"
+    schedule:
+      interval: monthly
+    open-pull-requests-limit: 0
+    groups:
+      security-actions:
+        applies-to: security-updates
+        update-types:
+          - patch
+          - minor
+        patterns:
+          - "*"
