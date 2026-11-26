@@ -4,6 +4,61 @@ import type { JarallaxCoverImageData, JarallaxInstance, JarallaxStatic } from '.
 import global from './utils/global';
 import prefersReducedMotion from './utils/prefersReducedMotion';
 
+const horizontalEdge = /^(left|right)$/;
+const verticalEdge = /^(top|bottom)$/;
+const percentage = /^[+-]?(?:\d*\.)?\d+(?:e[+-]?\d+)?%$/;
+
+function percentageFraction(value: string): number {
+  return percentage.test(value) ? Number.parseFloat(value) / 100 : Number.NaN;
+}
+
+function positionFraction(value: string, start: string, end: string): number {
+  if (value === start) {
+    return 0;
+  }
+  if (value === end) {
+    return 1;
+  }
+  if (value === 'center') {
+    return 0.5;
+  }
+  return percentageFraction(value);
+}
+
+function parseVideoPosition(value: string): [number, number] {
+  const tokens = String(value).trim().toLowerCase().split(/\s+/);
+  let [x, y = 'center'] = tokens;
+  let horizontal = Number.NaN;
+  let vertical = Number.NaN;
+
+  if (tokens.length === 4) {
+    const [xEdge, xOffset, yEdge, yOffset] = verticalEdge.test(x)
+      ? [tokens[2], tokens[3], x, y]
+      : tokens;
+
+    if (horizontalEdge.test(xEdge) && verticalEdge.test(yEdge)) {
+      const fromXEdge = percentageFraction(xOffset);
+      const fromYEdge = percentageFraction(yOffset);
+      horizontal = xEdge === 'right' ? 1 - fromXEdge : fromXEdge;
+      vertical = yEdge === 'bottom' ? 1 - fromYEdge : fromYEdge;
+    }
+  } else if (tokens.length <= 2) {
+    if (
+      (verticalEdge.test(x) && (horizontalEdge.test(y) || y === 'center')) ||
+      (x === 'center' && horizontalEdge.test(y))
+    ) {
+      [x, y] = [y, x];
+    }
+
+    horizontal = positionFraction(x, 'left', 'right');
+    vertical = positionFraction(y, 'top', 'bottom');
+  }
+
+  return Number.isFinite(horizontal) && Number.isFinite(vertical)
+    ? [horizontal, vertical]
+    : [0.5, 0.5];
+}
+
 // Under reduced motion a provider iframe buys nothing — its thumbnail is already painted as the
 // background — but a self-hosted video with no fallback image is the only thing that element has
 // to show, so it is inserted paused and the browser paints its first frame.
@@ -109,15 +164,15 @@ function jarallaxVideo(jarallax: JarallaxStatic | undefined = global.jarallax): 
 
     let h = imageData.image.height;
     let w = (h * (this.image.width || 0)) / (this.image.height || 1);
-    let ml = (imageData.container.width - w) / 2;
-    let mt = imageData.image.marginTop;
 
     if (imageData.container.width > w) {
       w = imageData.container.width;
       h = (w * (this.image.height || 0)) / (this.image.width || 1);
-      ml = 0;
-      mt += (imageData.image.height - h) / 2;
     }
+
+    const [x, y] = parseVideoPosition(this.options.videoPosition);
+    const ml = (imageData.container.width - w) * x;
+    let mt = imageData.image.marginTop + (imageData.image.height - h) * y;
 
     // Iframes need extra vertical overscan to hide native player controls outside the visible crop.
     if (node === 'IFRAME') {

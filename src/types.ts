@@ -54,6 +54,7 @@ export interface JarallaxOptions {
   onCoverImage?: ((this: JarallaxInstance) => void) | null;
   videoClass?: string;
   videoSrc?: string | null;
+  videoPosition?: string;
   videoStartTime?: number | string;
   videoEndTime?: number | string;
   videoVolume?: number | string;
@@ -92,6 +93,7 @@ export interface JarallaxResolvedOptions
   onCoverImage: ((this: JarallaxInstance) => void) | null;
   videoClass: string;
   videoSrc: string | null;
+  videoPosition: string;
   videoStartTime: number | string;
   videoEndTime: number | string;
   videoVolume: number | string;

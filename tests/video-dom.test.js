@@ -1,5 +1,5 @@
 import { beforeEach, describe, expect, it, vi } from 'vitest';
-import { createJarallaxBlock } from './test-helpers.js';
+import { createJarallaxBlock, stubElementRect } from './test-helpers.js';
 
 const videoWorkerState = vi.hoisted(() => ({
   instances: [],
@@ -116,6 +116,46 @@ describe('jarallax video DOM integration', () => {
     if (tagName === 'video') {
       expect(inserted.getAttribute('poster')).toContain('https://via.placeholder.com/100x50');
     }
+  });
+
+  it.each([
+    [undefined, -30, -45],
+    ['0% 0%', 0, 0],
+    ['100% 100%', -60, -90],
+    ['BOTTOM RIGHT', -60, -90],
+    ['top', -30, 0],
+    ['25%', -15, -45],
+    ['bottom 25% right 50%', -30, -67.5],
+    ['left 0% bottom', -30, -45],
+    ['true', -30, -45],
+  ])('positions a covered local video with data-video-position=%s', async (position, x, y) => {
+    const { default: jarallax } = await import('../src/core.ts');
+    const { default: jarallaxVideo } = await import('../src/ext-video.ts');
+    const block = createJarallaxBlock({ mode: 'img' });
+    if (position !== undefined) {
+      block.dataset.videoPosition = position;
+    }
+
+    jarallaxVideo(jarallax);
+    jarallax(block, {
+      type: 'opacity',
+      imgPosition: 'right bottom',
+      videoSrc: 'mp4:video.mp4',
+    });
+    const instance = block.jarallax;
+    const resize = stubElementRect(instance.image.$container, { width: 100, height: 90 });
+    instance.isElementInViewport = true;
+    instance.onScroll();
+    const video = block.querySelector('video');
+
+    expect(video.style.marginLeft).toBe(`${x}px`);
+    expect(video.style.marginTop).toBe('0px');
+
+    resize({ width: 320, height: 90 });
+    instance.onResize();
+
+    expect(video.style.marginLeft).toBe('0px');
+    expect(video.style.marginTop).toBe(`${y}px`);
   });
 
   // https://github.com/nk-o/jarallax/issues/227
