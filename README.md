@@ -447,6 +447,7 @@ videoSrc | string | `null` | You can use Youtube, Vimeo or Self-Hosted videos. A
 videoStartTime | float | `0` | Start time in seconds when video will be started (this value will be applied also after loop).
 videoEndTime | float | `0` | End time in seconds when video will be ended.
 videoLoop | boolean | `true` | Loop video to play infinitely.
+videoAutoplay | boolean | `true` | Set to `false` or use `data-video-autoplay="false"` to start playback manually with `instance.video.play()` once the player is ready.
 videoPlayOnlyVisible | boolean | `true` | Play video only when it is visible on the screen.
 videoLazyLoading | boolean | `true` | Preload videos only when it is visible on the screen.
 videoYoutubeHost | string | - | Origin the YouTube embed is loaded from, for example `https://www.youtube-nocookie.com`. Left empty, video-worker picks its own default.

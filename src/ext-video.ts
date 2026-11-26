@@ -165,10 +165,9 @@ function jarallaxVideo(jarallax: JarallaxStatic | undefined = global.jarallax): 
       return defaultResult;
     }
 
+    const { videoAutoplay } = this.options;
     const video = new VideoWorker(this.options.videoSrc, {
-      // Self-hosted players autoplay themselves once metadata lands, so this is what keeps a
-      // poster-only video paused.
-      autoplay: !prefersReducedMotion(),
+      autoplay: videoAutoplay && !prefersReducedMotion(),
       loop: this.options.videoLoop,
       showControls: false,
       accessibilityHidden: true,
@@ -244,14 +243,14 @@ function jarallaxVideo(jarallax: JarallaxStatic | undefined = global.jarallax): 
             !this.videoError &&
             (this.options.videoLoop || (!this.options.videoLoop && !this.videoEnded))
           ) {
-            if (this.isVisible()) {
-              video.play();
-            } else {
+            if (!this.isVisible()) {
               video.pause();
+            } else if (videoAutoplay) {
+              video.play();
             }
           }
         };
-      } else {
+      } else if (videoAutoplay) {
         video.play();
       }
     });

@@ -27,6 +27,7 @@ const defaults: JarallaxOptions = {
   videoYoutubeHost: '',
   videoVimeoHost: '',
   videoLoop: true,
+  videoAutoplay: true,
   videoPlayOnlyVisible: true,
   videoLazyLoading: true,
   disableVideo: false,
