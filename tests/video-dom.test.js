@@ -121,6 +121,55 @@ describe('jarallax video DOM integration', () => {
   });
 
   it.each([
+    true,
+    false,
+  ])('updates playback on viewport changes with autoplay=%s', async (autoplay) => {
+    let notify;
+
+    vi.stubGlobal(
+      'IntersectionObserver',
+      class {
+        constructor(callback) {
+          notify = callback;
+        }
+
+        observe() {}
+      }
+    );
+
+    const { default: jarallax } = await import('../src/core.ts');
+    const { default: jarallaxVideo } = await import('../src/ext-video.ts');
+    const block = createJarallaxBlock({ mode: 'img' });
+
+    jarallaxVideo(jarallax);
+    jarallax(block, { videoSrc: 'mp4:video.mp4', videoAutoplay: autoplay });
+    const [worker] = videoWorkerState.instances;
+    const frame = () => vi.mocked(requestAnimationFrame).mock.lastCall[0](0);
+
+    notify([{ target: block, isIntersecting: true }]);
+    frame();
+
+    if (autoplay) {
+      expect(worker.play).toHaveBeenCalled();
+    } else {
+      expect(worker.play).not.toHaveBeenCalled();
+    }
+    worker.play.mockClear();
+
+    notify([{ target: block, isIntersecting: false }]);
+    frame();
+    frame();
+
+    expect(worker.pause).toHaveBeenCalledTimes(1);
+
+    notify([{ target: block, isIntersecting: true }]);
+    frame();
+
+    expect(worker.play).toHaveBeenCalledTimes(autoplay ? 1 : 0);
+    expect(block.jarallax.image.$item.tagName).toBe(autoplay ? 'VIDEO' : 'IMG');
+  });
+
+  it.each([
     ['data attribute', true],
     ['JavaScript option', false],
   ])('only starts playback manually with autoplay disabled by %s', async (source, onlyVisible) => {
