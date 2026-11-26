@@ -61,6 +61,7 @@ export interface JarallaxOptions {
   videoYoutubeHost?: string;
   videoVimeoHost?: string;
   videoLoop?: boolean;
+  videoAutoplay?: boolean;
   videoPlayOnlyVisible?: boolean;
   videoLazyLoading?: boolean;
   disableVideo?: DisableOption;
@@ -100,6 +101,7 @@ export interface JarallaxResolvedOptions
   videoYoutubeHost: string;
   videoVimeoHost: string;
   videoLoop: boolean;
+  videoAutoplay: boolean;
   videoPlayOnlyVisible: boolean;
   videoLazyLoading: boolean;
   disableVideo: () => boolean;

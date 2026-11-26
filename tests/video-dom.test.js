@@ -62,7 +62,9 @@ vi.mock('video-worker', () => {
       document.body.appendChild(wrapper);
       callback(element);
       this.emit('ready');
-      this.emit('started');
+      if (this.options.autoplay) {
+        this.emit('started');
+      }
     }
 
     play = vi.fn();
@@ -116,6 +118,49 @@ describe('jarallax video DOM integration', () => {
     if (tagName === 'video') {
       expect(inserted.getAttribute('poster')).toContain('https://via.placeholder.com/100x50');
     }
+  });
+
+  it.each([
+    ['data attribute', true],
+    ['JavaScript option', false],
+  ])('only starts playback manually with autoplay disabled by %s', async (source, onlyVisible) => {
+    const { default: jarallax } = await import('../src/core.ts');
+    const { default: jarallaxVideo } = await import('../src/ext-video.ts');
+    const block = createJarallaxBlock({ mode: 'img' });
+    const options = {
+      videoSrc: 'mp4:video.mp4',
+      videoPlayOnlyVisible: onlyVisible,
+    };
+
+    if (source === 'data attribute') {
+      block.dataset.videoAutoplay = 'false';
+    } else {
+      options.videoAutoplay = false;
+    }
+
+    jarallaxVideo(jarallax);
+    jarallax(block, options);
+    const instance = block.jarallax;
+    const [worker] = videoWorkerState.instances;
+
+    instance.isElementInViewport = true;
+    instance.onScroll();
+    instance.onScroll();
+
+    expect(worker.options.autoplay).toBe(false);
+    expect(worker.play).not.toHaveBeenCalled();
+    expect(instance.image.$item.tagName).toBe('IMG');
+
+    instance.video.play();
+    worker.emit('started');
+    instance.isElementInViewport = false;
+    instance.onScroll();
+    instance.isElementInViewport = true;
+    instance.onScroll();
+
+    expect(instance.image.$item.tagName).toBe('VIDEO');
+    expect(worker.play).toHaveBeenCalledTimes(1);
+    expect(worker.pause).toHaveBeenCalledTimes(onlyVisible ? 1 : 0);
   });
 
   it.each([
