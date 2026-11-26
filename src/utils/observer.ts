@@ -28,6 +28,10 @@ function updateParallax(): void {
     const { instance, oldData } = data;
 
     if (!instance.isVisible()) {
+      if (oldData) {
+        data.oldData = undefined;
+        instance.onScroll();
+      }
       return;
     }
 
