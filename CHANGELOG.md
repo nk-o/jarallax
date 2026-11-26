@@ -1,5 +1,13 @@
 # Changelog
 
+## [3.2.0] - Nov 26, 2026
+
+- added a `videoAutoplay` option for starting background videos manually
+- added a `videoPosition` option for aligning background videos within their crop
+- fixed background videos continuing to play after leaving the viewport when playback is limited to visible videos
+- fixed muted Vimeo backgrounds reporting that sound was on
+- fixed playback errors when a self-hosted video is paused before it starts
+
 ## [3.1.0] - Aug 14, 2026
 
 - added automatic `prefers-reduced-motion` support, which stops the parallax movement and background video playback, falling back to the provider thumbnail, the author's image, or the video's own first frame

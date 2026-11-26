@@ -1,1 +1,1 @@
-{"version":3,"file":"observer.d.ts","sourceRoot":"","sources":["../../../../src/utils/observer.ts"],"names":[],"mappings":"AAEA,OAAO,KAAK,EAAE,gBAAgB,EAAE,MAAM,UAAU,CAAC;AAmFjD,wBAAgB,WAAW,CAAC,QAAQ,EAAE,gBAAgB,GAAG,IAAI,CAU5D;AAED,wBAAgB,cAAc,CAAC,QAAQ,EAAE,gBAAgB,GAAG,IAAI,CAQ/D"}
+{"version":3,"file":"observer.d.ts","sourceRoot":"","sources":["../../../../src/utils/observer.ts"],"names":[],"mappings":"AAEA,OAAO,KAAK,EAAE,gBAAgB,EAAE,MAAM,UAAU,CAAC;AAuFjD,wBAAgB,WAAW,CAAC,QAAQ,EAAE,gBAAgB,GAAG,IAAI,CAU5D;AAED,wBAAgB,cAAc,CAAC,QAAQ,EAAE,gBAAgB,GAAG,IAAI,CAQ/D"}

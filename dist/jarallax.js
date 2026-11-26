@@ -1,5 +1,5 @@
 /*!
- * Jarallax v3.1.0 (https://github.com/nk-o/jarallax)
+ * Jarallax v3.2.0 (https://github.com/nk-o/jarallax)
  * Copyright 2026 nK <https://nkdev.info>
  * Licensed under MIT (https://github.com/nk-o/jarallax/blob/master/LICENSE)
  */
@@ -55,6 +55,7 @@
     onCoverImage: null,
     videoClass: "jarallax-video",
     videoSrc: null,
+    videoPosition: "50% 50%",
     videoStartTime: 0,
     videoEndTime: 0,
     videoVolume: 0,
@@ -62,6 +63,7 @@
     videoYoutubeHost: "",
     videoVimeoHost: "",
     videoLoop: true,
+    videoAutoplay: true,
     videoPlayOnlyVisible: true,
     videoLazyLoading: true,
     disableVideo: false,
@@ -161,6 +163,10 @@
     jarallaxList.forEach((data, index) => {
       const { instance, oldData } = data;
       if (!instance.isVisible()) {
+        if (oldData) {
+          data.oldData = void 0;
+          instance.onScroll();
+        }
         return;
       }
       const clientRect = instance.$item.getBoundingClientRect();

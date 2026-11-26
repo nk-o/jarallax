@@ -1,5 +1,5 @@
 /*!
- * Jarallax v3.1.0 (https://github.com/nk-o/jarallax)
+ * Jarallax v3.2.0 (https://github.com/nk-o/jarallax)
  * Copyright 2026 nK <https://nkdev.info>
  * Licensed under MIT (https://github.com/nk-o/jarallax/blob/master/LICENSE)
  */
@@ -24,6 +24,7 @@ const defaults$1 = {
   onCoverImage: null,
   videoClass: "jarallax-video",
   videoSrc: null,
+  videoPosition: "50% 50%",
   videoStartTime: 0,
   videoEndTime: 0,
   videoVolume: 0,
@@ -31,6 +32,7 @@ const defaults$1 = {
   videoYoutubeHost: "",
   videoVimeoHost: "",
   videoLoop: true,
+  videoAutoplay: true,
   videoPlayOnlyVisible: true,
   videoLazyLoading: true,
   disableVideo: false,
@@ -157,6 +159,10 @@ function updateParallax() {
   jarallaxList.forEach((data, index) => {
     const { instance, oldData } = data;
     if (!instance.isVisible()) {
+      if (oldData) {
+        data.oldData = void 0;
+        instance.onScroll();
+      }
       return;
     }
     const clientRect = instance.$item.getBoundingClientRect();
@@ -615,7 +621,7 @@ const jarallax$1 = function jarallax2(items, options, ...args) {
 jarallax$1.constructor = Jarallax$1;
 
 /*!
- * Video Worker v3.1.0 (https://github.com/nk-o/video-worker)
+ * Video Worker v3.1.1 (https://github.com/nk-o/video-worker)
  * Copyright 2026 nK <https://nkdev.info>
  * Licensed under MIT (https://github.com/nk-o/video-worker/blob/master/LICENSE)
  */
@@ -780,15 +786,22 @@ class VideoWorkerLocal extends VideoWorkerBase {
       this.player.currentTime = start;
     }
     if (this.player.paused) {
+      const playVideo = () => {
+        var _a, _b;
+        void ((_b = (_a = this.player) == null ? void 0 : _a.play()) == null ? void 0 : _b.catch((error) => {
+          if ((error == null ? void 0 : error.name) !== "AbortError") {
+            throw error;
+          }
+        }));
+      };
       if (this.options.endTime && !this.options.loop) {
         this.getCurrentTime((seconds) => {
-          var _a;
           if (seconds < this.options.endTime) {
-            void ((_a = this.player) == null ? void 0 : _a.play());
+            playVideo();
           }
         });
       } else {
-        void this.player.play();
+        playVideo();
       }
     }
   }
@@ -1144,6 +1157,12 @@ class VideoWorkerVimeo extends VideoWorkerBase {
   getMuted(callback) {
     if (!this.player) {
       callback(null);
+      return;
+    }
+    if (this.player.getMuted) {
+      this.player.getMuted().then((muted) => {
+        callback(muted);
+      });
       return;
     }
     if (this.player.getVolume) {
@@ -1665,6 +1684,46 @@ VideoWorker.providers = {
   Local: VideoWorkerLocal
 };
 
+const horizontalEdge = /^(left|right)$/;
+const verticalEdge = /^(top|bottom)$/;
+const percentage = /^[+-]?(?:\d*\.)?\d+(?:e[+-]?\d+)?%$/;
+function percentageFraction(value) {
+  return percentage.test(value) ? Number.parseFloat(value) / 100 : Number.NaN;
+}
+function positionFraction(value, start, end) {
+  if (value === start) {
+    return 0;
+  }
+  if (value === end) {
+    return 1;
+  }
+  if (value === "center") {
+    return 0.5;
+  }
+  return percentageFraction(value);
+}
+function parseVideoPosition(value) {
+  const tokens = String(value).trim().toLowerCase().split(/\s+/);
+  let [x, y = "center"] = tokens;
+  let horizontal = Number.NaN;
+  let vertical = Number.NaN;
+  if (tokens.length === 4) {
+    const [xEdge, xOffset, yEdge, yOffset] = verticalEdge.test(x) ? [tokens[2], tokens[3], x, y] : tokens;
+    if (horizontalEdge.test(xEdge) && verticalEdge.test(yEdge)) {
+      const fromXEdge = percentageFraction(xOffset);
+      const fromYEdge = percentageFraction(yOffset);
+      horizontal = xEdge === "right" ? 1 - fromXEdge : fromXEdge;
+      vertical = yEdge === "bottom" ? 1 - fromYEdge : fromYEdge;
+    }
+  } else if (tokens.length <= 2) {
+    if (verticalEdge.test(x) && (horizontalEdge.test(y) || y === "center") || x === "center" && horizontalEdge.test(y)) {
+      [x, y] = [y, x];
+    }
+    horizontal = positionFraction(x, "left", "right");
+    vertical = positionFraction(y, "top", "bottom");
+  }
+  return Number.isFinite(horizontal) && Number.isFinite(vertical) ? [horizontal, vertical] : [0.5, 0.5];
+}
 function isPosterOnlyVideo(instance) {
   return prefersReducedMotion() && instance.video?.type === "local" && !instance.defaultInitImgResult;
 }
@@ -1731,14 +1790,13 @@ function jarallaxVideo$1(jarallax = global$2.jarallax) {
     }
     let h = imageData.image.height;
     let w = h * (this.image.width || 0) / (this.image.height || 1);
-    let ml = (imageData.container.width - w) / 2;
-    let mt = imageData.image.marginTop;
     if (imageData.container.width > w) {
       w = imageData.container.width;
       h = w * (this.image.height || 0) / (this.image.width || 1);
-      ml = 0;
-      mt += (imageData.image.height - h) / 2;
     }
+    const [x, y] = parseVideoPosition(this.options.videoPosition);
+    const ml = (imageData.container.width - w) * x;
+    let mt = imageData.image.marginTop + (imageData.image.height - h) * y;
     if (node === "IFRAME") {
       h += 400;
       mt -= 200;
@@ -1769,10 +1827,9 @@ function jarallaxVideo$1(jarallax = global$2.jarallax) {
     if (!this.options.videoSrc) {
       return defaultResult;
     }
+    const { videoAutoplay } = this.options;
     const video = new VideoWorker(this.options.videoSrc, {
-      // Self-hosted players autoplay themselves once metadata lands, so this is what keeps a
-      // poster-only video paused.
-      autoplay: !prefersReducedMotion(),
+      autoplay: videoAutoplay && !prefersReducedMotion(),
       loop: this.options.videoLoop,
       showControls: false,
       accessibilityHidden: true,
@@ -1828,14 +1885,14 @@ function jarallaxVideo$1(jarallax = global$2.jarallax) {
         this.onScroll = function onScrollPlayVideo() {
           oldOnScroll.apply(this);
           if (!this.videoError && (this.options.videoLoop || !this.options.videoLoop && !this.videoEnded)) {
-            if (this.isVisible()) {
-              video.play();
-            } else {
+            if (!this.isVisible()) {
               video.pause();
+            } else if (videoAutoplay) {
+              video.play();
             }
           }
         };
-      } else {
+      } else if (videoAutoplay) {
         video.play();
       }
     });
