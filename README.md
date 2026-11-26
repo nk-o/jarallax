@@ -444,6 +444,7 @@ Name | Type | Default | Description
 :--- | :--- | :------ | :----------
 videoClass | string | `jarallax-video` | Video frame class attribute. Will also contain the type of the video, for example `jarallax-video jarallax-video-youtube`
 videoSrc | string | `null` | You can use Youtube, Vimeo or Self-Hosted videos. Also you can use data attribute `data-jarallax-video`.
+videoPosition | string | `50% 50%` | Align the playing video within its crop using CSS `object-position` keywords and percentages, such as `top left` or `100% 100%`. Also available as `data-video-position`.
 videoStartTime | float | `0` | Start time in seconds when video will be started (this value will be applied also after loop).
 videoEndTime | float | `0` | End time in seconds when video will be ended.
 videoLoop | boolean | `true` | Loop video to play infinitely.

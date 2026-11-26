@@ -19,6 +19,7 @@ const defaults: JarallaxOptions = {
   onCoverImage: null,
   videoClass: 'jarallax-video',
   videoSrc: null,
+  videoPosition: '50% 50%',
   videoStartTime: 0,
   videoEndTime: 0,
   videoVolume: 0,
